@@ -2,33 +2,39 @@
 
 这是 [xdanger.com](https://www.xdanger.com/) 个人博客网站的源代码仓库，使用 [Astro](https://astro.build/) 框架构建。
 
+> AI agents (Claude Code, Codex, Cursor 等) 请阅读 [`AGENTS.md`](./AGENTS.md) 获取项目规范。
+
 ## 项目概述
 
-- 基于 [Astro](https://astro.build/) 框架构建的静态博客网站
-- 使用 `bun` 作为包管理器和构建工具
+- 基于 [Astro](https://astro.build/) v6 框架构建的静态博客网站
+- 使用 `pnpm` 作为包管理器
 - 支持 MDX 格式的博客文章和笔记
-- 集成了 Tailwind CSS 进行样式管理
+- 集成了 Tailwind CSS v4 进行样式管理
+- 通过 Pagefind 提供站内搜索
 - 包含博客文章、笔记和标签页面
 
-## Specifications
+## 开发指南
 
 ### 系统要求
 
-- [Bun](https://bun.sh/) 1.2.10 或更高版本
+- [Node.js](https://nodejs.org/) ≥ 20.19（推荐 Node 22 LTS，见 `.nvmrc`）
+- [pnpm](https://pnpm.io/) ≥ 10（通过 [Corepack](https://nodejs.org/api/corepack.html) 自动启用）
 
 ### 安装依赖
 
 ```bash
-bun install
+pnpm install
 ```
 
 ### 开发命令
 
-- `bun run dev` - 启动开发服务器
-- `bun run build` - 构建生产版本
-- `bun run preview` - 预览构建后的网站
-- `bun run lint` - 运行代码及文档检查
-- `bun run fix` - 格式化代码及文档
+| 命令            | 说明                                                         |
+| --------------- | ------------------------------------------------------------ |
+| `pnpm dev`      | 启动开发服务器                                               |
+| `pnpm build`    | 构建生产版本（构建后自动运行 `pagefind`）                    |
+| `pnpm preview`  | 预览构建后的网站                                             |
+| `pnpm lint`     | 运行 autocorrect / prettier / eslint / astro check 全套检查 |
+| `pnpm fix`      | 自动修复格式与可修复的 lint 问题                             |
 
 ### 项目结构
 
@@ -60,36 +66,37 @@ bun install
 3. Astro 时期的文章 (`2025-02-28` <= 发布日期)：
 
    - 文件路径：`src/content/post/YYYY/MMDD-title.mdx`
-   - 生成的 URL：`/YYYY/MMDD-title.html`（更简洁的新格式）
+   - 生成的 URL：`/YYYY/MMDD-title`（更简洁的新格式，依赖 Vercel `cleanUrls`）
 
-### 代码规范
+### 工具链
 
-- **检查代码和文档**：`bun run lint`
-- **格式化代码和文档**：`bun run fix`
+- **包管理器**：pnpm (`packageManager` 字段已锁定版本)
+- **代码格式化**：Prettier (含 `prettier-plugin-astro` / `prettier-plugin-tailwindcss` / `prettier-plugin-autocorrect`)
+- **TypeScript/JS lint**：ESLint (flat config，`eslint.config.js`)
+- **中文文本规范**：[AutoCorrect](https://github.com/huacnlee/autocorrect)
+- **类型检查**：`astro check`
 
 ### 重要文件
 
+- `AGENTS.md` - 给所有 AI 编程助手的规范说明
 - `MIGRATION.md` - 包含从 Next.js 迁移到 Astro 的完整过程记录和待办事项
 - `astro.config.ts` - Astro 配置文件
 - `src/site.config.ts` - 网站核心配置
 - `src/utils/url.ts` - URL 格式处理工具函数
 
-### Deployment
+### 部署
 
-网站通过 GitHub Actions 自动部署，配置位于 `.github/workflows/` 目录。
+- **Vercel**（主站）：通过 `vercel.json` 配置，启用 `cleanUrls`。
+- **GitHub Pages**（备份）：通过 `.github/workflows/deploy.yml` 在 `main` 推送后自动构建并发布。
 
 ## TODO
 
-### SSG 模式下仅需改进
+### SSG 模式下的改进
 
-- [x] 深入解决 URL 的处理，让生成的 URL 合理，让内链的 URL 符合预期（保持老 URL 不变的情况下，新文章使用新 URL 格式）
-- [x] 确保 linter/formatter 正确有效，混合使用 `autocorrect`, `prettier`, `biome`, `astro check`，并让他们各自发挥所长，不互相冲突
-- [x] [Use Bun](https://docs.astro.build/en/recipes/bun/) to replace Node.js
-  - 🔖 [Build an app with Astro and Bun](https://bun.sh/guides/ecosystem/astro)
-  - ⌛️ [`\[...slug\].png.ts`](src/pages/og-image/[...slug].png.ts) ❌
-- [x] Upgrade Astro to v5.7.0
-  - 🔖 Migrate custom fonts to [v5.7.0 fonts API](https://docs.astro.build/en/reference/experimental-flags/fonts/)
-  - Upgrade `@tailwindcss/vite` to latest version
+- [x] 深入解决 URL 的处理，让生成的 URL 合理，让内链的 URL 符合预期
+- [x] 确保 linter/formatter 正确有效（已统一为 prettier + eslint + autocorrect + astro check）
+- [x] Upgrade Astro to v6
+- [x] Switch package manager to pnpm (移除 bun / biomejs / deno 工具链)
 - [ ] Use Cypress/Playwright to establish an e2e tests framework
 - [ ] 整理目录结构和代码，让路由更简单合理
 - [ ] 重构页面布局相关的 components，需要更合理封装组件，而不是现在大量复制黏贴
