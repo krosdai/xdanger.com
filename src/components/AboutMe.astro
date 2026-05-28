@@ -2,13 +2,24 @@
 import SocialList from "@/components/SocialList.astro";
 import { siteConfig } from "@/site.config";
 import { Icon } from "astro-icon/components";
+
+interface Props {
+  // Render the name/tagline hero. Off on pages that already have their own <h1>.
+  showIntro?: boolean;
+}
+
+const { showIntro = true } = Astro.props;
 ---
 
 <div>
-  <header class="mb-8">
-    <h1 class="text-accent-2 text-3xl font-semibold sm:text-4xl">{siteConfig.author}</h1>
-    <p class="mt-2 text-gray-600 dark:text-gray-400">Notes on tech, products, and life.</p>
-  </header>
+  {
+    showIntro && (
+      <header class="mb-8">
+        <h1 class="text-accent-2 text-3xl font-semibold sm:text-4xl">{siteConfig.author}</h1>
+        <p class="mt-2 text-gray-600 dark:text-gray-400">Notes on tech, products, and life.</p>
+      </header>
+    )
+  }
   <ul class="list-none space-y-3 ps-0 leading-relaxed">
     <li class="ps-0">
       <Icon name="solar:chef-hat-heart-line-duotone" class="mr-2 inline-block h-5 w-5" />a father
