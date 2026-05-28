@@ -16,20 +16,20 @@ const readingTime: string = remarkPluginFrontmatter.readingTime;
 
 <BaseLayout meta={{ articleDate, description, ogImage: socialImage, title, post }}>
   <section
-    class="flex flex-col border-b border-dashed border-gray-200 dark:border-gray-700 pb-4 sm:pb-6"
+    class="flex flex-col border-b border-dashed border-gray-200 pb-4 sm:pb-6 dark:border-gray-700"
   >
-    <div id="blog-hero" class="container max-w-3xl m-auto p-4 sm:px-6">
+    <div id="blog-hero" class="container m-auto max-w-3xl p-4 sm:px-6">
       <div class="mb-4"><a href="/posts" class="border-b border-solid">← back to blog</a></div>
       <Masthead content={post} readingTime={readingTime} />
     </div>
   </section>
-  <article class="flex flex-colgrow break-words" data-pagefind-body>
+  <article class="flex-colgrow flex break-words" data-pagefind-body>
     <div
-      class="container max-w-3xl m-auto p-4 sm:px-6 py-4 sm:py-6 md:py-10 lg:py-16 flex-col gap-10 lg:flex-row lg:items-start"
+      class="container m-auto max-w-3xl flex-col gap-10 p-4 py-4 sm:px-6 sm:py-6 md:py-10 lg:flex-row lg:items-start lg:py-16"
     >
       <!-- {!!headings.length && <TOC headings={headings} />} -->
       <div
-        class="prose max-w-3xl prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none"
+        class="prose prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none max-w-3xl"
       >
         <slot />
         <WebMentions />

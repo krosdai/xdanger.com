@@ -40,14 +40,3 @@ pnpm-lock.yaml
 # Misc
 LICENSE
 .DS_Store
-
-# JavaScript
-*.js
-*.jsx
-*.ts
-*.tsx
-*.mjs
-*.cjs
-
-# Astro
-*.astro

@@ -34,7 +34,6 @@ export function isAstroEraPost(post: CollectionEntry<"post">): boolean {
  */
 export function getPostPath(post: CollectionEntry<"post">): string {
   const postId = post.id.startsWith("/") ? post.id.substring(1) : post.id;
-  const era = getBlogEra(post.data.publishDate);
 
   // 在内部导航中应当保持历史连接格式，以保持 URL 向后兼容
   // if (era === "moveabletype" || era === "jekyll") {

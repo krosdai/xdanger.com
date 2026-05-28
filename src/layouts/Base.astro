@@ -22,22 +22,22 @@ const {
       post={post}
     />
   </head>
-  <body class="overscroll-none dark:scrollbar-thumb-gray-700 bg-background antialiased">
+  <body class="bg-background overscroll-none antialiased dark:scrollbar-thumb-gray-700">
     <div
-      class="flex flex-col min-h-svh min-w-svw text-foreground text-sm text-offgray dark:text-offgray-300"
+      class="text-foreground text-offgray dark:text-offgray-300 flex min-h-svh min-w-svw flex-col text-sm"
     >
       <ThemeProvider />
       <SkipLink />
       <Header />
-      <main id="main" class="flex flex-grow flex-col pt-24 border-grid">
+      <main id="main" class="border-grid flex flex-grow flex-col pt-24">
         <slot />
       </main>
       <Footer />
     </div>
     <!-- Overlay vertical borders for entire page (another approach) -->
-    <div class="fixed inset-0 pointer-events-none" style="z-index: 5">
+    <div class="pointer-events-none fixed inset-0" style="z-index: 5">
       <div
-        class="max-w-4xl h-full mx-auto border-l border-r border-dashed border-gray-200 dark:border-gray-700"
+        class="mx-auto h-full max-w-4xl border-r border-l border-dashed border-gray-200 dark:border-gray-700"
       >
       </div>
     </div>

@@ -1,7 +1,7 @@
 /* would like to ignore ./src/pages/og-image/[slug].png.ts */
 @import "tailwindcss";
 /* config for tailwindcss-typography plugin */
-@config "tailwind.config.ts";
+@config "../../tailwind.config.ts";
 
 /* use a selector-based strategy for dark mode */
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));

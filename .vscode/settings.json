@@ -1,21 +1,23 @@
 {
-  // 完全开启/关闭 AutoCorrect，默认：true
   "autocorrect.enable": true,
-  // 开启/关闭 AutoCorrect Lint 检查，默认：true
   "autocorrect.enableLint": true,
-  // 是否启用 formatOnSave，默认：true
   "autocorrect.formatOnSave": true,
-  // 对于通用文件是否启用 formatOnSave，默认：false
   "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "astro"
+  ],
   "files.associations": {
     "*.mdx": "mdx"
   },
   "ruff.nativeServer": "on",
   "typescript.tsdk": "node_modules/typescript/lib",
-  "[astro-typescript][javascript][typescript][json][jsonc]": {
-    "editor.defaultFormatter": "biomejs.biome"
+  "[astro][javascript][typescript][typescriptreact][json][jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[markdown][mdx][astro-markdown][javascript][json][typescript][astro-typescript]": {
+  "[markdown][mdx][astro-markdown][javascript][json][typescript][astro]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 2
   },
@@ -25,15 +27,11 @@
   "[mdx]": {
     "editor.defaultFormatter": "unifiedjs.vscode-mdx"
   },
-
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",
       "source.organizeImports": "explicit"
     }
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

@@ -30,45 +30,41 @@ export default defineConfig({
     // https://docs.astro.build/zh-cn/reference/configuration-reference/#buildformat
     format: "preserve",
   },
-  experimental: {
-    fonts: [
-      {
-        provider: fontProviders.fontsource(),
-        name: "iA Writer Duo",
-        cssVariable: "--font-ia-writer-duo",
-      },
-      {
-        provider: fontProviders.fontsource(),
-        name: "iA Writer Mono",
-        cssVariable: "--font-ia-writer-mono",
-      },
-      {
-        provider: fontProviders.google(),
-        name: "Geist",
-        cssVariable: "--font-geist",
-      },
-      {
-        provider: fontProviders.google(),
-        name: "Geist Mono",
-        cssVariable: "--font-geist-mono",
-      },
-      {
-        provider: fontProviders.google(),
-        name: "Newsreader",
-        cssVariable: "--font-newsreader",
-      },
-      {
-        provider: fontProviders.google(),
-        name: "Noto Serif SC",
-        cssVariable: "--font-noto-serif-sc",
-      },
-      {
-        provider: fontProviders.fontsource(),
-        name: "LXGW WenKai",
-        cssVariable: "--font-lxgw-wenkai",
-      },
-    ],
-  },
+  fonts: [
+    {
+      provider: fontProviders.fontsource(),
+      name: "iA Writer Duo",
+      cssVariable: "--font-ia-writer-duo",
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: "iA Writer Mono",
+      cssVariable: "--font-ia-writer-mono",
+    },
+    {
+      provider: fontProviders.google(),
+      name: "Geist",
+      cssVariable: "--font-geist",
+    },
+    {
+      provider: fontProviders.google(),
+      name: "Geist Mono",
+      cssVariable: "--font-geist-mono",
+    },
+    {
+      provider: fontProviders.google(),
+      name: "Newsreader",
+      cssVariable: "--font-newsreader",
+    },
+    {
+      provider: fontProviders.google(),
+      name: "Noto Serif SC",
+      cssVariable: "--font-noto-serif-sc",
+    },
+    // LXGW WenKai is a CJK font that fontsource only ships as a broken latin-only
+    // subset, so it is loaded from the jsDelivr CDN instead (see the <link> in
+    // BaseHead.astro). Family name: "LXGW WenKai Lite".
+  ],
   image: {
     domains: ["webmention.io"],
   },
