@@ -1,7 +1,6 @@
 {
   "recommendations": [
     "astro-build.astro-vscode",
-    "biomejs.biome",
     "charliermarsh.ruff",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",

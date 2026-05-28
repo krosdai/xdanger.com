@@ -1,5 +1,17 @@
 {
-  "plugins": ["prettier-plugin-astro", "prettier-plugin-autocorrect"],
-  "printWidth": 96,
-  "trailingComma": "none"
+  "plugins": [
+    "prettier-plugin-astro",
+    "prettier-plugin-autocorrect",
+    "prettier-plugin-tailwindcss"
+  ],
+  "printWidth": 100,
+  "trailingComma": "all",
+  "overrides": [
+    {
+      "files": "*.astro",
+      "options": {
+        "parser": "astro"
+      }
+    }
+  ]
 }
