@@ -84,10 +84,16 @@ const socialImageURL = new URL(ogImage ? ogImage : "/social-card.png", Astro.url
 {/* Fonts */}
 <!-- <Font cssVariable="--font-ia-writer-duo" preload /> -->
 <Font cssVariable="--font-ia-writer-mono" preload />
+{/* Latin serif for prose body text; CJK falls through to LXGW WenKai Lite */}
+<Font cssVariable="--font-newsreader" />
 <!-- <Font cssVariable="--font-geist" preload />
-<Font cssVariable="--font-geist-mono" preload />
-<Font cssVariable="--font-newsreader" preload />
-<Font cssVariable="--font-lxgw-wenkai" preload /> -->
+<Font cssVariable="--font-geist-mono" preload /> -->
+{/* LXGW WenKai Lite (CJK serif) served from jsDelivr; family: "LXGW WenKai Lite" */}
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css"
+/>
 
 {/* KaTeX */}
 <script
