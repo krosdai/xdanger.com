@@ -88,8 +88,15 @@
   --color-quote: oklch(55.27% 0.195 19.06);
   /* --color-quote: var(--muted-foreground); */
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "iA Writer Mono", "SF Mono", ui-monospace, monospace;
-  --font-serif: "New York", "Newsreader", "LXGW WenKai", serif;
+  /* Astro registers webfonts under hashed family names exposed via the --font-*
+     variables; reference those (not literal names) so the self-hosted fonts are
+     used, never a locally-installed copy. The variables' trailing generic is a
+     latin-only system font, so CJK glyphs continue past it to LXGW WenKai Lite. */
+  /* Global default: iA Writer Mono (Latin) → LXGW WenKai Lite (CJK) → mono. */
+  --font-mono: var(--font-ia-writer-mono), "LXGW WenKai Lite", ui-monospace, monospace;
+  /* Prose: Newsreader (Latin) → LXGW WenKai Lite (CJK) → global mono stack. */
+  --font-serif: var(--font-newsreader), "LXGW WenKai Lite", var(--font-ia-writer-mono),
+    ui-monospace, monospace;
 }
 
 @layer base {
@@ -210,4 +217,13 @@
   --tw-prose-links: var(--color-foreground);
   --tw-prose-quotes: var(--color-quote);
   --tw-prose-th-borders: #666;
+
+  /* Serif body text: Latin renders in Newsreader, CJK falls through to LXGW
+     WenKai Lite. Code stays monospace (fenced blocks keep expressive-code's
+     own font; this only guards inline code/kbd/samp). */
+  font-family: var(--font-serif);
+
+  :where(code, kbd, samp) {
+    font-family: var(--font-mono);
+  }
 }
