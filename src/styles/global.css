@@ -883,6 +883,8 @@ hr {
   font-size: var(--fs-body);
   line-height: var(--lh-cjk);
   color: var(--ink);
+  /* wrap long unbroken tokens (URLs, code) instead of overflowing the column */
+  overflow-wrap: break-word;
 }
 .prose > * + * {
   margin-top: var(--sp-5);
