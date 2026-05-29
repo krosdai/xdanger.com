@@ -1,58 +1,19 @@
 ---
 import { Icon } from "astro-icon/components";
 
-/**
-	Uses https://www.astroicon.dev/getting-started/
-	Find icons via guide: https://www.astroicon.dev/guides/customization/#open-source-icon-sets
-	Only installed pack is: @iconify-json/mdi
-*/
-const socialLinks: {
-  friendlyName: string;
-  isWebmention?: boolean;
-  link: string;
-  icon: string;
-}[] = [
-  {
-    friendlyName: "X",
-    link: "https://x.com/xdanger",
-    icon: "fa6-brands:square-x-twitter",
-  },
-  {
-    friendlyName: "Github",
-    link: "https://github.com/xdanger",
-    icon: "mdi:github",
-  },
-
-  {
-    friendlyName: "Instagram",
-    link: "https://www.instagram.com/xdanger",
-    icon: "mdi:instagram",
-  },
+const socialLinks: { friendlyName: string; link: string; icon: string }[] = [
+  { friendlyName: "X", link: "https://x.com/xdanger", icon: "fa6-brands:square-x-twitter" },
+  { friendlyName: "GitHub", link: "https://github.com/xdanger", icon: "mdi:github" },
+  { friendlyName: "Instagram", link: "https://www.instagram.com/xdanger", icon: "mdi:instagram" },
 ];
 ---
 
-<div class="flex flex-wrap items-end">
-  <p>find <code class="text-accent">xdanger</code> on</p>
-  <ul class="flex flex-1 items-center gap-x-2 ps-2 sm:flex-initial">
-    {
-      socialLinks.map(({ friendlyName, isWebmention, link, icon }) => (
-        <li class="flex">
-          <a
-            class="hover:text-link inline-block"
-            href={link}
-            rel={`noreferrer ${isWebmention ? "me authn" : ""}`}
-            target="_blank"
-          >
-            <Icon
-              aria-hidden="true"
-              class="h-5 w-5 fill-current text-gray-700 dark:text-gray-300"
-              focusable="false"
-              name={icon}
-            />
-            <span class="sr-only">{friendlyName}</span>
-          </a>
-        </li>
-      ))
-    }
-  </ul>
-</div>
+<span class="socials">
+  {
+    socialLinks.map(({ friendlyName, link, icon }) => (
+      <a href={link} rel="noreferrer me" target="_blank" aria-label={friendlyName}>
+        <Icon name={icon} aria-hidden="true" focusable="false" />
+      </a>
+    ))
+  }
+</span>

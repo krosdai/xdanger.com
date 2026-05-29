@@ -1,11 +1,9 @@
 ---
 import { getCollection } from "astro:content";
-
 import Note from "@/components/note/Note.astro";
 import PageLayout from "@/layouts/Base.astro";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
-// if you're using an adaptor in SSR mode, getStaticPaths wont work -> https://docs.astro.build/en/guides/routing/#modifying-the-slug-example-for-ssr
 export const getStaticPaths = (async () => {
   const allNotes = await getCollection("note");
   return allNotes.map((note) => ({
@@ -27,9 +25,10 @@ const meta = {
 ---
 
 <PageLayout meta={meta}>
-  <section class="flex flex-col pb-4 sm:pb-6">
-    <div class="container m-auto max-w-3xl p-4 sm:px-6">
+  <div class="col" style="padding-block: var(--sp-7) var(--sp-8)">
+    <a href="/notes" class="backlink" style="margin-bottom: var(--sp-5)">← All notes</a>
+    <div class="note-card">
       <Note as="h1" note={note} />
     </div>
-  </section>
+  </div>
 </PageLayout>

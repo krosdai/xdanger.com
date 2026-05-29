@@ -1,18 +1,46 @@
 ---
-import AboutMe from "@/components/AboutMe.astro";
+import SocialList from "@/components/SocialList.astro";
 import PageLayout from "@/layouts/Base.astro";
 
 const meta = {
-  description: "About Yunjie Dai",
+  description: "About Yunjie Dai — father, coder, CEO of TapTap, co-founder of XD Inc.",
   title: "About",
 };
 ---
 
 <PageLayout meta={meta}>
-  <section class="flex flex-col pb-4 sm:pb-6">
-    <div class="container m-auto max-w-3xl p-4 sm:px-6">
-      <h1 class="title mb-6">About</h1>
-      <AboutMe showIntro={false} />
+  <div class="col">
+    <div class="page-head">
+      <span class="label">About</span>
+      <h1 class="page-head__title">About</h1>
+      <p class="page-head__sub">Yunjie Dai · 戴云杰 · @xdanger</p>
     </div>
-  </section>
+
+    <div class="prose" style="padding-bottom: var(--sp-8)">
+      <p>
+        I'm Yunjie Dai — a father first, a coder by habit, and a builder of products by trade. This
+        is where I keep notes on technology, products, investing, and the occasional thought about
+        life.
+      </p>
+
+      <h2>What I'm doing</h2>
+      <p>
+        Presently I'm CEO of <a href="https://www.taptap.com/">TapTap</a> and co-founder of <a
+          href="https://www.xd.com/">XD Inc</a
+        > — we build games and the platforms around them.
+      </p>
+
+      <h2>Before</h2>
+      <p>
+        Earlier I co-founded <a href="https://www.verycd.com/">VeryCD</a>, which taught me more
+        about the internet than any job since. A lot of the older posts here go back that far — this
+        site has outlived several platforms, and the writing has moved along with it.
+      </p>
+
+      <h2>Find me</h2>
+      <p>
+        I'm <span class="handle">xdanger</span> in most places: <SocialList />
+      </p>
+    </div>
+  </div>
 </PageLayout>

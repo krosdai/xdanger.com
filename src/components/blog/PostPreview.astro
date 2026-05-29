@@ -2,25 +2,24 @@
 import type { CollectionEntry } from "astro:content";
 import FormattedDate from "@/components/FormattedDate.astro";
 import { getPostPath } from "@/utils/url";
-import type { HTMLTag, Polymorphic } from "astro/types";
 
-type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
+interface Props {
   post: CollectionEntry<"post">;
-  withDesc?: boolean;
-};
+  /** drop the year (used inside year-grouped lists) */
+  compactDate?: boolean;
+}
 
-const { as: Tag = "div", post, withDesc = false } = Astro.props;
+const { post, compactDate = false } = Astro.props;
 const postUrl = getPostPath(post);
+const dateOptions: Intl.DateTimeFormatOptions | undefined = compactDate
+  ? { year: undefined, month: "short", day: "2-digit" }
+  : undefined;
 ---
 
-<FormattedDate
-  class="min-w-30 font-normal text-gray-600 dark:text-gray-400"
-  date={post.data.publishDate}
-/>
-<Tag>
-  {post.data.draft && <span class="text-red-500">(Draft) </span>}
-  <a class="cactus-link" data-astro-prefetch href={postUrl}>
-    {post.data.title}
+<span class="leader">
+  <a class="leader__title" data-astro-prefetch href={postUrl}>
+    {post.data.draft && <span class="leader__draft">(draft) </span>}{post.data.title}
   </a>
-</Tag>
-{withDesc && <q class="line-clamp-3 italic">{post.data.description}</q>}
+  <span class="leader__dots" aria-hidden="true"></span>
+  <FormattedDate class="leader__date" date={post.data.publishDate} dateTimeOptions={dateOptions} />
+</span>

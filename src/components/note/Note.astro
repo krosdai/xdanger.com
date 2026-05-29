@@ -10,39 +10,26 @@ type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 
 const { as: Tag = "div", note, isPreview = false } = Astro.props;
 const { Content } = await render(note);
+
+const timeOptions: Intl.DateTimeFormatOptions = {
+  year: "numeric",
+  month: "short",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+};
 ---
 
-<article
-  class:list={[
-    isPreview && "inline-grid rounded-md bg-[rgb(240,240,240)] px-4 py-3 dark:bg-[rgb(33,35,38)]",
-  ]}
-  data-pagefind-body={isPreview ? false : true}
->
-  <Tag class="title" class:list={{ "text-base": isPreview }}>
-    {
-      isPreview ? (
-        <a class="cactus-link" href={`/notes/${note.id}`}>
-          {note.data.title}
-        </a>
-      ) : (
-        <>{note.data.title}</>
-      )
-    }
-  </Tag>
-  <FormattedDate
-    dateTimeOptions={{
-      hour: "2-digit",
-      minute: "2-digit",
-      year: "2-digit",
-      month: "2-digit",
-      day: "2-digit",
-    }}
-    date={note.data.publishDate}
-  />
-  <div
-    class="prose prose-sm prose-cactus mt-4 max-w-none [&>p:last-of-type]:mb-0"
-    class:list={{ "line-clamp-6": isPreview }}
-  >
+<article class="note" data-pagefind-body={isPreview ? false : true}>
+  <FormattedDate class="note__time" date={note.data.publishDate} dateTimeOptions={timeOptions} />
+  {
+    note.data.title && (
+      <Tag class="note__title">
+        {isPreview ? <a href={`/notes/${note.id}`}>{note.data.title}</a> : note.data.title}
+      </Tag>
+    )
+  }
+  <div class="note__body" class:list={{ "note__body--clamp": isPreview }}>
     <Content />
   </div>
 </article>

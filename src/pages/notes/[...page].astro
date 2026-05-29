@@ -18,45 +18,41 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page } = Astro.props;
 
 const meta = {
-  description: "Read my collection of notes",
+  description: "Short, timestamped thoughts — half-formed on purpose.",
   title: "Notes",
 };
 
 const paginationProps = {
-  ...(page.url.prev && {
-    prevUrl: {
-      text: "← Previous Page",
-      url: page.url.prev,
-    },
-  }),
-  ...(page.url.next && {
-    nextUrl: {
-      text: "Next Page →",
-      url: page.url.next,
-    },
-  }),
+  ...(page.url.prev && { prevUrl: { text: "Newer", url: page.url.prev } }),
+  ...(page.url.next && { nextUrl: { text: "Older", url: page.url.next } }),
 };
 ---
 
 <PageLayout meta={meta}>
-  <section class="flex flex-col pb-4 sm:pb-6">
-    <div class="container m-auto max-w-3xl p-4 sm:px-6">
-      <h1 class="title mb-6 flex items-center gap-3">
-        Notes <a class="text-accent" href="/notes/rss.xml" target="_blank">
-          <span class="sr-only">RSS feed</span>
-          <Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="mdi:rss" />
+  <div class="col">
+    <div class="page-head">
+      <div class="section-head" style="margin-bottom: 0">
+        <span class="label">Notes</span>
+        <span class="section-head__line" aria-hidden="true"></span>
+        <a class="rss" href="/notes/rss.xml" target="_blank">
+          <Icon name="mdi:rss" aria-hidden="true" focusable="false" /> RSS
         </a>
-      </h1>
-      <ul class="mt-6 space-y-8 text-start">
-        {
-          page.data.map((note) => (
-            <li class="">
-              <Note note={note} as="h2" isPreview />
-            </li>
-          ))
-        }
-      </ul>
-      <Pagination {...paginationProps} />
+      </div>
+      <h1 class="page-head__title">Notes</h1>
+      <p class="page-head__sub">Short, timestamped thoughts — half-formed on purpose.</p>
     </div>
-  </section>
+
+    {
+      page.data.length > 0 ? (
+        <div class="notes">
+          {page.data.map((note) => (
+            <Note note={note} as="h2" isPreview />
+          ))}
+        </div>
+      ) : (
+        <p class="meta">No notes yet.</p>
+      )
+    }
+    <Pagination {...paginationProps} />
+  </div>
 </PageLayout>

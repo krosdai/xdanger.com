@@ -2,17 +2,23 @@
 import PageLayout from "@/layouts/Base.astro";
 
 const meta = {
-  description: "Oops! It looks like this page is lost in space!",
-  title: "Oops! You found a missing page!",
+  description: "This page doesn't exist.",
+  title: "404 — Page not found",
 };
 ---
 
 <PageLayout meta={meta}>
-  <section class="flex flex-col pb-4 sm:pb-6">
-    <div class="container m-auto max-w-3xl p-4 sm:px-6">
-      <h1 class="title mb-8">404 &middot; not found</h1>
-      <p class="mb-2 text-base">oops ... something went wrong</p>
-      <p class="text-base">please use the navigation to find your way back</p>
-    </div>
-  </section>
+  <div class="col" style="padding-block: var(--sp-9)">
+    <span class="label">Error</span>
+    <p class="bigcode" aria-hidden="true">404</p>
+    <h1 class="page-head__title" style="margin-top: var(--sp-2)">页面走丢了</h1>
+    <p class="page-head__sub" style="max-width: 34rem; line-height: 1.7">
+      This page doesn't exist — or it did, on one of the platforms this blog has outlived. The
+      writing, at least, is still here.
+    </p>
+    <p style="margin-top: var(--sp-6); display: flex; gap: var(--sp-6); flex-wrap: wrap">
+      <a class="backlink" href="/">← Back home</a>
+      <a class="backlink" href="/posts">Browse all posts →</a>
+    </p>
+  </div>
 </PageLayout>

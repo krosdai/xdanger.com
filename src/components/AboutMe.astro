@@ -1,47 +1,33 @@
 ---
 import SocialList from "@/components/SocialList.astro";
-import { siteConfig } from "@/site.config";
 import { Icon } from "astro-icon/components";
-
-interface Props {
-  // Render the name/tagline hero. Off on pages that already have their own <h1>.
-  showIntro?: boolean;
-}
-
-const { showIntro = true } = Astro.props;
 ---
 
-<div>
-  {
-    showIntro && (
-      <header class="mb-8">
-        <h1 class="text-accent-2 text-3xl font-semibold sm:text-4xl">{siteConfig.author}</h1>
-        <p class="mt-2 text-gray-600 dark:text-gray-400">Notes on tech, products, and life.</p>
-      </header>
-    )
-  }
-  <ul class="list-none space-y-3 ps-0 leading-relaxed">
-    <li class="ps-0">
-      <Icon name="solar:chef-hat-heart-line-duotone" class="mr-2 inline-block h-5 w-5" />a father
-    </li>
-    <li class="ps-0">
-      <Icon name="solar:code-bold-duotone" class="mr-2 inline-block h-5 w-5" />like coding
-    </li>
-    <li class="ps-0">
-      <Icon name="solar:gamepad-line-duotone" class="mr-2 inline-block h-5 w-5" />presently as ceo
-      of <a class="cactus-link" href="https://www.taptap.com/">TapTap</a>, co-founder of <a
-        class="cactus-link"
+<ul class="iam">
+  <li>
+    <span class="glyph"><Icon name="solar:chef-hat-heart-line-duotone" aria-hidden="true" /></span>
+    <span>a father</span>
+  </li>
+  <li>
+    <span class="glyph"><Icon name="solar:code-bold-duotone" aria-hidden="true" /></span>
+    <span>like coding</span>
+  </li>
+  <li>
+    <span class="glyph"><Icon name="solar:gamepad-line-duotone" aria-hidden="true" /></span>
+    <span
+      >presently ceo of <a href="https://www.taptap.com/">TapTap</a>, co-founder of <a
         href="https://www.xd.com/">XD Inc</a
-      >
-    </li>
-    <li class="ps-0">
-      <Icon
-        name="solar:turntable-music-note-line-duotone"
-        class="mr-2 inline-block h-5 w-5"
-      />previously as co-founder of <a class="cactus-link" href="https://www.verycd.com/">VeryCD</a>
-    </li>
-  </ul>
-  <div class="mt-3">
-    <SocialList />
-  </div>
-</div>
+      ></span
+    >
+  </li>
+  <li>
+    <span class="glyph"
+      ><Icon name="solar:turntable-music-note-line-duotone" aria-hidden="true" /></span
+    >
+    <span>previously co-founder of <a href="https://www.verycd.com/">VeryCD</a></span>
+  </li>
+  <li>
+    <span class="glyph" aria-hidden="true">@</span>
+    <span>find <span class="handle">xdanger</span> on <SocialList /></span>
+  </li>
+</ul>
