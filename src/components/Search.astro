@@ -123,8 +123,8 @@ import { Icon } from "astro-icon/components";
 
     onWindowKeydown = (e: KeyboardEvent) => {
       if (!this.#dialog) return;
-      // Control/⌘ + K
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      // Control/⌘ + K (normalize case so Shift/Caps Lock still matches)
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         this.#dialog.open ? this.closeModal() : this.openModal();
         e.preventDefault();
         return;

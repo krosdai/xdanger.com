@@ -77,7 +77,7 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
         <div class="taglist">
           {
             allTagsWithCount.map(([tag, count]) => (
-              <a class="tag" href={`/tags/${tag}`}>
+              <a class="tag" href={`/tags/${encodeURIComponent(tag)}`}>
                 <span class="hash" aria-hidden="true">
                   #
                 </span>

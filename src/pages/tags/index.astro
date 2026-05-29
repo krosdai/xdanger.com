@@ -22,7 +22,11 @@ const meta = {
     <div class="taglist" style="padding-bottom: var(--sp-8)">
       {
         allTags.map(([tag, count]) => (
-          <a class="tag" href={`/tags/${tag}`} title={`View posts with the tag: ${tag}`}>
+          <a
+            class="tag"
+            href={`/tags/${encodeURIComponent(tag)}`}
+            title={`View posts with the tag: ${tag}`}
+          >
             <span class="hash" aria-hidden="true">
               #
             </span>

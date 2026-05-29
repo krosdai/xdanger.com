@@ -41,7 +41,11 @@ const dateOptions: Intl.DateTimeFormatOptions = {
             ·
           </span>
           {data.tags.map((tag) => (
-            <a class="tag-chip" href={`/tags/${tag}`} data-pagefind-filter={`tag:${tag}`}>
+            <a
+              class="tag-chip"
+              href={`/tags/${encodeURIComponent(tag)}`}
+              data-pagefind-filter={`tag:${tag}`}
+            >
               {tag}
             </a>
           ))}

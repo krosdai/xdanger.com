@@ -61,7 +61,8 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
     btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
   }
 
-  // TOC scrollspy
+  // TOC scrollspy — highlight the last heading scrolled past (handles long
+  // sections and the regions before the first / after the last heading)
   const links = Array.from(document.querySelectorAll<HTMLAnchorElement>(".toc a"));
   if (links.length) {
     const byId = new Map<string, HTMLAnchorElement>();
@@ -74,23 +75,25 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
       .filter((el): el is HTMLElement => Boolean(el));
 
     let active: HTMLAnchorElement | null = null;
-    const setActive = (id: string) => {
-      const next = byId.get(id) ?? null;
+    const setActive = (next: HTMLAnchorElement | null) => {
       if (next === active) return;
       active?.classList.remove("is-active");
       next?.classList.add("is-active");
       active = next;
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]) setActive(visible[0].target.id);
-      },
-      { rootMargin: "-10% 0px -70% 0px", threshold: 0 },
-    );
-    targets.forEach((t) => observer.observe(t));
+    const syncToc = () => {
+      const offset = 140; // px from the top that counts as the "current" section
+      let currentId: string | null = null;
+      for (const t of targets) {
+        if (t.getBoundingClientRect().top <= offset) currentId = t.id;
+        else break; // headings are in document order
+      }
+      setActive(currentId ? (byId.get(currentId) ?? null) : null);
+    };
+
+    syncToc();
+    window.addEventListener("scroll", syncToc, { passive: true });
+    window.addEventListener("resize", syncToc, { passive: true });
   }
 </script>
