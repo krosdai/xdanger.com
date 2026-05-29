@@ -4,7 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@10.33.4",
   "engines": {
-    "node": ">=20.19.0",
+    "node": ">=22.12.0",
     "pnpm": ">=10"
   },
   "scripts": {
@@ -17,14 +17,14 @@
     "fix": "autocorrect --fix . && prettier --write . && eslint --fix ."
   },
   "dependencies": {
-    "@astrojs/markdown-remark": "^7.1.2",
-    "@astrojs/mdx": "^5.0.6",
+    "@astrojs/markdown-remark": "^7.2.0",
+    "@astrojs/mdx": "^6.0.1",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
-    "@astrojs/vercel": "^10.0.7",
+    "@astrojs/vercel": "^10.0.8",
     "@tailwindcss/vite": "^4.3.0",
     "@vercel/analytics": "^2.0.1",
-    "astro": "^6.3.8",
+    "astro": "^6.4.2",
     "astro-expressive-code": "^0.42.0",
     "astro-icon": "^1.1.5",
     "astro-robots-txt": "^1.0.0",
@@ -52,7 +52,7 @@
     "@astrojs/check": "^0.9.9",
     "@eslint/js": "^10.0.1",
     "@iconify-json/fa6-brands": "^1.2.6",
-    "@iconify-json/material-symbols-light": "^1.2.74",
+    "@iconify-json/material-symbols-light": "^1.2.75",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/solar": "^1.2.5",
     "@pagefind/default-ui": "^1.5.2",
