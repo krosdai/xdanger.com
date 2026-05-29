@@ -2,98 +2,35 @@
 import Search from "@/components/Search.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
 import { menuLinks } from "@/site.config";
-import { Icon } from "astro-icon/components";
+
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isActive = (path: string) =>
+  path === "/" ? pathname === "/" : pathname === path || pathname.startsWith(`${path}/`);
 ---
 
-<header
-  class="border-grid bg-background/95 supports-[backdrop-filter]:bg-background/60 fixed top-0 z-50 w-full border-b border-dashed border-gray-200 backdrop-blur-sm dark:border-gray-700"
->
-  <div
-    class="relative m-auto flex max-w-4xl items-center border-r border-l border-dashed border-gray-200 p-4 px-4 sm:flex-col sm:px-6 dark:border-gray-700"
-  >
-    <div class="flex w-full justify-between">
-      <nav aria-label="Main menu" id="navigation-menu" class="flex gap-4 sm:gap-6 md:gap-8">
+<header class="site-header">
+  <div class="shell">
+    <div class="site-header__inner">
+      <a href="/" class="wordmark" aria-label="xdanger — home">
+        <span class="mono-x" aria-hidden="true">x</span><span class="label-text">danger</span>
+      </a>
+      <nav class="nav" aria-label="Main">
         {
           menuLinks.map((link) => (
             <a
-              aria-current={Astro.url.pathname === link.path ? "page" : false}
-              class="hover:text-accent"
-              data-astro-prefetch
               href={link.path}
+              aria-current={isActive(link.path) ? "page" : undefined}
+              data-astro-prefetch
             >
-              <Icon name={link.icon} class="inline-block h-5 w-5 align-bottom" />
               {link.title}
             </a>
           ))
         }
       </nav>
-      <div class="flex gap-4">
-        <Search class="" />
+      <div class="header-tools">
+        <Search />
         <ThemeToggle />
-        {
-          /*
-        <mobile-button>
-          <button
-            aria-expanded="false"
-            aria-haspopup="menu"
-            class="group relative ms-4 h-7 w-7 sm:invisible sm:hidden"
-            id="toggle-navigation-menu"
-            type="button"
-          >
-            <span class="sr-only">Open main menu</span>
-            <svg
-              aria-hidden="true"
-              class="absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transition-all group-aria-expanded:scale-0 group-aria-expanded:opacity-0"
-              fill="none"
-              focusable="false"
-              id="line-svg"
-              stroke="currentColor"
-              stroke-width="1.5"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <svg
-              aria-hidden="true"
-              class="text-accent absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
-              class="text-accent"
-              fill="none"
-              focusable="false"
-              id="cross-svg"
-              stroke="currentColor"
-              stroke-width="1.5"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-          </button>
-        </mobile-button>
-				*/
-        }
       </div>
     </div>
   </div>
 </header>
-
-<script>
-  import { toggleClass } from "@/utils/domElement";
-
-  class MobileNavBtn extends HTMLElement {
-    #menuOpen: boolean = false;
-
-    connectedCallback() {
-      const headerEl = document.getElementById("main-header")!;
-      const mobileButtonEl = this.querySelector<HTMLButtonElement>("button");
-
-      mobileButtonEl?.addEventListener("click", () => {
-        if (headerEl) toggleClass(headerEl, "menu-open");
-        this.#menuOpen = !this.#menuOpen;
-        mobileButtonEl.setAttribute("aria-expanded", this.#menuOpen.toString());
-      });
-    }
-  }
-
-  customElements.define("mobile-button", MobileNavBtn);
-</script>

@@ -1,35 +1,30 @@
 ---
 // Heavy inspiration taken from Astro Starlight -> https://github.com/withastro/starlight/blob/main/packages/starlight/components/Search.astro
-
 import "@/styles/blocks/search.css";
 import { Icon } from "astro-icon/components";
 ---
 
-<site-search class="h-5 w-5" id="search">
+<site-search id="search">
   <button
-    class="hover:text-accent flex cursor-pointer justify-center rounded-md"
-    aria-keyshortcuts="Control+K Meta+K"
+    class="search-btn"
+    aria-keyshortcuts="Control+K Meta+K /"
+    aria-label="Search"
     data-open-modal
     disabled
   >
-    <Icon name="solar:magnifer-linear" class="h-5 w-5" />
-    <span class="sr-only">Open Search</span>
+    <Icon name="solar:magnifer-linear" aria-hidden="true" focusable="false" />
+    <span class="skb">Search</span>
+    <kbd aria-hidden="true">/</kbd>
   </button>
-  <dialog
-    aria-label="search"
-    class="bg-global-bg h-full max-h-full w-full max-w-full border border-zinc-400 shadow-sm backdrop:backdrop-blur-sm open:flex sm:mx-auto sm:mt-16 sm:mb-auto sm:h-max sm:max-h-[calc(100%-8rem)] sm:min-h-[15rem] sm:w-5/6 sm:max-w-[48rem] sm:rounded-md"
-  >
-    <div class="dialog-frame flex grow flex-col gap-4 p-6 pt-12 sm:pt-6">
-      <button
-        class="ms-auto cursor-pointer rounded-md bg-zinc-200 p-2 font-semibold dark:bg-zinc-700"
-        data-close-modal>Close</button
-      >
+  <dialog aria-label="Search" class="search-dialog">
+    <div class="dialog-frame">
+      <button class="search-close" data-close-modal aria-label="Close search">Esc</button>
       {
         import.meta.env.DEV ? (
-          <div class="mx-auto text-center">
+          <div class="search-dev-note">
             <p>
-              Search is only available in production builds. <br />
-              Try building and previewing the site to test it out locally.
+              Search is only available in production builds. Build and preview the site to test it
+              locally.
             </p>
           </div>
         ) : (
@@ -58,7 +53,6 @@ import { Icon } from "astro-icon/components";
       this.#dialogFrame = this.querySelector(".dialog-frame");
       this.#controller = new AbortController();
 
-      // Set up events
       if (this.#openBtn) {
         this.#openBtn.addEventListener("click", this.openModal);
         this.#openBtn.disabled = false;
@@ -68,16 +62,12 @@ import { Icon } from "astro-icon/components";
 
       if (this.#closeBtn) {
         this.#closeBtn.addEventListener("click", this.closeModal);
-      } else {
-        console.warn("Close button not found");
       }
 
       if (this.#dialog) {
         this.#dialog.addEventListener("close", () => {
           window.removeEventListener("click", this.onWindowClick);
         });
-      } else {
-        console.warn("Dialog not found");
       }
 
       // only add pagefind in production
@@ -93,7 +83,6 @@ import { Icon } from "astro-icon/components";
           showSubResults: true,
           processTerm: (term: string) => term,
           processResult: (result: { url: string }) => {
-            // 移除结果 URL 的尾部斜杠
             if (result.url && result.url.endsWith("/")) {
               result.url = result.url.slice(0, -1);
             }
@@ -104,7 +93,6 @@ import { Icon } from "astro-icon/components";
     }
 
     connectedCallback() {
-      // window events, requires cleanup
       window.addEventListener("keydown", this.onWindowKeydown, { signal: this.#controller.signal });
     }
 
@@ -113,11 +101,7 @@ import { Icon } from "astro-icon/components";
     }
 
     openModal = (event?: MouseEvent) => {
-      if (!this.#dialog) {
-        console.warn("Dialog not found");
-        return;
-      }
-
+      if (!this.#dialog) return;
       this.#dialog.showModal();
       this.querySelector("input")?.focus();
       event?.stopPropagation();
@@ -127,9 +111,7 @@ import { Icon } from "astro-icon/components";
     closeModal = () => this.#dialog?.close();
 
     onWindowClick = (event: MouseEvent) => {
-      // check if it's a link
       const isLink = "href" in (event.target || {});
-      // make sure the click is either a link or outside of the dialog
       if (
         isLink ||
         (document.body.contains(event.target as Node) &&
@@ -140,14 +122,23 @@ import { Icon } from "astro-icon/components";
     };
 
     onWindowKeydown = (e: KeyboardEvent) => {
-      if (!this.#dialog) {
-        console.warn("Dialog not found");
-        return;
-      }
-      // check if it's the Control+K or ⌘+K shortcut
-      if ((e.metaKey === true || e.ctrlKey === true) && e.key === "k") {
+      if (!this.#dialog) return;
+      // Control/⌘ + K
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         this.#dialog.open ? this.closeModal() : this.openModal();
         e.preventDefault();
+        return;
+      }
+      // "/" to open, unless typing in a field
+      if (e.key === "/" && !this.#dialog.open) {
+        const el = e.target as HTMLElement | null;
+        const typing =
+          el &&
+          (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable === true);
+        if (!typing) {
+          this.openModal();
+          e.preventDefault();
+        }
       }
     };
   }
