@@ -7,10 +7,12 @@ type Props = HTMLAttributes<"time"> & {
   dateTimeOptions?: Intl.DateTimeFormatOptions;
 };
 
-const { date, dateTimeOptions, ...attrs } = Astro.props;
+const { date, dateTimeOptions, class: className, ...attrs } = Astro.props;
 
 const postDate = getFormattedDate(date, dateTimeOptions);
 const ISO = date.toISOString();
 ---
 
-<time datetime={ISO} title={ISO} {...attrs}>{postDate}</time>
+<time class:list={["font-plex-mono", className]} datetime={ISO} title={ISO} {...attrs}>
+  {postDate}
+</time>

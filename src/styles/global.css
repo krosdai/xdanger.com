@@ -6,6 +6,192 @@
 /* use a selector-based strategy for dark mode */
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+@font-face {
+  font-family: "Newsreader Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/newsreader:vf@latest/latin-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Newsreader Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/newsreader:vf@latest/latin-ext-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Newsreader Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/newsreader:vf@latest/latin-wght-italic.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Newsreader Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/newsreader:vf@latest/latin-ext-wght-italic.woff2")
+    format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "LXGW WenKai";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/lxgw-wenkai@latest/latin-300-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "LXGW WenKai";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/lxgw-wenkai@latest/latin-500-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "iA Writer Quattro";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-quattro@latest/latin-400-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "iA Writer Quattro";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-quattro@latest/latin-400-italic.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "iA Writer Quattro";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-quattro@latest/latin-700-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "iA Writer Quattro";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-quattro@latest/latin-700-italic.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-ext-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-wght-italic.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-ext-wght-italic.woff2")
+    format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "iA Writer Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-400-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "iA Writer Mono";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-400-italic.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "iA Writer Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-700-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "iA Writer Mono";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/ia-writer-mono@latest/latin-700-italic.woff2")
+    format("woff2");
+}
+
 /* Shadcn UI theme https://ui.shadcn.com/themes */
 :root {
   --radius: 0.5rem;
@@ -87,16 +273,18 @@
   --color-accent-2: oklch(18.15% 0 0);
   --color-quote: oklch(55.27% 0.195 19.06);
   /* --color-quote: var(--muted-foreground); */
-  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
-  /* Astro registers webfonts under hashed family names exposed via the --font-*
-     variables; reference those (not literal names) so the self-hosted fonts are
-     used, never a locally-installed copy. The variables' trailing generic is a
-     latin-only system font, so CJK glyphs continue past it to LXGW WenKai Lite. */
-  /* Global default: iA Writer Mono (Latin) → LXGW WenKai Lite (CJK) → mono. */
-  --font-mono: var(--font-ia-writer-mono), "LXGW WenKai Lite", ui-monospace, monospace;
-  /* Prose: Newsreader (Latin) → LXGW WenKai Lite (CJK) → global mono stack. */
-  --font-serif: var(--font-newsreader), "LXGW WenKai Lite", var(--font-ia-writer-mono),
-    ui-monospace, monospace;
+  --font-alias-plexSerif: "Newsreader Variable", "LXGW WenKai", ui-serif, Georgia,
+    "Times New Roman", serif;
+  --font-alias-plexSans: "iA Writer Quattro", ui-sans-serif, system-ui, sans-serif;
+  --font-alias-writer: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-alias-plexMono: "iA Writer Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-plex-serif: var(--font-alias-plexSerif);
+  --font-plex-sans: var(--font-alias-plexSans);
+  --font-writer: var(--font-alias-writer);
+  --font-plex-mono: var(--font-alias-plexMono);
+  --font-sans: var(--font-alias-plexSans);
+  --font-mono: var(--font-alias-plexMono);
 }
 
 @layer base {
@@ -121,7 +309,14 @@
     }
   }
   body {
-    @apply font-mono;
+    @apply font-plex-sans;
+  }
+  :where(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-alias-plexSerif);
+  }
+
+  :where(code, kbd, samp, pre) {
+    font-family: var(--font-alias-plexMono);
   }
 }
 
@@ -136,7 +331,7 @@
   }
 
   .title {
-    @apply text-accent-2 text-2xl font-semibold;
+    @apply text-accent-2 font-plex-serif text-2xl font-semibold;
   }
 
   .admonition {
@@ -218,12 +413,13 @@
   --tw-prose-quotes: var(--color-quote);
   --tw-prose-th-borders: #666;
 
-  /* Serif body text: Latin renders in Newsreader, CJK falls through to LXGW
-     WenKai Lite. Code stays monospace (fenced blocks keep expressive-code's
-     own font; this only guards inline code/kbd/samp). */
-  font-family: var(--font-serif);
+  font-family: var(--font-alias-writer);
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-alias-plexSerif);
+  }
 
   :where(code, kbd, samp) {
-    font-family: var(--font-mono);
+    font-family: var(--font-alias-plexMono);
   }
 }
