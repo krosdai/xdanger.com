@@ -70,7 +70,7 @@ const markup = (title: string, pubDate: string) =>
   </div>`;
 
 const rendererSignature = createHash("sha256")
-  .update(markup.toString())
+  .update(JSON.stringify(markup("__TITLE__", "__DATE__")))
   .update(
     JSON.stringify({
       height: ogOptions.height,
