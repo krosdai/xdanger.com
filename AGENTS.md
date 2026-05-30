@@ -31,8 +31,7 @@ pnpm dev            # local dev server
 pnpm build          # production build, including pagefind search index
 pnpm build:site     # Astro-only build for faster local rebuild checks
 pnpm build:debug    # Astro build with NODE_OPTIONS=--trace-warnings
-pnpm run rebuild        # full rebuild; reuse cached OG image PNG and fill missing ones
-pnpm run rebuild:fast   # Astro-only rebuild; reuse cached OG image PNG
+pnpm run rebuild        # Astro-only rebuild; reuse cached OG image PNG and fill missing ones
 pnpm run rebuild:og     # force-refresh all OG image PNG in the local cache
 pnpm preview        # preview production build
 pnpm lint           # autocorrect + prettier --check + eslint + astro check
