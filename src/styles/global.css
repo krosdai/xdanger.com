@@ -201,7 +201,7 @@
 /* Shadcn UI theme https://ui.shadcn.com/themes */
 :root {
   --radius: 0.5rem;
-  --background: oklch(98.48% 0 0);
+  --background: oklch(98.79% 0.0045 34.31);
   --foreground: oklch(0.141 0.005 285.823); /* oklch(26.99% 0.0096 235.05) */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);
