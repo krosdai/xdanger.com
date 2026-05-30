@@ -1,3 +1,6 @@
+import { createHash } from "node:crypto";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
 import MonoBold from "@/assets/ia-writer-mono-bold.ttf";
 import MonoRegular from "@/assets/ia-writer-mono-regular.ttf";
 import { getAllPosts } from "@/data/post";
@@ -29,6 +32,13 @@ const ogOptions: SatoriOptions = {
   height: 630,
   width: 1200,
 };
+
+const cacheDirectory = path.join(process.cwd(), ".astro", "og-image-cache");
+const fontSignature = createHash("sha256")
+  .update(Buffer.from(MonoRegular))
+  .update(Buffer.from(MonoBold))
+  .digest("hex");
+const refreshOgImages = process.env.REFRESH_OG_IMAGES === "1";
 
 const markup = (title: string, pubDate: string) =>
   html`<div tw="flex flex-col w-full h-full bg-[#1d1f21] text-[#c9cacc]">
@@ -68,8 +78,52 @@ export async function GET(context: APIContext) {
     month: "long",
     weekday: "long",
   });
+  const cacheFile = getCacheFile(context.params.slug ?? "", title, postDate);
+  const cachedPng = refreshOgImages ? undefined : await readCachedPng(cacheFile);
+
+  if (cachedPng) {
+    return imageResponse(cachedPng);
+  }
+
   const svg = await satori(markup(title, postDate), ogOptions);
   const png = new Resvg(svg).render().asPng();
+  await writeCachedPng(cacheFile, png);
+
+  return imageResponse(png);
+}
+
+function getCacheFile(slug: string, title: string, postDate: string) {
+  const cacheKey = createHash("sha256")
+    .update("v1")
+    .update(slug)
+    .update(title)
+    .update(postDate)
+    .update(siteConfig.title)
+    .update(siteConfig.author)
+    .update(fontSignature)
+    .digest("hex");
+
+  return path.join(cacheDirectory, `${cacheKey}.png`);
+}
+
+async function readCachedPng(cacheFile: string) {
+  try {
+    return await readFile(cacheFile);
+  } catch {
+    return undefined;
+  }
+}
+
+async function writeCachedPng(cacheFile: string, png: Uint8Array) {
+  try {
+    await mkdir(cacheDirectory, { recursive: true });
+    await writeFile(cacheFile, png);
+  } catch {
+    // Cache writes are best effort; builds should still succeed without them.
+  }
+}
+
+function imageResponse(png: Uint8Array) {
   return new Response(new Uint8Array(png), {
     headers: {
       "Cache-Control": "public, max-age=31536000, immutable",

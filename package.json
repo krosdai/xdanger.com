@@ -10,8 +10,13 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "cross-env NODE_OPTIONS='--trace-warnings' astro build",
-    "postbuild": "pagefind --site dist",
+    "build": "pnpm run build:site && pnpm run build:search",
+    "build:site": "astro build",
+    "build:debug": "cross-env NODE_OPTIONS=--trace-warnings pnpm run build:site",
+    "build:search": "pagefind --site dist",
+    "rebuild": "pnpm run build",
+    "rebuild:fast": "pnpm run build:site",
+    "rebuild:og": "cross-env REFRESH_OG_IMAGES=1 pnpm run build:site",
     "preview": "astro preview",
     "lint": "autocorrect --lint --strict . && prettier --check . && eslint . && astro check --tsconfig tsconfig.json",
     "fix": "autocorrect --fix . && prettier --write . && eslint --fix ."

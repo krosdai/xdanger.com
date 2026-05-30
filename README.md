@@ -31,10 +31,15 @@ pnpm install
 | 命令            | 说明                                                         |
 | --------------- | ------------------------------------------------------------ |
 | `pnpm dev`      | 启动开发服务器                                               |
-| `pnpm build`    | 构建生产版本（构建后自动运行 `pagefind`）                    |
-| `pnpm preview`  | 预览构建后的网站                                             |
-| `pnpm lint`     | 运行 autocorrect / prettier / eslint / astro check 全套检查 |
-| `pnpm fix`      | 自动修复格式与可修复的 lint 问题                             |
+| `pnpm build`        | 构建生产版本，并生成 Pagefind 搜索索引                       |
+| `pnpm build:site`   | 只运行 Astro 构建，适合本地快速验证                          |
+| `pnpm build:debug`  | 带 `NODE_OPTIONS=--trace-warnings` 运行 Astro 构建            |
+| `pnpm run rebuild`      | 重新执行完整生产构建，复用已有 OG image PNG，只补缺失图片   |
+| `pnpm run rebuild:fast` | 只重新执行 Astro 构建，复用已有 OG image PNG                 |
+| `pnpm run rebuild:og`   | 强制刷新全部 OG image PNG，并写回本地缓存                    |
+| `pnpm preview`      | 预览构建后的网站                                             |
+| `pnpm lint`         | 运行 autocorrect / prettier / eslint / astro check 全套检查 |
+| `pnpm fix`          | 自动修复格式与可修复的 lint 问题                             |
 
 ### 项目结构
 
