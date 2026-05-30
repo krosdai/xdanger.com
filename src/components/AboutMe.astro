@@ -15,8 +15,10 @@ const { showIntro = true } = Astro.props;
   {
     showIntro && (
       <header class="mb-8">
-        <h1 class="text-accent-2 text-3xl font-semibold sm:text-4xl">{siteConfig.author}</h1>
-        <p class="mt-2 text-gray-600 dark:text-gray-400">Notes on tech, products, and life.</p>
+        <h1 class="text-accent-2 text-2xl font-semibold sm:text-3xl">{siteConfig.author}</h1>
+        <p class="font-plex-sans mt-2 text-gray-600 dark:text-gray-400">
+          Notes on tech, products, and life.
+        </p>
       </header>
     )
   }
