@@ -350,6 +350,7 @@
 }
 
 @utility content-shell {
+  /* Same as page-shell for now; split when content bodies need different constraints. */
   @apply container mx-auto max-w-3xl px-4 sm:px-6;
 }
 

@@ -24,8 +24,13 @@
             rootInDarkMode() ? "Switch to light theme" : "Switch to dark theme",
           );
         };
+        const themeObserver = new MutationObserver(setLabel);
 
         setLabel();
+        themeObserver.observe(document.documentElement, {
+          attributeFilter: ["data-theme"],
+          attributes: true,
+        });
         button.addEventListener("click", () => {
           const nextTheme = rootInDarkMode() ? "light" : "dark";
           const themeChangeEvent = new CustomEvent("theme-change", {
@@ -34,7 +39,7 @@
             },
           });
           document.dispatchEvent(themeChangeEvent);
-          queueMicrotask(() => setLabel());
+          setLabel();
         });
       } else {
         console.warn("Theme Toggle: No button found");
