@@ -37,7 +37,6 @@ export default {
             },
             strong: {
               fontFamily: "var(--font-alias-writerMedium)",
-              fontStyle: "normal",
               fontWeight: "500",
             },
             sup: {
