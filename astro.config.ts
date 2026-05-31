@@ -17,7 +17,7 @@ import { remarkAdmonitions } from "./src/plugins/remark-admonitions"; /* Add adm
 import { remarkReadingTime } from "./src/plugins/remark-reading-time"; /* Add reading time */
 
 // Rehype plugins
-import { rehypeHeadingIds } from "@astrojs/markdown-remark";
+import { rehypeHeadingIds, unified } from "@astrojs/markdown-remark";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
@@ -78,25 +78,36 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    rehypePlugins: [
-      rehypeHeadingIds,
-      [rehypeAutolinkHeadings, { behavior: "wrap", properties: { className: ["not-prose"] } }],
-      [
-        rehypeExternalLinks,
-        {
-          rel: ["noreferrer", "noopener"],
-          target: "_blank",
-        },
+    // Astro 6 deprecated the top-level `remarkPlugins`/`rehypePlugins`/`remarkRehype`
+    // options. They now live on a `unified({...})` processor from
+    // `@astrojs/markdown-remark`. Defaults (gfm, smartypants, syntax highlighting)
+    // stay enabled because they're baked into `unified()` itself.
+    //
+    // NOTE: the `[astro] markdown.*Plugins are deprecated` warning still prints at
+    // startup — it comes from astro-expressive-code (≤0.42.0), which injects its
+    // rehype plugin via the legacy `markdown.rehypePlugins` channel. It's harmless
+    // and will clear once that package migrates to `markdown.processor` upstream.
+    processor: unified({
+      rehypePlugins: [
+        rehypeHeadingIds,
+        [rehypeAutolinkHeadings, { behavior: "wrap", properties: { className: ["not-prose"] } }],
+        [
+          rehypeExternalLinks,
+          {
+            rel: ["noreferrer", "noopener"],
+            target: "_blank",
+          },
+        ],
+        [rehypeKatex, { strict: true }],
+        rehypeUnwrapImages,
       ],
-      [rehypeKatex, { strict: true }],
-      rehypeUnwrapImages,
-    ],
-    remarkPlugins: [remarkReadingTime, remarkDirective, remarkAdmonitions, remarkMath],
-    remarkRehype: {
-      footnoteLabelProperties: {
-        className: [""],
+      remarkPlugins: [remarkReadingTime, remarkDirective, remarkAdmonitions, remarkMath],
+      remarkRehype: {
+        footnoteLabelProperties: {
+          className: [""],
+        },
       },
-    },
+    }),
   },
   output: "static",
   // https://docs.astro.build/en/guides/prefetch/
