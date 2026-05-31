@@ -9,10 +9,10 @@ const meta = {
 ---
 
 <PageLayout meta={meta}>
-  <section class="flex flex-col pb-4 sm:pb-6">
-    <div class="container m-auto max-w-3xl p-4 sm:px-6">
-      <h1 class="title mb-6">About</h1>
-      <AboutMe showIntro={false} />
+  <section class="page-section pt-0">
+    <div class="page-shell grid gap-10 lg:grid-cols-[1fr_2fr]">
+      <h1 class="page-title">About</h1>
+      <AboutMe />
     </div>
   </section>
 </PageLayout>

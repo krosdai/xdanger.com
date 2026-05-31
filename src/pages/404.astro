@@ -8,11 +8,13 @@ const meta = {
 ---
 
 <PageLayout meta={meta}>
-  <section class="flex flex-col pb-4 sm:pb-6">
-    <div class="container m-auto max-w-3xl p-4 sm:px-6">
-      <h1 class="title mb-8">404 &middot; not found</h1>
+  <section class="page-section pt-0">
+    <div class="page-shell">
+      <h1 class="page-title mb-8">404 &middot; not found</h1>
       <p class="mb-2 text-base">oops ... something went wrong</p>
-      <p class="text-base">please use the navigation to find your way back</p>
+      <p class="text-base">
+        please <a class="cactus-link" href="/">head back home</a> to find your way.
+      </p>
     </div>
   </section>
 </PageLayout>

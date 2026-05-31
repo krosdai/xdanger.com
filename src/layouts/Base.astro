@@ -29,17 +29,10 @@ const {
       <ThemeProvider />
       <SkipLink />
       <Header />
-      <main id="main" class="border-grid flex flex-grow flex-col pt-24">
+      <main id="main" class="relative flex flex-grow flex-col pt-3 sm:pt-3 [&>*]:relative">
         <slot />
       </main>
       <Footer />
-    </div>
-    <!-- Overlay vertical borders for entire page (another approach) -->
-    <div class="pointer-events-none fixed inset-0" style="z-index: 5">
-      <div
-        class="mx-auto h-full max-w-4xl border-r border-l border-dashed border-gray-200 dark:border-gray-700"
-      >
-      </div>
     </div>
     <Analytics />
   </body>

@@ -5,6 +5,7 @@ import PostPreview from "@/components/blog/PostPreview.astro";
 import Note from "@/components/note/Note.astro";
 import { getAllPosts } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
+import { siteConfig } from "@/site.config";
 import { collectionDateSort } from "@/utils/date";
 
 // Posts
@@ -21,14 +22,16 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 ---
 
 <PageLayout meta={{ title: "Home" }}>
-  <section class="flex flex-col">
-    <div class="container m-auto max-w-3xl p-4 sm:px-6">
+  <h1 class="sr-only">{siteConfig.author}</h1>
+  <section class="pt-0 pb-5 sm:pb-6">
+    <div class="page-shell grid gap-6 md:grid-cols-[1fr_3fr]">
+      <h2 class="section-heading">about</h2>
       <AboutMe />
     </div>
   </section>
-  <section class="flex flex-col border-t border-dashed border-gray-200 py-10 dark:border-gray-700">
-    <div class="container m-auto max-w-3xl px-4 sm:px-6">
-      <h2 class="mb-6 text-lg"><a href="/posts" class="text-accent">blog</a></h2>
+  <section class="py-5 sm:py-6">
+    <div class="page-shell grid gap-6 md:grid-cols-[1fr_3fr]">
+      <h2 class="section-heading"><a href="/posts">blog</a></h2>
       <ul class="space-y-4" role="list">
         {
           allPostsByDate.map((p) => (
@@ -42,14 +45,12 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
   </section>
   {
     latestNotes.length > 0 && (
-      <section class="flex flex-col border-t border-dashed border-gray-200 py-10 dark:border-gray-700">
-        <div class="container m-auto max-w-3xl px-4 sm:px-6">
-          <h2 class="mb-6 text-lg">
-            <a href="/notes" class="text-accent">
-              notes
-            </a>
+      <section class="py-5 sm:py-6">
+        <div class="page-shell grid gap-6 md:grid-cols-[1fr_3fr]">
+          <h2 class="section-heading">
+            <a href="/notes">notes</a>
           </h2>
-          <ul class="space-y-4" role="list">
+          <ul class="grid gap-4 sm:grid-cols-2" role="list">
             {latestNotes.map((note) => (
               <li>
                 <Note note={note} as="h3" isPreview />

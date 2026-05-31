@@ -298,6 +298,8 @@
   html {
     color-scheme: light dark;
     accent-color: var(--color-accent);
+    min-height: 100%;
+    overscroll-behavior: none;
 
     &[data-theme="light"] {
       color-scheme: light;
@@ -317,6 +319,9 @@
   }
   body {
     @apply font-plex-sans;
+    min-height: 100%;
+    background-color: var(--color-background);
+    overscroll-behavior: none;
   }
   :where(h1, h2, h3, h4, h5, h6) {
     font-family: var(--font-alias-plexSerif);
@@ -332,14 +337,45 @@
   scrollbar-color: var(--border) transparent;
 }
 
-@layer components {
-  .cactus-link {
-    @apply hover:decoration-link underline underline-offset-2 hover:decoration-2;
-  }
+@utility cactus-link {
+  @apply hover:decoration-link underline underline-offset-2 hover:decoration-2;
+}
 
-  .title {
-    @apply text-accent-2 font-plex-serif text-2xl font-semibold;
-  }
+@utility title {
+  @apply text-accent-2 font-plex-serif text-2xl font-semibold;
+}
+
+@utility page-shell {
+  @apply container mx-auto max-w-3xl px-4 sm:px-6;
+}
+
+@utility content-shell {
+  /* Same as page-shell for now; split when content bodies need different constraints. */
+  @apply container mx-auto max-w-3xl px-4 sm:px-6;
+}
+
+@utility page-section {
+  @apply py-2 sm:py-4;
+}
+
+@utility page-title {
+  @apply text-accent-2 font-plex-serif text-4xl leading-tight font-semibold sm:text-5xl;
+}
+
+@utility article-title {
+  @apply text-accent-2 font-plex-serif text-2xl leading-tight font-semibold sm:text-4xl;
+}
+
+@utility subtitle {
+  @apply font-plex-serif mt-2 mb-8 max-w-3xl text-base leading-snug text-gray-700 italic sm:text-lg
+    dark:text-gray-400;
+}
+
+@utility section-heading {
+  @apply text-accent font-plex-serif text-xl font-semibold;
+}
+
+@layer components {
 
   .admonition {
     --admonition-color: var(--tw-prose-quotes);
@@ -415,7 +451,7 @@
   --tw-prose-bullets: var(--color-foreground);
   --tw-prose-code: var(--color-foreground);
   --tw-prose-headings: var(--color-accent-2);
-  --tw-prose-hr: 0.5px dashed #666;
+  --tw-prose-hr: var(--border);
   --tw-prose-links: var(--color-foreground);
   --tw-prose-quotes: var(--color-quote);
   --tw-prose-th-borders: #666;

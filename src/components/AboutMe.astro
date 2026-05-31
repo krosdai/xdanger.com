@@ -4,18 +4,18 @@ import { siteConfig } from "@/site.config";
 import { Icon } from "astro-icon/components";
 
 interface Props {
-  // Render the name/tagline hero. Off on pages that already have their own <h1>.
+  // Render the name/tagline hero for standalone reuse outside the site header.
   showIntro?: boolean;
 }
 
-const { showIntro = true } = Astro.props;
+const { showIntro = false } = Astro.props;
 ---
 
 <div>
   {
     showIntro && (
       <header class="mb-8">
-        <h1 class="text-accent-2 text-2xl font-semibold sm:text-3xl">{siteConfig.author}</h1>
+        <h2 class="text-accent-2 text-2xl font-semibold sm:text-3xl">{siteConfig.author}</h2>
         <p class="font-plex-sans mt-2 text-gray-600 dark:text-gray-400">
           Notes on tech, products, and life.
         </p>

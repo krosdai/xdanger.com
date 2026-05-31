@@ -21,7 +21,7 @@ export default {
               // borderLeftWidth: "0",
             },
             code: {
-              border: "1px dotted #666",
+              border: "1px solid #666",
               borderRadius: "2px",
             },
             kbd: {
@@ -30,7 +30,7 @@ export default {
               },
             },
             hr: {
-              borderTopStyle: "dashed",
+              borderTopStyle: "solid",
             },
             strong: {
               fontWeight: "700",
@@ -56,13 +56,13 @@ export default {
               borderBottomWidth: "none",
             },
             tfoot: {
-              borderTop: "1px dashed #666",
+              borderTop: "1px solid #666",
             },
             thead: {
               borderBottomWidth: "none",
             },
             "thead th": {
-              borderBottom: "1px dashed #666",
+              borderBottom: "1px solid #666",
               fontWeight: "700",
             },
             'th[align="center"], td[align="center"]': {
