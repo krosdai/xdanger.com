@@ -6,18 +6,19 @@ import { siteConfig } from "@/site.config";
 <header
   data-collapsed="false"
   id="site-header"
-  class="pointer-events-none sticky top-0 z-50 h-[4.25rem] w-full sm:h-[5.25rem]"
+  style="--header-collapse-offset: 0px; --header-padding-y: 3rem; --header-padding-y-sm: 4.5rem; --header-padding-y-md: 6rem; --header-tagline-max-height: 2rem; --header-tagline-margin-top: 0.25rem; --header-tagline-opacity: 1;"
+  class="pointer-events-none sticky top-0 z-50 w-full"
 >
   <div
     class="bg-background/95 supports-[backdrop-filter]:bg-background/60 [[data-collapsed=true]_&]:border-foreground/10 pointer-events-auto w-full border-b-0 border-dotted border-transparent backdrop-blur-sm transition-colors [[data-collapsed=true]_&]:border-b"
   >
-    <div class="page-shell relative z-10 flex items-start justify-between gap-4 py-3 sm:py-4">
+    <div class="site-header-shell page-shell relative z-10 flex items-start justify-between gap-4">
       <div>
-        <p class="text-accent-2 font-plex-serif text-xl leading-none font-semibold sm:text-2xl">
+        <p class="text-accent-2 font-plex-serif text-lg leading-none font-semibold sm:text-xl">
           <a href="/" data-astro-prefetch>{siteConfig.author}</a>
         </p>
         <p
-          class="font-plex-mono mt-1 max-h-8 max-w-2xl overflow-hidden text-xs leading-relaxed text-gray-600 transition-[max-height,opacity,margin-top] duration-200 ease-out sm:text-sm dark:text-gray-400 [[data-collapsed=true]_&]:mt-0 [[data-collapsed=true]_&]:max-h-0 [[data-collapsed=true]_&]:opacity-0"
+          class="site-header-tagline font-plex-mono max-w-2xl overflow-hidden text-xs leading-relaxed text-gray-600 sm:text-sm dark:text-gray-400"
         >
           Notes on tech, products, and life.
         </p>
@@ -27,19 +28,101 @@ import { siteConfig } from "@/site.config";
   </div>
 </header>
 
+<style>
+  #site-header {
+    --header-collapse-offset: 0px;
+    --header-padding-y: 3rem;
+    --header-padding-y-sm: 4.5rem;
+    --header-padding-y-md: 6rem;
+    --header-tagline-margin-top: 0.25rem;
+    --header-tagline-max-height: 2rem;
+    --header-tagline-opacity: 1;
+
+    margin-bottom: var(--header-collapse-offset);
+  }
+
+  .site-header-shell {
+    padding-block: var(--header-padding-y);
+  }
+
+  .site-header-tagline {
+    margin-top: var(--header-tagline-margin-top);
+    max-height: var(--header-tagline-max-height);
+    opacity: var(--header-tagline-opacity);
+  }
+
+  @media (min-width: 640px) {
+    .site-header-shell {
+      padding-block: var(--header-padding-y-sm);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .site-header-shell {
+      padding-block: var(--header-padding-y-md);
+    }
+  }
+</style>
+
 <script>
-  let headerCollapsed = false;
+  const COMPACT_PADDING_Y = 12;
+  const COMPACT_PADDING_Y_SM = 16;
+  const COMPACT_PADDING_Y_MD = 16;
+  const EXPANDED_PADDING_Y = 48;
+  const EXPANDED_PADDING_Y_SM = 72;
+  const EXPANDED_PADDING_Y_MD = 96;
+  const TAGLINE_MARGIN_TOP = 4;
+  const TAGLINE_MAX_HEIGHT = 32;
+
+  let compactScrollY = 192;
   let ticking = false;
+
+  function setHeaderExpandedness(siteHeader: HTMLElement, expandedness: number) {
+    const paddingY = COMPACT_PADDING_Y + (EXPANDED_PADDING_Y - COMPACT_PADDING_Y) * expandedness;
+    const paddingYSm =
+      COMPACT_PADDING_Y_SM + (EXPANDED_PADDING_Y_SM - COMPACT_PADDING_Y_SM) * expandedness;
+    const paddingYMd =
+      COMPACT_PADDING_Y_MD + (EXPANDED_PADDING_Y_MD - COMPACT_PADDING_Y_MD) * expandedness;
+
+    siteHeader.style.setProperty("--header-padding-y", `${paddingY}px`);
+    siteHeader.style.setProperty("--header-padding-y-sm", `${paddingYSm}px`);
+    siteHeader.style.setProperty("--header-padding-y-md", `${paddingYMd}px`);
+    siteHeader.style.setProperty(
+      "--header-tagline-margin-top",
+      `${TAGLINE_MARGIN_TOP * expandedness}px`,
+    );
+    siteHeader.style.setProperty(
+      "--header-tagline-max-height",
+      `${TAGLINE_MAX_HEIGHT * expandedness}px`,
+    );
+    siteHeader.style.setProperty("--header-tagline-opacity", String(expandedness));
+  }
+
+  function measureHeaderCollapseDistance() {
+    const siteHeader = document.getElementById("site-header") as HTMLElement | null;
+    if (!siteHeader) return;
+
+    siteHeader.style.setProperty("--header-collapse-offset", "0px");
+    setHeaderExpandedness(siteHeader, 1);
+    const expandedHeight = siteHeader.getBoundingClientRect().height;
+
+    setHeaderExpandedness(siteHeader, 0);
+    const compactHeight = siteHeader.getBoundingClientRect().height;
+
+    compactScrollY = Math.max(expandedHeight - compactHeight, 1);
+    updateHeaderCollapse();
+  }
 
   function updateHeaderCollapse() {
     const siteHeader = document.getElementById("site-header") as HTMLElement | null;
     if (!siteHeader) return;
 
-    const shouldCollapse = headerCollapsed ? window.scrollY > 8 : window.scrollY > 48;
-    if (shouldCollapse === headerCollapsed) return;
+    const progress = Math.min(Math.max(window.scrollY / compactScrollY, 0), 1);
+    const expandedness = 1 - progress;
 
-    headerCollapsed = shouldCollapse;
-    siteHeader.setAttribute("data-collapsed", String(headerCollapsed));
+    setHeaderExpandedness(siteHeader, expandedness);
+    siteHeader.style.setProperty("--header-collapse-offset", `${compactScrollY * progress}px`);
+    siteHeader.setAttribute("data-collapsed", String(progress === 1));
   }
 
   function scheduleHeaderCollapseUpdate() {
@@ -52,10 +135,10 @@ import { siteConfig } from "@/site.config";
     });
   }
 
-  updateHeaderCollapse();
+  measureHeaderCollapseDistance();
   document.addEventListener("scroll", scheduleHeaderCollapseUpdate, { passive: true });
+  window.addEventListener("resize", measureHeaderCollapseDistance);
   document.addEventListener("astro:after-swap", () => {
-    headerCollapsed = false;
-    updateHeaderCollapse();
+    measureHeaderCollapseDistance();
   });
 </script>
