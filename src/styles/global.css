@@ -163,12 +163,15 @@
   --font-alias-plexSerifMedium: "LXGW Bright Medium", "LXGW Bright", ui-serif, serif;
   --font-alias-plexSans: "iA Writer Quattro", ui-sans-serif, system-ui, sans-serif;
   --font-alias-writer: "LXGW Bright", ui-sans-serif, system-ui, sans-serif;
+  --font-alias-writerMedium: "LXGW Bright Medium", "LXGW Bright", ui-sans-serif, system-ui,
+    sans-serif;
   --font-alias-plexMono: "iA Writer Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", "Courier New", monospace;
   --font-plex-serif: var(--font-alias-plexSerif);
   --font-plex-serif-medium: var(--font-alias-plexSerifMedium);
   --font-plex-sans: var(--font-alias-plexSans);
   --font-writer: var(--font-alias-writer);
+  --font-writer-medium: var(--font-alias-writerMedium);
   --font-plex-mono: var(--font-alias-plexMono);
   --font-sans: var(--font-alias-plexSans);
   --font-mono: var(--font-alias-plexMono);
