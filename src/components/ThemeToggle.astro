@@ -1,11 +1,14 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
 <theme-toggle class="flex flex-col">
   <button
-    class="text-accent-2 hover:text-accent focus-visible:outline-accent flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center text-base leading-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+    class="text-accent-2 hover:text-accent focus-visible:outline-accent flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
     type="button"
   >
     <span class="sr-only">Toggle theme</span>
-    <span aria-hidden="true" class="dark:hidden">☾</span>
-    <span aria-hidden="true" class="hidden dark:inline">☀</span>
+    <Icon aria-hidden="true" class="h-5 w-5" focusable="false" name="line-md:light-dark" />
   </button>
 </theme-toggle>
 
