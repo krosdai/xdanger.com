@@ -20,7 +20,7 @@ const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
     <div class="content-shell flex-col gap-10 py-4 sm:py-6 lg:flex-row lg:items-start">
       <!-- {!!headings.length && <TOC headings={headings} />} -->
       <div
-        class="prose prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none max-w-3xl"
+        class="prose prose-lg prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none max-w-3xl"
       >
         <slot />
         <WebMentions />

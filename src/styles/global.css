@@ -370,7 +370,7 @@
 }
 
 @utility section-heading {
-  @apply text-accent font-plex-serif text-xl font-semibold;
+  @apply text-accent font-plex-serif text-2xl font-semibold;
 }
 
 @layer components {

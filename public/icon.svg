@@ -1,0 +1,14 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 512 512"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">Daihaus d mark</title>
+  <desc id="desc">A red lowercase d mark built from a circle and a vertical bar.</desc>
+
+  <g fill="#b02e22" shape-rendering="geometricPrecision">
+    <circle cx="240.8" cy="343.9" r="112.1" />
+    <rect x="337.8" y="56" width="45.4" height="397.7" />
+  </g>
+</svg>
