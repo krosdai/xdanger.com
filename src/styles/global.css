@@ -218,7 +218,7 @@
 }
 
 @utility title {
-  @apply text-accent-2 font-plex-serif text-2xl font-semibold;
+  @apply text-accent-2 font-plex-serif text-2xl font-medium;
 }
 
 @utility page-shell {
@@ -235,11 +235,11 @@
 }
 
 @utility page-title {
-  @apply text-accent-2 font-plex-serif text-4xl leading-tight font-semibold sm:text-5xl;
+  @apply text-accent-2 font-plex-serif text-4xl leading-tight font-medium sm:text-5xl;
 }
 
 @utility article-title {
-  @apply text-accent-2 font-plex-serif text-2xl leading-tight font-semibold sm:text-4xl;
+  @apply text-accent-2 font-plex-serif text-2xl leading-tight font-medium sm:text-4xl;
 }
 
 @utility subtitle {
@@ -248,7 +248,7 @@
 }
 
 @utility section-heading {
-  @apply text-accent font-plex-serif text-2xl font-semibold;
+  @apply text-accent font-plex-serif text-2xl font-medium;
 }
 
 @layer components {
