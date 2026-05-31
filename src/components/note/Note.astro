@@ -10,43 +10,44 @@ type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
 
 const { as: Tag = "div", note, isPreview = false } = Astro.props;
 const { Content } = await render(note);
-const CardTag = isPreview ? "a" : "div";
 const noteUrl = `/notes/${note.id}`;
 ---
 
-<article data-pagefind-body={isPreview ? false : true}>
-  <CardTag
-    class:list={[
-      isPreview &&
-        "group border-foreground/5 grid rounded-md border bg-white/75 px-4 py-3 dark:border-white/5 dark:bg-white/5",
-      !isPreview && "contents",
-    ]}
-    href={isPreview ? noteUrl : undefined}
+<article
+  class:list={[
+    isPreview &&
+      "group border-foreground/5 relative grid rounded-md border bg-white/75 px-4 py-3 dark:border-white/5 dark:bg-white/5",
+  ]}
+  data-pagefind-body={isPreview ? false : true}
+>
+  <Tag class:list={[isPreview ? "title text-base" : "page-title mb-3"]}>
+    {
+      isPreview ? (
+        <a
+          class="cactus-link group-hover:decoration-link group-hover:decoration-2 after:absolute after:inset-0 after:content-['']"
+          href={noteUrl}
+        >
+          {note.data.title}
+        </a>
+      ) : (
+        <>{note.data.title}</>
+      )
+    }
+  </Tag>
+  <FormattedDate
+    dateTimeOptions={{
+      hour: "2-digit",
+      minute: "2-digit",
+      year: "2-digit",
+      month: "2-digit",
+      day: "2-digit",
+    }}
+    date={note.data.publishDate}
+  />
+  <div
+    class="prose prose-sm prose-cactus sm:prose-base mt-4 max-w-none [&>p:last-of-type]:mb-0"
+    class:list={{ "line-clamp-6 [&_a]:relative [&_a]:z-10": isPreview }}
   >
-    <Tag class:list={[isPreview ? "title text-base" : "page-title mb-3"]}>
-      <span
-        class:list={[
-          isPreview && "cactus-link group-hover:decoration-link group-hover:decoration-2",
-        ]}
-      >
-        {note.data.title}
-      </span>
-    </Tag>
-    <FormattedDate
-      dateTimeOptions={{
-        hour: "2-digit",
-        minute: "2-digit",
-        year: "2-digit",
-        month: "2-digit",
-        day: "2-digit",
-      }}
-      date={note.data.publishDate}
-    />
-    <div
-      class="prose prose-sm prose-cactus sm:prose-base mt-4 max-w-none [&>p:last-of-type]:mb-0"
-      class:list={{ "line-clamp-6": isPreview }}
-    >
-      <Content />
-    </div>
-  </CardTag>
+    <Content />
+  </div>
 </article>
