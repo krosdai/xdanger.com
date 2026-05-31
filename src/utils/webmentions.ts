@@ -23,7 +23,7 @@ async function fetchWebmentions(timeFrom: string | null, perPage = 1000) {
 
   let url = `https://webmention.io/api/mentions.jf2?domain=${hostName}&token=${WEBMENTION_API_KEY}&sort-dir=up&per-page=${perPage}`;
 
-  if (timeFrom) url += `&since${timeFrom}`;
+  if (timeFrom) url += `&since=${timeFrom}`;
 
   const res = await fetch(url);
 
