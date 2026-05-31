@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "@/components/FormattedDate.astro";
+import { getPostPath } from "@/utils/url";
+import type { HTMLTag, Polymorphic } from "astro/types";
+
+type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
+  post: CollectionEntry<"post">;
+};
+
+const { as: Tag = "h3", post } = Astro.props;
+const postUrl = getPostPath(post);
+const subtitle = post.data.subtitle?.trim();
+---
+
+<a
+  class="group -mx-3 block cursor-pointer px-3 transition-colors hover:bg-gray-200/10"
+  data-astro-prefetch
+  href={postUrl}
+>
+  <article class="grid gap-3 py-5 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-8 sm:py-6">
+    <FormattedDate
+      class="pt-1 text-xs text-gray-600 uppercase sm:text-right dark:text-gray-400"
+      date={post.data.publishDate}
+      dateTimeOptions={{ day: "numeric" }}
+    />
+    <div>
+      <Tag class="font-plex-serif text-lg leading-tight text-pretty sm:text-xl">
+        {post.data.draft && <span class="text-red-500">(Draft) </span>}
+        <span class="text-accent-2 group-hover:text-accent transition-colors">
+          <span class="sr-only">Read </span>
+          {post.data.title}
+        </span>
+      </Tag>
+      {
+        subtitle && (
+          <p class="font-plex-sans mt-2 max-w-2xl text-sm leading-snug text-gray-600 dark:text-gray-400">
+            {subtitle}
+          </p>
+        )
+      }
+    </div>
+  </article>
+</a>
