@@ -25,25 +25,6 @@ export const siteConfig: SiteConfig = {
   url: "https://www.xdanger.com/",
 };
 
-// Used to generate links in both the Header & Footer.
-export const menuLinks: { path: string; title: string; icon: string }[] = [
-  {
-    path: "/",
-    title: "home",
-    icon: "solar:home-2-line-duotone",
-  },
-  {
-    path: "/posts",
-    title: "posts",
-    icon: "solar:notification-unread-lines-line-duotone",
-  },
-  {
-    path: "/notes",
-    title: "notes",
-    icon: "solar:notes-minimalistic-line-duotone",
-  },
-];
-
 // https://expressive-code.com/reference/configuration/
 export const expressiveCodeOptions: AstroExpressiveCodeOptions = {
   styleOverrides: {

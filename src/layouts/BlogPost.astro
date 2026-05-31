@@ -1,5 +1,4 @@
 ---
-import { render } from "astro:content";
 import Masthead from "@/components/blog/Masthead.astro";
 // import TOC from "@/components/blog/TOC.astro";
 import WebMentions from "@/components/blog/webmentions/index.astro";
@@ -9,24 +8,16 @@ const { post } = Astro.props;
 const { ogImage, title, description, updatedDate, publishDate } = post.data;
 const socialImage = ogImage ?? `/og-image/${post.id}.png`;
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString();
-// const { headings, remarkPluginFrontmatter } = await render(post);
-const { remarkPluginFrontmatter } = await render(post);
-const readingTime: string = remarkPluginFrontmatter.readingTime;
 ---
 
 <BaseLayout meta={{ articleDate, description, ogImage: socialImage, title, post }}>
-  <section
-    class="flex flex-col border-b border-dashed border-gray-200 pb-4 sm:pb-6 dark:border-gray-700"
-  >
-    <div id="blog-hero" class="container m-auto max-w-3xl p-4 sm:px-6">
-      <div class="mb-4"><a href="/posts" class="border-b border-solid">← back to blog</a></div>
-      <Masthead content={post} readingTime={readingTime} />
+  <section class="page-section pt-0">
+    <div id="blog-hero" class="page-shell">
+      <Masthead content={post} />
     </div>
   </section>
   <article class="flex-colgrow flex break-words" data-pagefind-body>
-    <div
-      class="container m-auto max-w-3xl flex-col gap-10 p-4 py-4 sm:px-6 sm:py-6 md:py-10 lg:flex-row lg:items-start lg:py-16"
-    >
+    <div class="content-shell flex-col gap-10 py-4 sm:py-6 lg:flex-row lg:items-start">
       <!-- {!!headings.length && <TOC headings={headings} />} -->
       <div
         class="prose prose-headings:font-semibold prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none max-w-3xl"

@@ -39,18 +39,18 @@ const paginationProps = {
 ---
 
 <PageLayout meta={meta}>
-  <section class="flex flex-col pb-4 sm:pb-6">
-    <div class="container m-auto max-w-3xl p-4 sm:px-6">
-      <h1 class="title mb-6 flex items-center gap-3">
+  <section class="page-section pt-0">
+    <div class="page-shell">
+      <h1 class="page-title mb-10 flex items-center gap-3">
         Notes <a class="text-accent" href="/notes/rss.xml" target="_blank">
           <span class="sr-only">RSS feed</span>
           <Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="mdi:rss" />
         </a>
       </h1>
-      <ul class="mt-6 space-y-8 text-start">
+      <ul class="grid gap-5 text-start sm:grid-cols-2">
         {
           page.data.map((note) => (
-            <li class="">
+            <li>
               <Note note={note} as="h2" isPreview />
             </li>
           ))

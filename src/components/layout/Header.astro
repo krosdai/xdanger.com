@@ -1,99 +1,36 @@
 ---
-import Search from "@/components/Search.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
-import { menuLinks } from "@/site.config";
-import { Icon } from "astro-icon/components";
+import { siteConfig } from "@/site.config";
 ---
 
 <header
-  class="border-grid bg-background/95 supports-[backdrop-filter]:bg-background/60 font-plex-sans fixed top-0 z-50 w-full border-b border-dashed border-gray-200 backdrop-blur-sm dark:border-gray-700"
+  data-collapsed="false"
+  id="site-header"
+  class="bg-background/95 supports-[backdrop-filter]:bg-background/60 data-[collapsed=true]:border-foreground/10 fixed inset-x-0 top-0 z-50 w-full border-b-0 border-dotted border-transparent backdrop-blur-sm transition-colors data-[collapsed=true]:border-b"
 >
-  <div
-    class="relative m-auto flex max-w-4xl items-center border-r border-l border-dashed border-gray-200 p-4 px-4 sm:flex-col sm:px-6 dark:border-gray-700"
-  >
-    <div class="flex w-full justify-between">
-      <nav aria-label="Main menu" id="navigation-menu" class="flex gap-4 sm:gap-6 md:gap-8">
-        {
-          menuLinks.map((link) => (
-            <a
-              aria-current={Astro.url.pathname === link.path ? "page" : false}
-              class="hover:text-accent"
-              data-astro-prefetch
-              href={link.path}
-            >
-              <Icon name={link.icon} class="inline-block h-5 w-5 align-bottom" />
-              {link.title}
-            </a>
-          ))
-        }
-      </nav>
-      <div class="flex gap-4">
-        <Search class="" />
-        <ThemeToggle />
-        {
-          /*
-        <mobile-button>
-          <button
-            aria-expanded="false"
-            aria-haspopup="menu"
-            class="group relative ms-4 h-7 w-7 sm:invisible sm:hidden"
-            id="toggle-navigation-menu"
-            type="button"
-          >
-            <span class="sr-only">Open main menu</span>
-            <svg
-              aria-hidden="true"
-              class="absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 transition-all group-aria-expanded:scale-0 group-aria-expanded:opacity-0"
-              fill="none"
-              focusable="false"
-              id="line-svg"
-              stroke="currentColor"
-              stroke-width="1.5"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M3.75 9h16.5m-16.5 6.75h16.5" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <svg
-              aria-hidden="true"
-              class="text-accent absolute start-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-0 opacity-0 transition-all group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
-              class="text-accent"
-              fill="none"
-              focusable="false"
-              id="cross-svg"
-              stroke="currentColor"
-              stroke-width="1.5"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-          </button>
-        </mobile-button>
-				*/
-        }
-      </div>
+  <div class="page-shell relative z-10 flex items-start justify-between gap-4 py-3 sm:py-4">
+    <div>
+      <h2 class="text-accent-2 font-plex-serif text-xl leading-none font-semibold sm:text-2xl">
+        <a href="/" data-astro-prefetch>{siteConfig.author}</a>
+      </h2>
+      <p
+        class="font-plex-mono mt-1 max-h-8 max-w-2xl overflow-hidden text-xs leading-relaxed text-gray-600 transition-[max-height,opacity,margin-top] duration-200 ease-out sm:text-sm dark:text-gray-400 [[data-collapsed=true]_&]:mt-0 [[data-collapsed=true]_&]:max-h-0 [[data-collapsed=true]_&]:opacity-0"
+      >
+        Notes on tech, products, and life.
+      </p>
     </div>
+    <ThemeToggle />
   </div>
 </header>
 
 <script>
-  import { toggleClass } from "@/utils/domElement";
+  const siteHeader = document.getElementById("site-header") as HTMLElement | null;
 
-  class MobileNavBtn extends HTMLElement {
-    #menuOpen: boolean = false;
-
-    connectedCallback() {
-      const headerEl = document.getElementById("main-header")!;
-      const mobileButtonEl = this.querySelector<HTMLButtonElement>("button");
-
-      mobileButtonEl?.addEventListener("click", () => {
-        if (headerEl) toggleClass(headerEl, "menu-open");
-        this.#menuOpen = !this.#menuOpen;
-        mobileButtonEl.setAttribute("aria-expanded", this.#menuOpen.toString());
-      });
-    }
+  function updateHeaderCollapse() {
+    siteHeader?.setAttribute("data-collapsed", String(window.scrollY > 12));
   }
 
-  customElements.define("mobile-button", MobileNavBtn);
+  updateHeaderCollapse();
+  document.addEventListener("scroll", updateHeaderCollapse, { passive: true });
+  document.addEventListener("astro:after-swap", updateHeaderCollapse);
 </script>
