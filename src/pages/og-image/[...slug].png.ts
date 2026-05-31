@@ -35,8 +35,8 @@ const ogOptions: SatoriOptions = {
 
 const cacheDirectory = path.join(process.cwd(), ".astro", "og-image-cache");
 const fontSignature = createHash("sha256")
-  .update(Buffer.from(MonoRegular))
-  .update(Buffer.from(MonoBold))
+  .update(new Uint8Array(Buffer.from(MonoRegular)))
+  .update(new Uint8Array(Buffer.from(MonoBold)))
   .digest("hex");
 const refreshOgImages = process.env.REFRESH_OG_IMAGES === "1";
 
@@ -98,7 +98,7 @@ export async function GET(context: APIContext) {
   }
 
   const svg = await satori(markup(title, postDate), ogOptions);
-  const png = new Resvg(svg).render().asPng();
+  const png = new Uint8Array(new Resvg(svg).render().asPng());
   await writeCachedPng(cacheFile, png);
 
   return imageResponse(png);
@@ -124,7 +124,7 @@ function getCacheFile(slug: string, title: string, postDate: string) {
 
 async function readCachedPng(cacheFile: string) {
   try {
-    const png = await readFile(cacheFile);
+    const png = new Uint8Array(await readFile(cacheFile));
     return isCompletePng(png) ? png : undefined;
   } catch {
     return undefined;
