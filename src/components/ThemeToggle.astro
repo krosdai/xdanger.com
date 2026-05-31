@@ -8,7 +8,18 @@ import { Icon } from "astro-icon/components";
     type="button"
   >
     <span class="sr-only">Toggle theme</span>
-    <Icon aria-hidden="true" class="h-5 w-5" focusable="false" name="line-md:light-dark" />
+    <Icon
+      aria-hidden="true"
+      class="block h-5 w-5 dark:hidden"
+      focusable="false"
+      name="solar:sun-outline"
+    />
+    <Icon
+      aria-hidden="true"
+      class="hidden h-5 w-5 dark:block"
+      focusable="false"
+      name="circum:dark"
+    />
   </button>
 </theme-toggle>
 
@@ -23,13 +34,6 @@ import { Icon } from "astro-icon/components";
       const button = this.querySelector<HTMLButtonElement>("button");
 
       if (button) {
-        const replayIcon = () => {
-          const icon = button.querySelector("svg");
-          if (!icon) return;
-
-          icon.replaceWith(icon.cloneNode(true));
-        };
-
         const setLabel = () => {
           button.setAttribute(
             "aria-label",
@@ -51,7 +55,6 @@ import { Icon } from "astro-icon/components";
             },
           });
           document.dispatchEvent(themeChangeEvent);
-          replayIcon();
         });
       } else {
         console.warn("Theme Toggle: No button found");

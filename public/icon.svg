@@ -5,9 +5,11 @@
   aria-labelledby="title desc"
 >
   <title id="title">Daihaus d mark</title>
-  <desc id="desc">A red lowercase d mark built from a circle and a vertical bar.</desc>
+  <desc id="desc">A white lowercase d mark on a rounded red background.</desc>
 
-  <g fill="#b02e22" shape-rendering="geometricPrecision">
+  <rect width="512" height="512" rx="112" fill="#b02e22" />
+
+  <g fill="#fff" shape-rendering="geometricPrecision">
     <circle cx="240.8" cy="343.9" r="112.1" />
     <rect x="337.8" y="56" width="45.4" height="397.7" />
   </g>
