@@ -9,6 +9,14 @@ const validWebmentionTypes = ["like-of", "mention-of", "in-reply-to"];
 
 const hostName = new URL(DOMAIN).hostname;
 
+/**
+ * 仅放行 http(s) 链接，过滤 `javascript:` 等可执行协议。
+ * 非法或空值返回 undefined，让 Astro 直接省略 href 属性。
+ */
+export function safeHref(url?: string | null): string | undefined {
+  return url && /^https?:\/\//i.test(url) ? url : undefined;
+}
+
 // Calls webmention.io api.
 async function fetchWebmentions(timeFrom: string | null, perPage = 1000) {
   if (!DOMAIN) {

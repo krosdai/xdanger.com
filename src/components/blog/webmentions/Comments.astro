@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { WebmentionsChildren } from "@/types";
+import { safeHref } from "@/utils/webmentions";
 import { Icon } from "astro-icon/components";
 
 interface Props {
@@ -29,7 +30,7 @@ const comments = mentions.filter(
               mention.author.url && mention.author.url !== "" ? (
                 <a
                   class="u-author not-prose ring-global-text hover:ring-link focus-visible:ring-link shrink-0 overflow-hidden rounded-full ring-2 hover:ring-4 focus-visible:ring-4"
-                  href={mention.author.url}
+                  href={safeHref(mention.author.url)}
                   rel="noreferrer"
                   target="_blank"
                   title={mention.author.name}
@@ -58,13 +59,13 @@ const comments = mentions.filter(
                   {mention.author?.name}
                 </p>
                 <a
-                  aria-labelledby="cmt-source"
+                  aria-labelledby={`cmt-source-${mention["wm-id"]}`}
                   class="u-url not-prose hover:text-link"
-                  href={mention.url}
+                  href={safeHref(mention.url)}
                   rel="noreferrer"
                   target="_blank"
                 >
-                  <span class="hidden" id="cmt-source">
+                  <span class="hidden" id={`cmt-source-${mention["wm-id"]}`}>
                     Visit the source of this webmention
                   </span>
                   <Icon
