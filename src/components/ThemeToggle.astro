@@ -34,10 +34,7 @@
             },
           });
           document.dispatchEvent(themeChangeEvent);
-          button.setAttribute(
-            "aria-label",
-            nextTheme === "dark" ? "Switch to light theme" : "Switch to dark theme",
-          );
+          queueMicrotask(() => setLabel());
         });
       } else {
         console.warn("Theme Toggle: No button found");

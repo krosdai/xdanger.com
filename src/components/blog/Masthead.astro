@@ -31,7 +31,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
   )
 }
 {data.draft ? <span class="text-base text-red-500">(Draft)</span> : null}
-<h1 class="article-title" class:list={[subtitle ? "mb-2" : "mb-8 sm:mb-12"]}>
+<h1 class:list={["article-title", subtitle ? "mb-2" : "mb-8 sm:mb-12"]}>
   {data.title}
 </h1>
 {subtitle && <p class="subtitle">{subtitle}</p>}
