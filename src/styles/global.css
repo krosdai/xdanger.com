@@ -299,7 +299,6 @@
     color-scheme: light dark;
     accent-color: var(--color-accent);
     min-height: 100%;
-    overscroll-behavior: none;
 
     &[data-theme="light"] {
       color-scheme: light;
@@ -321,7 +320,6 @@
     @apply font-plex-sans;
     min-height: 100%;
     background-color: var(--color-background);
-    overscroll-behavior: none;
   }
   :where(h1, h2, h3, h4, h5, h6) {
     font-family: var(--font-alias-plexSerif);
