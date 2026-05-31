@@ -13,10 +13,9 @@ export function getPostPath(post: CollectionEntry<"post">): string {
 }
 
 /**
- * 根据发布日期决定文章的规范 URL 格式
- * 用于 canonical 和外部链接
+ * 拼接文章的规范绝对 URL，用于 canonical 与外部链接
  * @param post 文章对象
- * @returns 规范化的 URL 路径
+ * @returns 规范化的绝对 URL
  */
 export function getCanonicalUrl(post: CollectionEntry<"post">): string {
   // getPostPath 已返回以 `/` 开头的路径；以 import.meta.env.SITE 为 base 交给 URL
