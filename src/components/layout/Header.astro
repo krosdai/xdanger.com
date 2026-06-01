@@ -13,9 +13,7 @@ import { siteConfig } from "@/site.config";
   >
     <div class="site-header-shell page-shell relative z-10 flex items-start justify-between gap-4">
       <div>
-        <p
-          class="text-accent-2 font-plex-serif-medium text-xl leading-none font-medium sm:text-2xl"
-        >
+        <p class="site-header-title text-accent-2 font-plex-serif-medium leading-none font-medium">
           <a href="/" data-astro-prefetch>{siteConfig.author}</a>
         </p>
         <p
@@ -92,9 +90,59 @@ import { siteConfig } from "@/site.config";
     opacity: var(--header-tagline-opacity);
   }
 
+  /* Mobile (< sm) keeps the title at text-xl and never shrinks it further. */
+  .site-header-title {
+    font-size: 1.25rem;
+  }
+
   @media (min-width: 640px) {
     .site-header-shell {
       padding-block: var(--header-padding-y-sm);
+    }
+
+    /* sm+ : the title stays text-2xl through the whole scroll-linked collapse,
+       then eases one notch to text-xl only once the bar is fully collapsed —
+       a single smooth transition at the final stage rather than a size that
+       tracks scroll position frame-by-frame (which read as abrupt). */
+    .site-header-title {
+      font-size: 1.5rem;
+      transition: font-size 500ms ease;
+    }
+    :global(#site-header[data-collapsed="true"]) .site-header-title {
+      font-size: 1.25rem;
+    }
+
+    /* Theme toggle eases down with the title so the collapsed row narrows to
+       20px (taking the fully-collapsed bar to ~44px) and the two stay matched. */
+    :global(#site-header theme-toggle button),
+    :global(#site-header theme-toggle button svg) {
+      transition:
+        height 500ms ease,
+        width 500ms ease;
+    }
+    :global(#site-header[data-collapsed="true"] theme-toggle button) {
+      height: 1.25rem;
+      width: 1.25rem;
+    }
+    :global(#site-header[data-collapsed="true"] theme-toggle button svg) {
+      height: 1rem;
+      width: 1rem;
+    }
+  }
+
+  /* Hold animations still while the script samples collapse geometry, and honor
+     reduced-motion. */
+  :global(#site-header.is-measuring) .site-header-title,
+  :global(#site-header.is-measuring theme-toggle button),
+  :global(#site-header.is-measuring theme-toggle button svg) {
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header-title,
+    :global(#site-header theme-toggle button),
+    :global(#site-header theme-toggle button svg) {
+      transition: none;
     }
   }
 
@@ -107,8 +155,8 @@ import { siteConfig } from "@/site.config";
 
 <script>
   const COMPACT_PADDING_Y = 12;
-  const COMPACT_PADDING_Y_SM = 16;
-  const COMPACT_PADDING_Y_MD = 16;
+  const COMPACT_PADDING_Y_SM = 12;
+  const COMPACT_PADDING_Y_MD = 12;
   const EXPANDED_PADDING_Y = 48;
   const EXPANDED_PADDING_Y_SM = 72;
   const EXPANDED_PADDING_Y_MD = 96;
@@ -144,12 +192,21 @@ import { siteConfig } from "@/site.config";
     const siteHeader = document.getElementById("site-header") as HTMLElement | null;
     if (!siteHeader) return;
 
+    // Measure with the title/toggle at full size (data-collapsed=false) and
+    // animations frozen, so the reads are exact regardless of the live state.
+    // The title shrink is a final-stage transition, so it must not count toward
+    // the collapse distance (otherwise the offset would over-compensate).
+    siteHeader.classList.add("is-measuring");
+    siteHeader.setAttribute("data-collapsed", "false");
+
     siteHeader.style.setProperty("--header-collapse-offset", "0px");
     setHeaderExpandedness(siteHeader, 1);
     const expandedHeight = siteHeader.getBoundingClientRect().height;
 
     setHeaderExpandedness(siteHeader, 0);
     const compactHeight = siteHeader.getBoundingClientRect().height;
+
+    siteHeader.classList.remove("is-measuring");
 
     compactScrollY = Math.max(expandedHeight - compactHeight, 1);
     updateHeaderCollapse();
