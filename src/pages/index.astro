@@ -33,7 +33,7 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
       <ul class="border-foreground/5 border-b dark:border-white/5" role="list">
         {
           allPostsByDate.map((p) => (
-            <li class="border-foreground/5 border-t dark:border-white/5">
+            <li>
               <HomePostPreview as="h3" post={p} />
             </li>
           ))

@@ -14,11 +14,11 @@ const subtitle = post.data.subtitle?.trim();
 ---
 
 <a
-  class="focus-visible:outline-accent group -mx-3 block cursor-pointer px-3 transition-colors hover:bg-gray-200/10 focus-visible:bg-gray-200/10 focus-visible:outline-2 focus-visible:outline-offset-2"
+  class="focus-visible:outline-accent group border-foreground/5 block cursor-pointer border-t transition-colors hover:bg-gray-200/10 focus-visible:bg-gray-200/10 focus-visible:outline-2 focus-visible:-outline-offset-2 dark:border-white/5"
   data-astro-prefetch
   href={postUrl}
 >
-  <article class="grid gap-3 py-5 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-8 sm:py-6">
+  <article class="grid gap-3 py-5 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-8">
     <FormattedDate
       class="pt-1 text-xs text-gray-600 uppercase sm:text-right dark:text-gray-400"
       date={post.data.publishDate}
