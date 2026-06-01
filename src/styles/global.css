@@ -183,6 +183,14 @@
     accent-color: var(--color-accent);
     min-height: 100%;
 
+    /* Kill the horizontal axis entirely: the page has no horizontal overflow,
+     * but a macOS trackpad can still rubber-band/two-finger-swipe the viewport
+     * sideways, dragging the sticky header off with it. overscroll-behavior-x
+     * is the only thing that stops elastic overscroll (overflow/clip can't).
+     * `-x` only, so vertical scrolling and its bounce are untouched.
+     * Trade-off: this also disables Chrome's two-finger swipe back/forward. */
+    overscroll-behavior-x: none;
+
     &[data-theme="light"] {
       color-scheme: light;
     }
@@ -345,5 +353,17 @@
 
   :where(code, kbd, samp) {
     font-family: var(--font-alias-plexMono);
+  }
+
+  /* Break long unbroken strings (URLs, hashes) so they wrap instead of
+   * widening the column and dragging the sticky header off on h-scroll. */
+  overflow-wrap: break-word;
+
+  /* Wide tables scroll inside their own box rather than overflowing the page.
+   * `display: block` is required for overflow to take effect on a table. */
+  :where(table) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
   }
 }

@@ -29,7 +29,14 @@ const {
     />
   </head>
   <body class="bg-background antialiased dark:scrollbar-thumb-gray-700">
-    <div class="text-foreground flex min-h-svh min-w-svw flex-col text-sm">
+    {
+      /* overflow-x-clip contains any over-wide descendant so the page never
+        scrolls horizontally (which would slide the sticky header off-screen),
+        and clip keeps position:sticky working. A full-viewport min-width was
+        also dropped here: that unit counts the vertical scrollbar's width, so
+        it added a sliver of horizontal overflow on its own. */
+    }
+    <div class="text-foreground flex min-h-svh flex-col overflow-x-clip text-sm">
       <ThemeProvider />
       <SkipLink />
       <Header />
