@@ -221,6 +221,11 @@
     font-family: var(--font-alias-plexSerifMedium);
     font-weight: 500;
   }
+  /* Only the top two headings keep Medium; h3–h6 drop to normal weight so CJK
+   * glyphs falling back to the system font don't read as heavy at 500. */
+  h3, h4, h5, h6 {
+    font-weight: normal;
+  }
 
   :where(code, kbd, samp, pre) {
     font-family: var(--font-alias-plexMono);
