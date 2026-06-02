@@ -78,6 +78,58 @@
     format("woff2");
 }
 
+/* Inter (variable) via Fontsource CDN — https://fontsource.org/fonts/inter/cdn.
+ * latin + latin-ext subsets, each weight 100–900 in one file. unicode-range lets
+ * the browser fetch only the subset a page actually needs. CJK is not in Inter, so
+ * it falls back per the --font-alias-writer stack. */
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-ext-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+    U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-wght-italic.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-ext-wght-italic.woff2")
+    format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+    U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 /* Shadcn UI theme https://ui.shadcn.com/themes */
 :root {
   --radius: 0.5rem;
@@ -159,13 +211,17 @@
   --color-accent-2: oklch(18.15% 0 0);
   --color-quote: oklch(55.27% 0.195 19.06);
   /* --color-quote: var(--muted-foreground); */
+  /* Four type families. The Latin-only faces (iA Writer, Inter) lean on the
+   * generic families below — the browser picks the right system font per platform
+   * and substitutes the system CJK font for glyphs the webfont lacks. */
+  --font-alias-plexSans: "iA Writer Quattro", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-alias-plexSerif: "LXGW Bright", ui-serif, serif;
-  --font-alias-plexSerifMedium: "LXGW Bright", ui-serif, serif;
-  --font-alias-plexSans: "iA Writer Quattro", ui-sans-serif, system-ui, sans-serif;
-  --font-alias-writer: "LXGW Bright", ui-serif, Georgia, "Times New Roman", serif;
-  --font-alias-writerMedium: "LXGW Bright", ui-serif, Georgia, "Times New Roman", serif;
-  --font-alias-plexMono: "iA Writer Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-alias-plexMono: "iA Writer Mono", ui-monospace, monospace;
+  --font-alias-writer: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system,
+    sans-serif;
+  /* Medium cuts reuse the same family; weight comes from font-medium / 500. */
+  --font-alias-plexSerifMedium: var(--font-alias-plexSerif);
+  --font-alias-writerMedium: var(--font-alias-writer);
   --font-plex-serif: var(--font-alias-plexSerif);
   --font-plex-serif-medium: var(--font-alias-plexSerifMedium);
   --font-plex-sans: var(--font-alias-plexSans);
