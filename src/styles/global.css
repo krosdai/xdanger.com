@@ -252,7 +252,7 @@
 
     &[data-theme="dark"] {
       color-scheme: dark;
-      --color-background: oklch(23.64% 0.0045 248);
+      --color-background: oklch(23.64% 0 0);
       --color-foreground: oklch(83.54% 0 264);
       --color-primary: oklch(0.546 0.245 262.881);
       --color-primary-foreground: oklch(0.379 0.146 265.522);
