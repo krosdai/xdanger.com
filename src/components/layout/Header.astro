@@ -17,7 +17,7 @@ import { siteConfig } from "@/site.config";
           <a href="/" data-astro-prefetch>{siteConfig.author}</a>
         </p>
         <p
-          class="site-header-tagline font-plex-mono max-w-2xl overflow-hidden text-xs leading-relaxed text-gray-600 sm:text-sm dark:text-gray-400"
+          class="site-header-tagline note max-w-2xl overflow-hidden leading-relaxed text-gray-600 dark:text-gray-400"
         >
           Notes on tech, products, and life.
         </p>
@@ -41,9 +41,13 @@ import { siteConfig } from "@/site.config";
   }
 
   /*
-   * Frosted-glass material. A stronger blur plus a saturation boost makes
-   * content scrolling underneath read as "lit glass" rather than a flat tint,
-   * and the inset rim highlight mimics light catching the pane's top edge.
+   * Frosted-glass material: a 6px backdrop blur frosts content scrolling
+   * underneath. (Two earlier flourishes were dropped because they made the
+   * expanded header read differently from the body at the top of the page,
+   * where nothing sits behind the glass for them to act on: a saturate(180%)
+   * boost amplified the uniform background's chroma, and an inset 1px rim
+   * highlight drew a faint light line along the top edge — both showed up as a
+   * seam against the body in dark mode.)
    *
    * This is deliberately *not* Apple's Liquid Glass: true refraction needs an
    * SVG filter fed into backdrop-filter, which WebKit/Safari (iOS & macOS) does
@@ -51,25 +55,17 @@ import { siteConfig } from "@/site.config";
    * Browsers without backdrop-filter fall back to the bg-background/95 tint.
    */
   .site-header-glass {
-    -webkit-backdrop-filter: blur(6px) saturate(180%);
-    backdrop-filter: blur(6px) saturate(180%);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
     /*
-     * box-shadow stacks two layers via custom properties: a top rim highlight
-     * (always on) and a drop shadow that stays invisible until the header
-     * collapses, when it lifts the bar a hair off the content below. The
-     * element carries Tailwind's `transition` utility (not `transition-colors`)
-     * so this box-shadow fades in/out on collapse instead of popping — the drop
-     * layer interpolates from transparent to its lifted value.
+     * A drop shadow that stays invisible until the header collapses, when it
+     * lifts the bar a hair off the content below. The element carries Tailwind's
+     * `transition` utility (not `transition-colors`) so this box-shadow fades in
+     * on collapse instead of popping — the drop layer interpolates from
+     * transparent to its lifted value.
      */
-    --header-glass-rim: oklch(100% 0 0 / 0.45);
     --header-glass-drop: 0 0 #0000;
-    box-shadow:
-      inset 0 1px 0 0 var(--header-glass-rim),
-      var(--header-glass-drop);
-  }
-
-  :global([data-theme="dark"]) .site-header-glass {
-    --header-glass-rim: oklch(100% 0 0 / 0.12);
+    box-shadow: var(--header-glass-drop);
   }
 
   :global([data-collapsed="true"]) .site-header-glass {
@@ -85,6 +81,8 @@ import { siteConfig } from "@/site.config";
   }
 
   .site-header-tagline {
+    /* Bump one step over .note's 13px; the scoped selector outweighs the utility. */
+    font-size: 14px;
     margin-top: var(--header-tagline-margin-top);
     max-height: var(--header-tagline-max-height);
     opacity: var(--header-tagline-opacity);

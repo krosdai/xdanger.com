@@ -13,34 +13,30 @@ const postUrl = getPostPath(post);
 const subtitle = post.data.subtitle?.trim();
 ---
 
-<a
-  class="focus-visible:outline-accent group border-foreground/5 block cursor-pointer border-t transition-colors hover:bg-gray-200/10 focus-visible:bg-gray-200/10 focus-visible:outline-2 focus-visible:-outline-offset-2 dark:border-white/5"
-  data-astro-prefetch
-  href={postUrl}
->
-  <article class="grid gap-3 py-5 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-8">
-    <FormattedDate
-      class="pt-1 text-xs text-gray-600 uppercase sm:text-right dark:text-gray-400"
-      date={post.data.publishDate}
-      dateTimeOptions={{ day: "numeric" }}
-    />
-    <div>
-      <Tag class="font-plex-serif text-lg leading-tight text-pretty sm:text-xl">
-        {post.data.draft && <span class="text-red-500">(Draft) </span>}
-        <span
-          class="text-accent-2 group-hover:text-accent group-focus-visible:text-accent transition-colors"
-        >
-          <span class="sr-only">Read </span>
-          {post.data.title}
-        </span>
-      </Tag>
-      {
-        subtitle && (
-          <p class="font-plex-sans mt-2 max-w-2xl text-sm leading-snug text-gray-600 dark:text-gray-400">
-            {subtitle}
-          </p>
-        )
-      }
-    </div>
-  </article>
-</a>
+<article class="flex flex-wrap items-baseline gap-x-4 gap-y-2 py-5">
+  <Tag class="heading order-1 leading-tight text-pretty">
+    {post.data.draft && <span class="text-red-500">(Draft) </span>}
+    <a
+      class="text-accent-2 focus-visible:text-accent focus-visible:outline-accent rounded-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+      data-astro-prefetch
+      href={postUrl}
+    >
+      {post.data.title}
+    </a>
+  </Tag>
+  <span
+    aria-hidden="true"
+    class="border-foreground/5 order-2 hidden min-w-6 flex-1 self-center border-t sm:block dark:border-white/5"
+  ></span>
+  <FormattedDate
+    class="date order-3 shrink-0 text-gray-600 dark:text-gray-400"
+    date={post.data.publishDate}
+  />
+  {
+    subtitle && (
+      <p class="font-plex-sans order-2 w-full text-sm leading-snug text-gray-600 sm:order-4 dark:text-gray-400">
+        {subtitle}
+      </p>
+    )
+  }
+</article>

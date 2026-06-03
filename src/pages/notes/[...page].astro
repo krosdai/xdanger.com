@@ -5,7 +5,6 @@ import Note from "@/components/note/Note.astro";
 import PageLayout from "@/layouts/Base.astro";
 import { collectionDateSort } from "@/utils/date";
 import type { GetStaticPaths } from "astro";
-import { Icon } from "astro-icon/components";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const MAX_NOTES_PER_PAGE = 20;
@@ -41,12 +40,7 @@ const paginationProps = {
 <PageLayout meta={meta}>
   <section class="page-section pt-0">
     <div class="page-shell">
-      <h1 class="page-title mb-10 flex items-center gap-3">
-        Notes <a class="text-accent" href="/notes/rss.xml" target="_blank">
-          <span class="sr-only">RSS feed</span>
-          <Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="mdi:rss" />
-        </a>
-      </h1>
+      <h1 class="sr-only">Notes</h1>
       <ul class="grid gap-5 text-start sm:grid-cols-2">
         {
           page.data.map((note) => (

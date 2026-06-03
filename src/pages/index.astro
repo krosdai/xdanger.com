@@ -22,15 +22,15 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 <PageLayout meta={{ title: "Home" }}>
   <h1 class="sr-only">{siteConfig.author}</h1>
   <section class="pt-0 pb-5 sm:pb-6">
-    <div class="page-shell grid gap-6 md:grid-cols-[1fr_3fr]">
-      <h2 class="section-heading">about</h2>
+    <div class="page-shell grid gap-6 md:grid-cols-[9rem_minmax(0,1fr)]">
+      <h2 class="section">about</h2>
       <AboutMe />
     </div>
   </section>
   <section class="py-5 sm:py-6">
     <div class="page-shell grid gap-6 md:grid-cols-[9rem_minmax(0,1fr)]">
-      <h2 class="section-heading"><a href="/posts">blog</a></h2>
-      <ul class="border-foreground/5 border-b dark:border-white/5" role="list">
+      <h2 class="section"><a href="/posts">posts</a></h2>
+      <ul class="[&>li:first-child>article]:pt-0" role="list">
         {
           allPostsByDate.map((p) => (
             <li>
@@ -44,8 +44,8 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
   {
     latestNotes.length > 0 && (
       <section class="py-5 sm:py-6">
-        <div class="page-shell grid gap-6 md:grid-cols-[1fr_3fr]">
-          <h2 class="section-heading">
+        <div class="page-shell grid gap-6 md:grid-cols-[9rem_minmax(0,1fr)]">
+          <h2 class="section">
             <a href="/notes">notes</a>
           </h2>
           <ul class="grid gap-4 sm:grid-cols-2" role="list">

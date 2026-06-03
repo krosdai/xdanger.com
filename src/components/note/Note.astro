@@ -20,7 +20,7 @@ const noteUrl = `/notes/${note.id}`;
   ]}
   data-pagefind-body={!isPreview}
 >
-  <Tag class:list={[isPreview ? "title text-base" : "page-title mb-3"]}>
+  <Tag class:list={[isPreview ? "heading text-accent-2" : "page-title mb-3"]}>
     {
       isPreview ? (
         <a
