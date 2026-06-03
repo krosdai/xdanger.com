@@ -306,14 +306,18 @@
   scrollbar-color: var(--border) transparent;
 }
 
-/* Site-wide link affordance: every link reads as a link via a faint 1px underline
- * that darkens to the text colour on hover (hover just drops the faded color back
- * to currentColor). Unlayered on purpose so it overrides Preflight, the prose
- * plugin, and cactus-link for one consistent treatment — no `.no-underline`
- * opt-outs exist in the codebase. Opted out: the header/footer chrome, icon/avatar
- * links (:has(svg, img)) where the line would cross the graphic, and `.not-prose`
- * links (heading self-anchors, webmention avatars) — kept in a separate rule so a
- * class selector doesn't outweigh the chrome exclusion. */
+/* Two link treatments site-wide, both unlayered so they override Preflight, the
+ * prose plugin, and cactus-link for one consistent system:
+ *   A — chrome (header/footer) and section headings (.section): no underline;
+ *       the text itself shifts to the accent colour on hover.
+ *   B — every other link, incl. post/note titles (.heading): a faint 1px
+ *       underline whose colour firms up to accent on hover.
+ * Icon/avatar links (:has(svg, img)) are excluded from the underline so the line
+ * doesn't cross the graphic; `.not-prose` links (article heading self-anchors,
+ * webmention avatars) keep their own treatment, so they only opt out of the
+ * underline. */
+
+/* Style B — content links: underlined, underline turns accent on hover. */
 a:not(:has(svg, img)) {
   text-decoration-line: underline;
   text-decoration-thickness: 1px;
@@ -321,11 +325,20 @@ a:not(:has(svg, img)) {
   text-decoration-color: color-mix(in oklab, currentColor 30%, transparent);
 }
 a:not(:has(svg, img)):hover {
-  text-decoration-color: currentColor;
+  text-decoration-color: var(--color-accent);
 }
+
+/* Style A — chrome + section headings: no underline, text turns accent on hover.
+ * Listed after Style B so the no-underline wins the same-specificity tie for
+ * header/footer links. */
 :is(header, footer) a,
+.section a,
 a.not-prose {
   text-decoration-line: none;
+}
+:is(header, footer) a:hover,
+.section a:hover {
+  color: var(--color-accent);
 }
 
 @utility cactus-link {
