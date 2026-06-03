@@ -65,7 +65,7 @@ const descYearKeys = Object.keys(groupedByYear).sort((a, b) => +b - +a);
           {
             descYearKeys.map((yearKey) => (
               <section aria-labelledby={`year-${yearKey}`}>
-                <h2 id={`year-${yearKey}`} class="section-heading">
+                <h2 id={`year-${yearKey}`} class="section">
                   <span class="sr-only">Posts in</span>
                   {yearKey}
                 </h2>

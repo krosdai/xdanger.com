@@ -268,7 +268,7 @@
     background-color: var(--color-background);
   }
   /* Default heading family is writer (Inter). The named title utilities
-   * (page-title, article-title, section-heading, title) and prose headings opt
+   * (page-title, article-title, title) and prose headings opt
    * back into plexSerif themselves; this is just the fallback for "naked"
    * headings. Plain (not :where) so font-weight beats Preflight's
    * `h1, h2, h3, h4, h5, h6 { font-weight: inherit }` — Inter Variable spans the
@@ -375,8 +375,8 @@ a.not-prose {
   @apply mt-2 mb-8 max-w-3xl text-base leading-snug text-gray-700 sm:text-lg dark:text-gray-400;
 }
 
-@utility section-heading {
-  @apply text-accent font-plex-serif-medium text-2xl font-medium;
+@utility section {
+  @apply font-plex-sans text-xl font-medium;
 }
 
 @layer components {
