@@ -17,6 +17,14 @@ export function safeHref(url?: string | null): string | undefined {
   return url && /^https?:\/\//i.test(url) ? url : undefined;
 }
 
+/**
+ * 仅放行 ISO-8601 时间戳。`lastFetched` 来自本地缓存文件，拼进 `since`
+ * 前先收敛成受控格式：缓存被篡改/损坏时直接走全量拉取，而非把任意文件内容外发。
+ */
+function isIsoTimestamp(value: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value);
+}
+
 // Calls webmention.io api.
 async function fetchWebmentions(timeFrom: string | null, perPage = 1000) {
   if (!DOMAIN) {
@@ -31,7 +39,7 @@ async function fetchWebmentions(timeFrom: string | null, perPage = 1000) {
 
   let url = `https://webmention.io/api/mentions.jf2?domain=${hostName}&token=${WEBMENTION_API_KEY}&sort-dir=up&per-page=${perPage}`;
 
-  if (timeFrom) url += `&since=${encodeURIComponent(timeFrom)}`;
+  if (timeFrom && isIsoTimestamp(timeFrom)) url += `&since=${encodeURIComponent(timeFrom)}`;
 
   const res = await fetch(url);
 
