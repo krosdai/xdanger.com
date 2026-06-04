@@ -20,9 +20,13 @@ export function safeHref(url?: string | null): string | undefined {
 /**
  * 仅放行 ISO-8601 时间戳。`lastFetched` 来自本地缓存文件，拼进 `since`
  * 前先收敛成受控格式：缓存被篡改/损坏时直接走全量拉取，而非把任意文件内容外发。
+ * 小数秒限定 1–9 位，避免被构造成超长 URL；并要求能解析成真实日期。
  */
 function isIsoTimestamp(value: string): boolean {
-  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(value);
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$/.test(value)) {
+    return false;
+  }
+  return !Number.isNaN(Date.parse(value));
 }
 
 // Calls webmention.io api.
@@ -92,15 +96,17 @@ function writeToCache(data: WebmentionsCache) {
 }
 
 function getFromCache(): WebmentionsCache {
-  if (fs.existsSync(filePath)) {
-    const data = fs.readFileSync(filePath, "utf-8");
-    return JSON.parse(data);
+  const emptyCache: WebmentionsCache = { lastFetched: null, children: [] };
+
+  if (!fs.existsSync(filePath)) return emptyCache;
+
+  // 缓存损坏/非法 JSON 时退化为全量拉取，而非让异常冒泡中断构建。
+  try {
+    return JSON.parse(fs.readFileSync(filePath, "utf-8")) as WebmentionsCache;
+  } catch (err) {
+    console.warn(`Webmentions cache unreadable, falling back to full fetch: ${err}`);
+    return emptyCache;
   }
-  // no cache found
-  return {
-    lastFetched: null,
-    children: [],
-  };
 }
 
 async function getAndCacheWebmentions() {
