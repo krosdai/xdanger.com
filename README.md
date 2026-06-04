@@ -70,7 +70,7 @@ pnpm install
 
    - 文件路径：`_posts/YYYY/MMDD-title.mdx`
    - URL 形态：`/title-YYYYMMDD`（干净 URL，slug 取自文件名 `MMDD-` 之后那段，日期取自 `YYYY`+`MMDD`）
-   - 历史上短暂使用过的 `/YYYY/MMDD-title` 形态，由 `astro.config.ts` 的 `redirects` 301 跳到此形态
+   - 历史上短暂用过的 `/YYYY/MMDD-title`（无后缀）及更早 `/YYYY/MMDD-title.html` 形态，统一重定向到此形态（机制见下）
 
 4. 笔记（notes）：
 
@@ -79,9 +79,15 @@ pnpm install
 
 实现机制：`build.format: "directory"` 让每个页面默认输出为 `<path>/index.html`（干净 URL）；
 历史文章（①②）在 `astro:build:done` 钩子（`astro.config.ts` 的 `legacyHtmlFlattener`）里被还原成
-扁平 `<path>.html` 文件，以原样伺服历史 `.html` 链接。整套 URL 契约都写在静态产物里，因此
-任意静态 host（Vercel / GitHub Pages）行为一致、可移植。本地 `pnpm preview`
-（`scripts/preview-server.mjs`，按 `try_files $uri $uri/index.html =404` 解析，等价于任意静态 host）伺服 `dist/`，即可 1:1 复现线上的链接 / 跳转 / 404。
+扁平 `<path>.html` 文件，以原样伺服历史 `.html` 链接。
+
+重定向（③/旧 `.html` → ④、旧笔记 → 新）走双层：`astro.config.ts` 的 `redirects` 在静态产物里生成带
+`canonical` + `noindex` 的 **meta-refresh 桩**（200 HTML，供 GitHub Pages 等任意静态 host 兜底）；
+`vercel.json` 的 `redirects` 在 Vercel 上把同样的源升级为真正的 **308 永久重定向**。两处源/目标须保持一致。
+
+整套 URL 契约都写在静态产物 + 一份可移植的重定向规则里，因此任意静态 host 行为一致、可迁移。本地
+`pnpm preview`（`scripts/preview-server.mjs`）按 `try_files $uri $uri/index.html =404` 伺服 `dist/`，
+并读取 `vercel.json` 的 `redirects` 复现 Vercel 的 308，即可 1:1 复现线上的链接 / 跳转 / 404。
 注意不要用 `astro preview`（带路由魔法：对重定向发 3xx、对历史无后缀做 `.html` 回退），不反映线上。
 
 ### 工具链
@@ -102,7 +108,7 @@ pnpm install
 
 ### 部署
 
-- **Vercel**（主站）：`vercel.json` 仅设 `cleanUrls: false`；URL 规则全部由静态产物自身承载，不依赖任何平台路由配置。
+- **Vercel**（主站）：`vercel.json` 设 `cleanUrls: false`，并用 `redirects` 把 ③/旧 `.html`/旧笔记升级为 308 永久重定向；URL 规则由静态产物承载，重定向规则可移植到其它 host（如 Netlify `_redirects`、nginx）。
 - **GitHub Pages**（备份）：通过 `.github/workflows/deploy.yml` 在 `main` 推送后自动构建并发布，行为与 Vercel 一致。
 
 ## TODO

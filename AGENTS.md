@@ -109,14 +109,16 @@ The site uses **clean URLs by default, with the frozen legacy posts as the excep
 2. **Jekyll era** (`2013-05-31` ≤ date < `2025-02-28`): `/YYYY/MM/DD/title.html`
 3. **Astro era** (date ≥ `2025-02-28`): `/title-YYYYMMDD` (clean, no `.html`); slug comes from the
    filename after `MMDD-`, date from the `YYYY`+`MMDD` prefix. The briefly-used `/YYYY/MMDD-title`
-   form 301-redirects here via `astro.config.ts`'s `redirects`.
+   form (and the older `/YYYY/MMDD-title.html`) redirect here — see the redirect mechanism below.
 4. **Notes**: file `_notes/<slug>-<YYYYMMDD>.md` → URL `/notes/<slug>-<YYYYMMDD>`.
 
 Mechanism: `build.format: "directory"` outputs every page as `<path>/index.html` (clean URLs); the
 `legacyHtmlFlattener` integration (`astro:build:done` in `astro.config.ts`) then flattens the
-historical posts (①②) back to flat `<path>.html` files. The whole URL contract lives in the static
-output, so every static host (Vercel / GitHub Pages) behaves identically and is portable.
-`vercel.json` only sets `cleanUrls: false` — no host-level routing rules.
+historical posts (①②) back to flat `<path>.html` files. Redirects are two-layer: `astro.config.ts`'s
+`redirects` bakes a `canonical`+`noindex` **meta-refresh stub** (200 HTML) into the static output as a
+portable fallback for any static host (e.g. GitHub Pages), while `vercel.json`'s `redirects` upgrades the
+same sources to true **308** permanent redirects on Vercel. Keep the two source/destination sets in sync.
+`pnpm preview` reads `vercel.json`'s `redirects`, so it reproduces Vercel's 308s 1:1.
 
 ## Commit style
 
