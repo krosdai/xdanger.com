@@ -23,9 +23,34 @@ import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
 import rehypeUnwrapImages from "rehype-unwrap-images";
 
+// Optional HTTPS for remote debugging over Tailscale via anyip.dev.
+// `<dashed-ip>.anyip.dev` resolves back to the embedded IP and anyip publishes a
+// real Let's Encrypt wildcard cert for `*.anyip.dev` (private key intentionally
+// public — same security as plain HTTP, which is fine since Tailscale already
+// encrypts the transport). Drop the cert into `.cert/anyip/` (git-ignored via
+// *.pem) and the dev server auto-serves HTTPS so secure-context APIs work:
+//   mkdir -p .cert/anyip
+//   curl -o .cert/anyip/fullchain.pem https://anyip.dev/cert/fullchain.pem
+//   curl -o .cert/anyip/privkey.pem   https://anyip.dev/cert/privkey.pem
+// Then open e.g. https://100-77-4-5.anyip.dev:4321 (your Tailscale IP, dashed).
+const anyipCert = "./.cert/anyip/fullchain.pem";
+const anyipKey = "./.cert/anyip/privkey.pem";
+const devHttps =
+  fs.existsSync(anyipCert) && fs.existsSync(anyipKey)
+    ? { cert: fs.readFileSync(anyipCert), key: fs.readFileSync(anyipKey) }
+    : undefined;
+
 // https://astro.build/config
 export default defineConfig({
   // adapter: vercel(),
+  // Dev/preview server — listen on all interfaces so it's reachable over
+  // Tailscale (MagicDNS host `*.hound-manta.ts.net`) for remote debugging.
+  // The leading dot in `allowedHosts` whitelists every machine in the tailnet.
+  server: {
+    host: true,
+    port: 4321,
+    allowedHosts: [".hound-manta.ts.net", ".anyip.dev"],
+  },
   build: {
     // https://docs.astro.build/zh-cn/reference/configuration-reference/#buildformat
     format: "preserve",
@@ -120,6 +145,12 @@ export default defineConfig({
       exclude: ["@resvg/resvg-js"],
     },
     plugins: [tailwindcss(), rawFonts([".ttf", ".woff"])],
+    // `devHttps` is undefined unless the anyip cert is present, so this is a
+    // no-op for normal local dev and only flips the dev server to HTTPS when
+    // you've downloaded the cert (see the note near the top of this file).
+    server: {
+      https: devHttps,
+    },
   },
   env: {
     schema: {

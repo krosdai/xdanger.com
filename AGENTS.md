@@ -38,6 +38,25 @@ pnpm lint           # autocorrect + prettier --check + eslint + astro check
 pnpm fix            # autocorrect + prettier --write + eslint --fix
 ```
 
+### Remote debugging over Tailscale
+
+`pnpm dev` auto-serves **HTTPS** when an [anyip.dev](https://anyip.dev) wildcard cert is present
+in `.cert/anyip/`, making the dev server reachable from any device on the tailnet with a
+browser-trusted TLS cert (handy for mobile / secure-context testing). Without the cert it falls
+back to plain HTTP on localhost, so the default local flow is unchanged.
+
+```bash
+# One-time: fetch the cert (git-ignored via *.pem; re-download ~every 90 days when it expires)
+curl -o .cert/anyip/fullchain.pem https://anyip.dev/cert/fullchain.pem
+curl -o .cert/anyip/privkey.pem   https://anyip.dev/cert/privkey.pem
+```
+
+Then run `pnpm dev` and open `https://<dashed-ip>.anyip.dev:4321`, where `<dashed-ip>` is this
+machine's Tailscale IP with dots written as dashes — look it up with `tailscale ip -4` (e.g.
+`100.77.4.5` → `100-77-4-5`). HMR works over the same port with no extra config. The mechanism
+(anyip resolves the embedded IP back, plus a public-key Let's Encrypt wildcard for `*.anyip.dev`)
+is documented in the note atop `astro.config.ts`.
+
 ### File-level checks
 
 When you edit a file by hand, run the appropriate checks before committing:
