@@ -28,7 +28,7 @@
 import { createReadStream, existsSync, readFileSync, statSync } from "node:fs";
 import { createServer as createHttpServer } from "node:http";
 import { createServer as createHttpsServer } from "node:https";
-import { extname, join, normalize, resolve, sep } from "node:path";
+import { extname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(fileURLToPath(new URL("../dist", import.meta.url)));
@@ -76,10 +76,16 @@ function isFile(p) {
  * Returns an absolute path inside ROOT, or null for a 404.
  */
 function resolveFile(pathname) {
-  const decoded = decodeURIComponent(pathname);
-  // Defend against path traversal: normalize, then confine to ROOT.
-  const safe = normalize(decoded);
-  const abs = join(ROOT, safe);
+  let decoded;
+  try {
+    decoded = decodeURIComponent(pathname);
+  } catch {
+    return null; // malformed percent-encoding → 404 instead of a thrown URIError
+  }
+  if (decoded.includes("\0")) return null; // reject NUL-byte paths
+
+  // Resolve under ROOT and confine: any `..` that would climb above ROOT → 404.
+  const abs = resolve(ROOT, `.${decoded.startsWith("/") ? decoded : `/${decoded}`}`);
   if (abs !== ROOT && !abs.startsWith(ROOT + sep)) return null;
 
   // 1. exact file (legacy `.html`, hashed assets, rss.xml, CNAME, …)
@@ -91,7 +97,10 @@ function resolveFile(pathname) {
 }
 
 function log(req, status) {
-  console.log(`${status} ${req.method} ${req.url}`);
+  // Strip control chars from method/target before logging (log-injection guard).
+  const method = String(req.method).replace(/[^A-Za-z]/g, "");
+  const target = String(req.url).replace(/[\r\n]/g, "");
+  console.log(`${status} ${method} ${target}`);
 }
 
 function handler(req, res) {
