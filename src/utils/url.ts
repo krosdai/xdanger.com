@@ -78,8 +78,3 @@ export function getCanonicalUrl(post: CollectionEntry<"post">): string {
 export function getNotePath(note: CollectionEntry<"note">): string {
   return `/notes/${bareId(note.id)}`;
 }
-
-/** 笔记的规范绝对 URL，用于 canonical 与 RSS */
-export function getNoteCanonicalUrl(note: CollectionEntry<"note">): string {
-  return new URL(getNotePath(note), import.meta.env.SITE).href;
-}
