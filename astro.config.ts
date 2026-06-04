@@ -29,9 +29,7 @@ import rehypeUnwrapImages from "rehype-unwrap-images";
 // public — same security as plain HTTP, which is fine since Tailscale already
 // encrypts the transport). Drop the cert into `.cert/anyip/` (git-ignored via
 // *.pem) and the dev server auto-serves HTTPS so secure-context APIs work:
-//   mkdir -p .cert/anyip
-//   curl -o .cert/anyip/fullchain.pem https://anyip.dev/cert/fullchain.pem
-//   curl -o .cert/anyip/privkey.pem   https://anyip.dev/cert/privkey.pem
+//   pnpm cert:anyip   # downloads fullchain.pem + privkey.pem into .cert/anyip/
 // Then open e.g. https://100-77-4-5.anyip.dev:4321 (your Tailscale IP, dashed).
 const anyipCert = "./.cert/anyip/fullchain.pem";
 const anyipKey = "./.cert/anyip/privkey.pem";

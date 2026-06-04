@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "cert:anyip": "curl -fsS --create-dirs -o .cert/anyip/fullchain.pem https://anyip.dev/cert/fullchain.pem && curl -fsS --create-dirs -o .cert/anyip/privkey.pem https://anyip.dev/cert/privkey.pem && echo 'anyip cert saved to .cert/anyip/ (run: pnpm dev for HTTPS)'",
     "build": "pnpm run build:site && pnpm run build:search",
     "build:site": "astro build",
     "build:debug": "cross-env NODE_OPTIONS=--trace-warnings pnpm run build:site",

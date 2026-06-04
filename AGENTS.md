@@ -28,6 +28,7 @@ etc.) working in this repository.
 ```bash
 pnpm install        # install deps
 pnpm dev            # local dev server
+pnpm cert:anyip     # fetch anyip TLS cert so `pnpm dev` serves HTTPS (Tailscale remote debug)
 pnpm build          # production build, including pagefind search index
 pnpm build:site     # Astro-only build for faster local rebuild checks
 pnpm build:debug    # Astro build with NODE_OPTIONS=--trace-warnings
@@ -46,9 +47,8 @@ browser-trusted TLS cert (handy for mobile / secure-context testing). Without th
 back to plain HTTP on localhost, so the default local flow is unchanged.
 
 ```bash
-# One-time: fetch the cert (git-ignored via *.pem; re-download ~every 90 days when it expires)
-curl -o .cert/anyip/fullchain.pem https://anyip.dev/cert/fullchain.pem
-curl -o .cert/anyip/privkey.pem   https://anyip.dev/cert/privkey.pem
+# One-time; re-run ~every 90 days when the cert expires. Saves into .cert/anyip/ (git-ignored).
+pnpm cert:anyip
 ```
 
 Then run `pnpm dev` and open `https://<dashed-ip>.anyip.dev:4321`, where `<dashed-ip>` is this
