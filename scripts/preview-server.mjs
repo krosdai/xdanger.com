@@ -36,6 +36,28 @@ const PORT = Number(process.env.PORT) || 4321;
 const CERT = resolve(fileURLToPath(new URL("../.cert/anyip/fullchain.pem", import.meta.url)));
 const KEY = resolve(fileURLToPath(new URL("../.cert/anyip/privkey.pem", import.meta.url)));
 
+// Mirror Vercel's host-level redirects so `pnpm preview` matches prod 1:1: read
+// `vercel.json`'s `redirects` and serve a real 308/307 BEFORE touching the
+// filesystem (Vercel runs redirects ahead of static files). The static
+// meta-refresh stubs Astro bakes for the same sources stay as the portable
+// fallback for hosts without this config (e.g. GitHub Pages).
+const REDIRECTS = (() => {
+  const map = new Map();
+  try {
+    const cfg = JSON.parse(
+      readFileSync(fileURLToPath(new URL("../vercel.json", import.meta.url)), "utf8"),
+    );
+    for (const r of cfg.redirects ?? []) {
+      if (r?.source && r?.destination) {
+        map.set(r.source, { to: r.destination, code: r.permanent === false ? 307 : 308 });
+      }
+    }
+  } catch {
+    // no vercel.json / unreadable → plain static serving, no redirects
+  }
+  return map;
+})();
+
 const MIME = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -116,6 +138,16 @@ function handler(req, res) {
   }
 
   const pathname = (req.url || "/").split("?")[0];
+
+  // Host-level redirects (mirrors vercel.json), applied before the filesystem.
+  const redirect = REDIRECTS.get(pathname);
+  if (redirect) {
+    res.writeHead(redirect.code, { Location: redirect.to });
+    res.end();
+    log(req, redirect.code);
+    return;
+  }
+
   const file = resolveFile(pathname);
 
   if (!file) {

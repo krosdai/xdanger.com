@@ -167,13 +167,20 @@ export default defineConfig({
     }),
   },
   output: "static",
+  // 每条 redirect 在静态产物里是一张带 canonical + noindex 的 meta-refresh 桩
+  // （200 HTML，供 GitHub Pages 等任意静态 host 兜底）；Vercel 上再由 vercel.json
+  // 的 redirects 升级为真正的 308 永久重定向（本地 pnpm preview 也读 vercel.json
+  // 复现 308）。两处的源/目标须保持一致。
   redirects: {
-    // ③ → ④：在 [2025-02-28, 2026-06-04)（④ 启用日）之间用 ③ `/YYYY/MMDD-slug`
-    // 形态发布过的文章，301 跳到 ④ `/slug-YYYYMMDD`。这是冻结集——此后新文章
-    // 直接以 ④ 形态发布，不再新增条目。
+    // ③/旧 .html → ④：[2025-02-28, 2026-06-04) 间这两篇 Astro 文章曾以 ③
+    // `/YYYY/MMDD-slug`（无后缀）和旧 getPostPath 的 `….html` 形态发布过，一并
+    // 重定向到 ④ `/slug-YYYYMMDD`。冻结集，此后新文章直接以 ④ 发布。
     "/2025/0315-multiplanet-civilization-v-earth-gravity":
       "/multiplanet-civilization-v-earth-gravity-20250315",
+    "/2025/0315-multiplanet-civilization-v-earth-gravity.html":
+      "/multiplanet-civilization-v-earth-gravity-20250315",
     "/2025/0504-berkshire-hathaway": "/berkshire-hathaway-20250504",
+    "/2025/0504-berkshire-hathaway.html": "/berkshire-hathaway-20250504",
     // 旧笔记 URL → 新 `<slug>-<YYYYMMDD>` 形态
     "/notes/welcome": "/notes/welcome-20250514",
   },

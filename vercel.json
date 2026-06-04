@@ -1,3 +1,30 @@
 {
-  "cleanUrls": false
+  "cleanUrls": false,
+  "redirects": [
+    {
+      "source": "/2025/0315-multiplanet-civilization-v-earth-gravity",
+      "destination": "/multiplanet-civilization-v-earth-gravity-20250315",
+      "permanent": true
+    },
+    {
+      "source": "/2025/0315-multiplanet-civilization-v-earth-gravity.html",
+      "destination": "/multiplanet-civilization-v-earth-gravity-20250315",
+      "permanent": true
+    },
+    {
+      "source": "/2025/0504-berkshire-hathaway",
+      "destination": "/berkshire-hathaway-20250504",
+      "permanent": true
+    },
+    {
+      "source": "/2025/0504-berkshire-hathaway.html",
+      "destination": "/berkshire-hathaway-20250504",
+      "permanent": true
+    },
+    {
+      "source": "/notes/welcome",
+      "destination": "/notes/welcome-20250514",
+      "permanent": true
+    }
+  ]
 }
