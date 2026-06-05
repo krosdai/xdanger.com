@@ -21,7 +21,7 @@ jobs:
       - name: Checkout your repository using git
         uses: actions/checkout@v6
       - name: Install, build, and upload your site
-        uses: withastro/action@v6
+        uses: withastro/action@b7d53628f8b666036b0238aadb0b984a2a489f26 # v6.1.1
         with:
           node-version: 24 # Match .nvmrc; Node 24 LTS, satisfies Astro 6's >=22.12.0.
           # path: . # The root location of your Astro project inside the repository. (optional)

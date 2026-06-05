@@ -17,6 +17,18 @@ export function safeHref(url?: string | null): string | undefined {
   return url && /^https?:\/\//i.test(url) ? url : undefined;
 }
 
+/**
+ * 仅放行 ISO-8601 时间戳。`lastFetched` 来自本地缓存文件，拼进 `since`
+ * 前先收敛成受控格式：缓存被篡改/损坏时直接走全量拉取，而非把任意文件内容外发。
+ * 小数秒限定 1–9 位，避免被构造成超长 URL；并要求能解析成真实日期。
+ */
+function isIsoTimestamp(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$/.test(value)) {
+    return false;
+  }
+  return !Number.isNaN(Date.parse(value));
+}
+
 // Calls webmention.io api.
 async function fetchWebmentions(timeFrom: string | null, perPage = 1000) {
   if (!DOMAIN) {
@@ -31,7 +43,7 @@ async function fetchWebmentions(timeFrom: string | null, perPage = 1000) {
 
   let url = `https://webmention.io/api/mentions.jf2?domain=${hostName}&token=${WEBMENTION_API_KEY}&sort-dir=up&per-page=${perPage}`;
 
-  if (timeFrom) url += `&since=${encodeURIComponent(timeFrom)}`;
+  if (timeFrom && isIsoTimestamp(timeFrom)) url += `&since=${encodeURIComponent(timeFrom)}`;
 
   const res = await fetch(url);
 
@@ -83,16 +95,37 @@ function writeToCache(data: WebmentionsCache) {
   });
 }
 
+// 最小结构校验：lastFetched 为 string|null、children 为含 wm-id 的对象数组，才视为可用缓存。
+// 校验到下游真正用到的 `wm-id`，避免 `children: [null]` 之类在 mergeWebmentions 里抛 TypeError。
+function isWebmentionsCache(value: unknown): value is WebmentionsCache {
+  if (typeof value !== "object" || value === null) return false;
+  const cache = value as Record<string, unknown>;
+  const lastFetchedOk = cache.lastFetched === null || typeof cache.lastFetched === "string";
+  if (!lastFetchedOk || !Array.isArray(cache.children)) return false;
+  return cache.children.every(
+    (c) => typeof c === "object" && c !== null && typeof (c as Record<string, unknown>)["wm-id"] === "number",
+  );
+}
+
 function getFromCache(): WebmentionsCache {
-  if (fs.existsSync(filePath)) {
-    const data = fs.readFileSync(filePath, "utf-8");
-    return JSON.parse(data);
+  const emptyCache: WebmentionsCache = { lastFetched: null, children: [] };
+
+  if (!fs.existsSync(filePath)) return emptyCache;
+
+  // 缓存非法 JSON、或结构不符（被改成 null/缺字段）时退化为全量拉取，
+  // 而非让异常冒泡中断构建。
+  try {
+    const parsed: unknown = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    if (!isWebmentionsCache(parsed)) {
+      console.warn("Webmentions cache has unexpected shape, falling back to full fetch");
+      return emptyCache;
+    }
+    return parsed;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn(`Webmentions cache unreadable, falling back to full fetch: ${message}`);
+    return emptyCache;
   }
-  // no cache found
-  return {
-    lastFetched: null,
-    children: [],
-  };
 }
 
 async function getAndCacheWebmentions() {
