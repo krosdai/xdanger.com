@@ -95,16 +95,31 @@ function writeToCache(data: WebmentionsCache) {
   });
 }
 
+// 最小结构校验：lastFetched 为 string|null、children 为数组，才视为可用缓存。
+function isWebmentionsCache(value: unknown): value is WebmentionsCache {
+  if (typeof value !== "object" || value === null) return false;
+  const cache = value as Record<string, unknown>;
+  const lastFetchedOk = cache.lastFetched === null || typeof cache.lastFetched === "string";
+  return lastFetchedOk && Array.isArray(cache.children);
+}
+
 function getFromCache(): WebmentionsCache {
   const emptyCache: WebmentionsCache = { lastFetched: null, children: [] };
 
   if (!fs.existsSync(filePath)) return emptyCache;
 
-  // 缓存损坏/非法 JSON 时退化为全量拉取，而非让异常冒泡中断构建。
+  // 缓存非法 JSON、或结构不符（被改成 null/缺字段）时退化为全量拉取，
+  // 而非让异常冒泡中断构建。
   try {
-    return JSON.parse(fs.readFileSync(filePath, "utf-8")) as WebmentionsCache;
+    const parsed: unknown = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    if (!isWebmentionsCache(parsed)) {
+      console.warn("Webmentions cache has unexpected shape, falling back to full fetch");
+      return emptyCache;
+    }
+    return parsed;
   } catch (err) {
-    console.warn(`Webmentions cache unreadable, falling back to full fetch: ${err}`);
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn(`Webmentions cache unreadable, falling back to full fetch: ${message}`);
     return emptyCache;
   }
 }
