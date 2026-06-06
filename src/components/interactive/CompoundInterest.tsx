@@ -113,7 +113,10 @@ export default function CompoundInterest({
           </span>
         </p>
         <p className="text-foreground/70 font-mono tabular-nums">
-          收益 +{fmt(gain)}（{gainPct.toFixed(0)}%）
+          {/* rate 可经 prop 传负数 → gain/gainPct 为负，fmt() 已自带 `-`；
+              只在非负时补 `+`，避免出现 `+-123` 双符号。 */}
+          收益 {gain >= 0 ? "+" : ""}
+          {fmt(gain)}（{gainPct.toFixed(0)}%）
         </p>
         <button
           type="button"
