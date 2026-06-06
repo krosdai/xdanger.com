@@ -46,7 +46,9 @@ export default function CompoundInterest({
   }, [principal, rate, years]);
 
   const final = series[series.length - 1] ?? principal;
-  const peak = Math.max(final, 1);
+  // 用整段序列的最大值做峰值：rate 可经 prop 传负数（滑块 min=0 只约束拖动），
+  // 此时序列递减、principal 才是峰值，用 final 会让所有柱子超过 100% 溢出容器。
+  const peak = Math.max(...series, 1);
   const gain = final - principal;
   // principal 可由 prop 传入 0（滑块 min=100 只约束拖动，不约束初值）→ 守护分母避免 NaN%。
   const gainPct = principal > 0 ? (gain / principal) * 100 : 0;
