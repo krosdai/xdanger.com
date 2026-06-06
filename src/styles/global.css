@@ -209,8 +209,16 @@
  * the project's proven pattern for flipping CSS custom properties. Every color
  * is a literal oklch so Canvas components can read it via getComputedStyle in
  * either theme (per AGENTS.md "Theme linkage contract").
+ *
+ * `static` is required: many tokens (the `--color-seq-*` ramps, chart infra) are
+ * consumed *only* through raw `var()` / SVG attributes / getComputedStyle, never a
+ * Tailwind utility, so v4's default `@theme` pruning would drop their LIGHT `:root`
+ * declarations. The dark overrides live in a plain `@layer base` rule (never
+ * pruned), so the loss showed up in light mode only — empty seq swatches, black
+ * Fibonacci fills. `static` emits every token unconditionally, honoring the
+ * runtime-read contract above.
  * ========================================================================== */
-@theme {
+@theme static {
   /* ---- Type families — renamed (plexSans→sans, plexSerif→serif,
    * plexMono→mono, writer→writer) but the actual faces + fallback chains are
    * unchanged. The Latin-only webfonts lean on the generic families so the
