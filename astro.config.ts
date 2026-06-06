@@ -30,9 +30,11 @@ import rehypeUnwrapImages from "rehype-unwrap-images";
 // `<dashed-ip>.anyip.dev` resolves back to the embedded IP and anyip publishes a
 // real Let's Encrypt wildcard cert for `*.anyip.dev` (private key intentionally
 // public — same security as plain HTTP, which is fine since Tailscale already
-// encrypts the transport). Drop the cert into `.cert/anyip/` (git-ignored via
-// *.pem) and the dev server auto-serves HTTPS so secure-context APIs work:
-//   pnpm cert:anyip   # downloads fullchain.pem + privkey.pem into .cert/anyip/
+// encrypts the transport). The cert lives in `.cert/anyip/` (git-ignored via
+// *.pem); whenever it's present the dev server auto-serves HTTPS so
+// secure-context APIs work. `pnpm dev` ensures the cert first (see
+// scripts/ensure-anyip-cert.mjs), so it's HTTPS by default; `pnpm cert:anyip`
+// force-refreshes it.
 // Then open e.g. https://100-77-4-5.anyip.dev:4321 (your Tailscale IP, dashed).
 const anyipCert = "./.cert/anyip/fullchain.pem";
 const anyipKey = "./.cert/anyip/privkey.pem";
@@ -53,9 +55,10 @@ const devHttps = (() => {
 export default defineConfig({
   // adapter: vercel(),
   // Dev server. Only bind to all interfaces when the anyip cert is present
-  // (i.e. you've opted into HTTPS remote debugging over Tailscale). Without the
-  // cert, fall back to Astro's localhost-only default so a plain `pnpm dev` is
-  // never exposed to the LAN.
+  // (i.e. HTTPS remote debugging over Tailscale). `pnpm dev` provisions the cert
+  // up front, so it binds here by default; running `astro dev` directly with no
+  // cert on disk falls back to Astro's localhost-only default and is never
+  // exposed to the LAN.
   //
   // No `allowedHosts` here: Vite skips its host-header allowlist entirely when
   // the dev server runs over HTTPS (https://vite.dev/config/server-options),

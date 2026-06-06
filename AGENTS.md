@@ -27,8 +27,8 @@ etc.) working in this repository.
 
 ```bash
 pnpm install        # install deps
-pnpm dev            # local dev server
-pnpm cert:anyip     # fetch anyip TLS cert so `pnpm dev` serves HTTPS (Tailscale remote debug)
+pnpm dev            # dev server; auto-provisions anyip cert → HTTPS on all interfaces (:4321)
+pnpm cert:anyip     # force-refresh the anyip TLS cert (pnpm dev already auto-fetches it)
 pnpm build          # production build, including pagefind search index
 pnpm build:site     # Astro-only build for faster local rebuild checks
 pnpm build:debug    # Astro build with NODE_OPTIONS=--trace-warnings
@@ -41,25 +41,28 @@ pnpm fix            # autocorrect + prettier --write + eslint --fix
 
 ### Remote debugging over Tailscale
 
-`pnpm dev` auto-serves **HTTPS** when an [anyip.dev](https://anyip.dev) wildcard cert is present
-in `.cert/anyip/`, making the dev server reachable from any device on the tailnet with a
-browser-trusted TLS cert (handy for mobile / secure-context testing). Without the cert it falls
-back to plain HTTP on localhost, so the default local flow is unchanged.
+`pnpm dev` provisions an [anyip.dev](https://anyip.dev) wildcard cert into `.cert/anyip/` before
+starting (via `scripts/ensure-anyip-cert.mjs`), then auto-serves **HTTPS** bound to all interfaces
+— so the dev server is reachable from any device on the tailnet with a browser-trusted TLS cert
+(handy for mobile / secure-context testing). The prestep is idempotent: it skips the network when
+a valid, unexpired cert is already on disk, auto-renews when it's within 7 days of expiry, and
+fails open (warns, then runs plain HTTP on localhost) when offline.
 
 ```bash
-# One-time; re-run ~every 90 days when the cert expires. Saves into .cert/anyip/ (git-ignored).
-pnpm cert:anyip
+pnpm dev            # ensures cert, then HTTPS dev on :4321 (all interfaces)
+pnpm cert:anyip     # force a cert refresh now (rarely needed; pnpm dev auto-renews)
 ```
 
-Then run `pnpm dev` and open `https://<dashed-ip>.anyip.dev:4321`, where `<dashed-ip>` is this
-machine's Tailscale IP with dots written as dashes — look it up with `tailscale ip -4` (e.g.
-`100.77.4.5` → `100-77-4-5`). HMR works over the same port with no extra config. The mechanism
-(anyip resolves the embedded IP back, plus a Let's Encrypt wildcard cert for `*.anyip.dev` whose
-private key is intentionally public) is documented in the note atop `astro.config.ts`.
+Open `https://<dashed-ip>.anyip.dev:4321`, where `<dashed-ip>` is this machine's Tailscale IP with
+dots written as dashes — look it up with `tailscale ip -4` (e.g. `100.77.4.5` → `100-77-4-5`). HMR
+works over the same port with no extra config. The mechanism (anyip resolves the embedded IP back,
+plus a Let's Encrypt wildcard cert for `*.anyip.dev` whose private key is intentionally public) is
+documented in the note atop `astro.config.ts`.
 
-> **Heads-up:** with the cert present the dev server binds to all interfaces (`0.0.0.0`), so it's
-> reachable not only over Tailscale but on any LAN the machine is attached to — enable it only on
-> networks you trust, or add a firewall rule. Without the cert, `pnpm dev` stays on `localhost`.
+> **Heads-up:** `pnpm dev` now binds to all interfaces (`0.0.0.0`), so it's reachable not only over
+> Tailscale but on any LAN the machine is attached to — run it only on networks you trust, or add a
+> firewall rule. To stay localhost-only, run `astro dev` directly (no cert prestep) or delete
+> `.cert/anyip/` and use Astro's default.
 
 ### File-level checks
 
