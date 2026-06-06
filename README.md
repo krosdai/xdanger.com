@@ -101,7 +101,7 @@ pnpm install
 ### 重要文件
 
 - `AGENTS.md` - 给所有 AI 编程助手的规范说明
-- `MIGRATION.md` - 包含从 Next.js 迁移到 Astro 的完整过程记录和待办事项
+- `docs/20250413_migration.md` - 包含从 Next.js 迁移到 Astro 的完整过程记录和待办事项
 - `astro.config.ts` - Astro 配置文件
 - `src/site.config.ts` - 网站核心配置
 - `src/utils/url.ts` - URL 格式处理工具函数
