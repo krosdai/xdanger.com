@@ -74,8 +74,8 @@ pnpm install
 
 4. 笔记（notes）：
 
-   - 文件路径：`_notes/<slug>-<YYYYMMDD>.md`
-   - URL 形态：`/notes/<slug>-<YYYYMMDD>`（干净 URL）
+   - 文件路径：`_notes/<YYYY>/<MMDD>-<slug>.md`（按年分目录、日期前缀，与文章 Astro 期对齐）
+   - URL 形态：`/notes/<slug>-<YYYYMMDD>`（干净 URL，日期取自路径，时区无关；文件名不符合约定会导致构建失败）
 
 实现机制：`build.format: "directory"` 让每个页面默认输出为 `<path>/index.html`（干净 URL）；
 历史文章（①②）在 `astro:build:done` 钩子（`astro.config.ts` 的 `legacyHtmlFlattener`）里被还原成

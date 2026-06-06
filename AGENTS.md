@@ -110,7 +110,9 @@ The site uses **clean URLs by default, with the frozen legacy posts as the excep
 3. **Astro era** (date ≥ `2025-02-28`): `/title-YYYYMMDD` (clean, no `.html`); slug comes from the
    filename after `MMDD-`, date from the `YYYY`+`MMDD` prefix. The briefly-used `/YYYY/MMDD-title`
    form (and the older `/YYYY/MMDD-title.html`) redirect here — see the redirect mechanism below.
-4. **Notes**: file `_notes/<slug>-<YYYYMMDD>.md` → URL `/notes/<slug>-<YYYYMMDD>`.
+4. **Notes**: file `_notes/<YYYY>/<MMDD>-<slug>.md` (year-foldered, date-prefixed; mirrors the
+   Astro-era post layout) → URL `/notes/<slug>-<YYYYMMDD>`. The date comes from the path, so it is
+   timezone-independent; a filename that doesn't match the convention fails the build.
 
 Mechanism: `build.format: "directory"` outputs every page as `<path>/index.html` (clean URLs); the
 `legacyHtmlFlattener` integration (`astro:build:done` in `astro.config.ts`) then flattens the
