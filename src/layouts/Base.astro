@@ -39,7 +39,9 @@ const {
     <div class="text-foreground flex min-h-svh flex-col overflow-x-clip text-sm">
       <ThemeProvider />
       <SkipLink />
-      <Header />
+      <Header>
+        <slot name="header-nav" slot="nav" />
+      </Header>
       <main id="main" class="relative flex flex-grow flex-col pt-3 [&>*]:relative">
         <slot />
       </main>

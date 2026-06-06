@@ -118,6 +118,18 @@ const bars = [22, 30, 38, 47, 57, 68, 80, 93].map((h, i) => ({
 ---
 
 <PageLayout meta={meta}>
+  {
+    /* Section nav injected into the shared site header, mirroring the design
+      system reference's `.topnav` (mono links, accent hover underline, hidden
+      below 760px). Scoped to this page via Astro's authoring-location scoping. */
+  }
+  <nav slot="header-nav" class="ds-topnav" aria-label="Sections">
+    <a href="#color">color</a>
+    <a href="#type">type</a>
+    <a href="#space">space</a>
+    <a href="#motion">motion</a>
+    <a href="#components">components</a>
+  </nav>
   <div class="ds page-shell">
     <!-- ===== Intro ===== -->
     <section class="ds-intro">
@@ -560,6 +572,35 @@ const bars = [22, 30, 38, 47, 57, 68, 80, 93].map((h, i) => ({
      can't override the utility. */
   .ds {
     padding-bottom: var(--space-10);
+  }
+
+  /* Section nav rendered inside the site header (via the `header-nav` slot),
+     styled after the reference topbar's `.topnav`: mono links that turn accent
+     with an underline on hover, hidden below the reference's 760px breakpoint. */
+  .ds-topnav {
+    display: flex;
+    gap: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+  }
+  .ds-topnav a {
+    color: var(--color-ink-muted);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    transition:
+      color var(--dur-fast) var(--ease-standard),
+      border-color var(--dur-fast) var(--ease-standard);
+  }
+  .ds-topnav a:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+  @media (max-width: 760px) {
+    .ds-topnav {
+      display: none;
+    }
   }
 
   .ds code {

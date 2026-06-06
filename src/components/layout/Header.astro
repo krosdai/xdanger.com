@@ -20,7 +20,10 @@ import { siteConfig } from "@/site.config";
           Notes on tech, products, and life.
         </p>
       </div>
-      <ThemeToggle />
+      <div class="site-header-actions flex items-center gap-6">
+        <slot name="nav" />
+        <ThemeToggle />
+      </div>
     </div>
   </div>
 </header>
