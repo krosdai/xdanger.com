@@ -58,14 +58,22 @@ lark-cli im +messages-send --as bot --user-id ou_b196a9da09c0f5dce927256299ebdba
    - `AGENTS.md`：「Interactive component layers」（分层 SVG>Canvas>React、主题 token、
      reduced-motion、a11y、`client:*` 默认、`not-prose`）与「Chinese typography」（CJK / ASCII
      间空格，°% 除外）
+   - **design system（视觉/交互组件必须遵循）**：`/design-system` 页 + `src/styles/global.css`
+     的 token 系统。颜色一律**按角色用 token、绝不硬编码**——主操作/单序列/链接用 `--color-accent`，
+     多序列用分类色 `--color-cat-1…6`（跨主题稳定），量级/序号用 sequential `--color-seq-*`，盈亏用
+     `--color-positive`/`--color-negative`；间距 `--space-*`、圆角 `--radius-*`、动效 `--dur-*`·`--ease-*`
+     同理。Canvas 取色只读两套主题都是**字面 oklch** 的 token。
    - `src/content.config.ts`：note 的 frontmatter schema（title ≤60、给 description、publishDate
      ISO8601 带 offset 且 = issue createdAt 当日）
    - `src/utils/url.ts`：文件名↔URL 规则 `_notes/<YYYY>/<MMDD>-<slug>.mdx` → `/notes/<slug>-<YYYYMMDD>`
      （不符则构建失败）
-   - 范本：`_notes/2026/0605-interactive-notes.mdx`
+   - 范本（活的 design system 样板，直接复用 / 模仿其组件）：`_notes/2026/0605-interactive-notes.mdx`
+     与 `src/components/viz/*`、`src/components/interactive/*`
 
-   内容客观、只渲染 issue 里有的事实，交互层够用即可（prose-only 也行）。**只动 `_notes/`**（及
-   确有必要的 `src/components/`）。不过关 → 白名单清理草稿 + `note-blocked` + 📣 + 进下一个。
+   内容客观、只渲染 issue 里有的事实，交互层够用即可（prose-only 也行）；但凡放视觉/交互组件，
+   一律走上面的 design system（token、主题契约、reduced-motion、a11y），优先复用现有范例组件。
+   **只动 `_notes/`**（及确有必要的 `src/components/`）。不过关 → 白名单清理草稿 + `note-blocked` +
+   📣 + 进下一个。
 4. **本地门禁** — `pnpm fix && pnpm lint && pnpm build:site` 全过（仓库无 PR build/lint check，
    deploy 也只构建，本地是唯一兜底）。失败 → 同 §3 收尾。
 5. **PR 前深度评审（并行，独立外部把关）** — note 写好、未建 PR 时：
