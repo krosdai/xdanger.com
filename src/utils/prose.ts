@@ -12,4 +12,4 @@
  * 类名 token，工具类照常生成。
  */
 export const PROSE_ARTICLE =
-  "prose prose-base prose-headings:font-plex-serif-medium prose-headings:font-medium prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-gray-600 dark:prose-headings:before:text-gray-400 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none";
+  "prose prose-base prose-headings:font-serif-medium prose-headings:font-medium prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-gray-600 dark:prose-headings:before:text-gray-400 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none";

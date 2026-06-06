@@ -29,7 +29,7 @@ export const siteConfig: SiteConfig = {
 export const expressiveCodeOptions: AstroExpressiveCodeOptions = {
   styleOverrides: {
     borderRadius: "4px",
-    codeFontFamily: "var(--font-plex-mono)",
+    codeFontFamily: "var(--font-mono)",
     codeFontSize: "0.875rem",
     codeLineHeight: "1.7142857rem",
     codePaddingInline: "1rem",

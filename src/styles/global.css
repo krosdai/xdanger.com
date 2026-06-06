@@ -81,7 +81,7 @@
 /* Inter (variable) via Fontsource CDN — https://fontsource.org/fonts/inter/cdn.
  * latin + latin-ext subsets, each weight 100–900 in one file. unicode-range lets
  * the browser fetch only the subset a page actually needs. CJK is not in Inter, so
- * it falls back per the --font-alias-writer stack. */
+ * it falls back per the --font-writer stack. */
 @font-face {
   font-family: "Inter Variable";
   font-style: normal;
@@ -200,36 +200,151 @@
   --sidebar-ring: oklch(0.488 0.243 264.376);
 }
 
-/* you could refactor below to use light-dark(), depending on your target audience */
+/* ============================================================================
+ * Design tokens — editorial palette absorbed from the xdanger design system
+ * (color · space · radius · elevation · motion). Authored in oklch · warm
+ * paper / charcoal ink; the brand accent shifts hue across themes (crimson in
+ * light → emerald in dark). LIGHT values live here in @theme (Tailwind's lowest
+ * layer); dark overrides sit in the `html[data-theme="dark"]` base block below,
+ * the project's proven pattern for flipping CSS custom properties. Every color
+ * is a literal oklch so Canvas components can read it via getComputedStyle in
+ * either theme (per AGENTS.md "Theme linkage contract").
+ * ========================================================================== */
 @theme {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-link: oklch(70.44% 0.1133 349);
-  --color-accent: oklch(55.27% 0.195 19.06);
-  --color-accent-2: oklch(18.15% 0 0);
-  --color-quote: oklch(55.27% 0.195 19.06);
-  /* --color-quote: var(--muted-foreground); */
-  /* Four type families. The Latin-only faces (iA Writer, Inter) lean on the
-   * generic families below — the browser picks the right system font per platform
-   * and substitutes the system CJK font for glyphs the webfont lacks. */
-  --font-alias-plexSans: "iA Writer Quattro", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-alias-plexSerif: "LXGW Bright", ui-serif, serif;
-  --font-alias-plexMono: "iA Writer Mono", ui-monospace, monospace;
-  --font-alias-writer: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system,
-    sans-serif;
+  /* ---- Type families — renamed (plexSans→sans, plexSerif→serif,
+   * plexMono→mono, writer→writer) but the actual faces + fallback chains are
+   * unchanged. The Latin-only webfonts lean on the generic families so the
+   * browser substitutes the system CJK font for glyphs they lack. */
+  --font-sans: "iA Writer Quattro", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: "LXGW Bright", ui-serif, serif;
+  --font-mono: "iA Writer Mono", ui-monospace, monospace;
+  --font-writer: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
   /* Medium cuts reuse the same family; weight comes from font-medium / 500. */
-  --font-alias-plexSerifMedium: var(--font-alias-plexSerif);
-  --font-alias-writerMedium: var(--font-alias-writer);
-  --font-plex-serif: var(--font-alias-plexSerif);
-  --font-plex-serif-medium: var(--font-alias-plexSerifMedium);
-  --font-plex-sans: var(--font-alias-plexSans);
-  --font-writer: var(--font-alias-writer);
-  --font-writer-medium: var(--font-alias-writerMedium);
-  --font-plex-mono: var(--font-alias-plexMono);
-  --font-sans: var(--font-alias-plexSans);
-  --font-mono: var(--font-alias-plexMono);
+  --font-serif-medium: var(--font-serif);
+  --font-writer-medium: var(--font-writer);
+
+  /* ---- Surfaces & ink (warm, near-neutral) ------------------------------ */
+  --color-bg: oklch(0.978 0.006 83); /* page paper */
+  --color-surface: oklch(0.965 0.007 83); /* cards, panels */
+  --color-surface-2: oklch(0.945 0.008 83); /* sunken / inset wells */
+  --color-ink: oklch(0.29 0.012 60); /* primary text */
+  --color-ink-muted: oklch(0.53 0.012 62); /* secondary text */
+  --color-ink-faint: oklch(0.68 0.01 65); /* captions, dates */
+  --color-line: oklch(0.905 0.006 75); /* hairline borders */
+  --color-line-strong: oklch(0.83 0.008 72); /* stronger dividers */
+
+  /* ---- Brand accent (crimson in light · emerald in dark) ---------------- */
+  --color-accent: oklch(0.555 0.142 23);
+  --color-accent-hover: oklch(0.495 0.142 23);
+  --color-accent-weak: oklch(0.555 0.142 23 / 0.12); /* tints / fills */
+  --color-accent-contrast: oklch(0.985 0.005 83); /* text on accent */
+
+  /* ---- Categorical palette (multi-series charts) ------------------------ */
+  /* One family: equal register, distinct hue. Stable across themes so a series
+   * keeps its identity. cat-1 == accent in LIGHT only. */
+  --color-cat-1: oklch(0.555 0.142 23); /* crimson */
+  --color-cat-2: oklch(0.62 0.115 47); /* terracotta */
+  --color-cat-3: oklch(0.715 0.105 80); /* ochre */
+  --color-cat-4: oklch(0.615 0.092 150); /* sage */
+  --color-cat-5: oklch(0.565 0.082 235); /* steel */
+  --color-cat-6: oklch(0.545 0.098 305); /* plum */
+
+  /* ---- Sequential · accent (crimson light → emerald dark) · 1 low → 6 hi - */
+  --color-seq-accent-1: oklch(0.935 0.028 25);
+  --color-seq-accent-2: oklch(0.865 0.058 24);
+  --color-seq-accent-3: oklch(0.775 0.09 24);
+  --color-seq-accent-4: oklch(0.675 0.12 23);
+  --color-seq-accent-5: oklch(0.575 0.14 23);
+  --color-seq-accent-6: oklch(0.475 0.128 22);
+
+  /* ---- Sequential · steel ----------------------------------------------- */
+  --color-seq-steel-1: oklch(0.935 0.018 235);
+  --color-seq-steel-2: oklch(0.855 0.04 235);
+  --color-seq-steel-3: oklch(0.76 0.06 235);
+  --color-seq-steel-4: oklch(0.66 0.075 235);
+  --color-seq-steel-5: oklch(0.565 0.082 235);
+  --color-seq-steel-6: oklch(0.47 0.078 235);
+
+  /* ---- Sequential · neutral (warm gray ramp) ---------------------------- */
+  --color-seq-neutral-1: oklch(0.945 0.005 75);
+  --color-seq-neutral-2: oklch(0.875 0.006 75);
+  --color-seq-neutral-3: oklch(0.785 0.008 75);
+  --color-seq-neutral-4: oklch(0.66 0.009 72);
+  --color-seq-neutral-5: oklch(0.52 0.01 65);
+  --color-seq-neutral-6: oklch(0.36 0.01 60);
+
+  /* ---- Semantic · gain / loss (finance; swap for CN-market convention) -- */
+  --color-positive: oklch(0.585 0.105 150);
+  --color-positive-weak: oklch(0.585 0.105 150 / 0.14);
+  --color-negative: oklch(0.555 0.15 26);
+  --color-negative-weak: oklch(0.555 0.15 26 / 0.14);
+
+  /* ---- Chart infrastructure --------------------------------------------- */
+  --color-grid: oklch(0.915 0.005 75); /* gridlines */
+  --color-axis: oklch(0.8 0.008 72); /* axes, ticks */
+  --color-track: oklch(0.9 0.006 75); /* slider / progress bed */
+  --color-placeholder: oklch(0.84 0.008 72); /* dashed empty strokes */
+  --color-highlight: oklch(0.555 0.142 23 / 0.1); /* hover wash */
+
+  /* ---- Legacy semantic aliases → mapped onto the palette ----------------
+   * Keeps every existing utility (bg-background, text-foreground, …) working.
+   * accent-2 / link / quote are kept as LITERAL oklch (not var() chains) so
+   * Canvas components reading them via getComputedStyle stay reliable. */
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-ink);
+  --color-primary: var(--color-accent);
+  --color-primary-foreground: var(--color-accent-contrast);
+  --color-accent-2: oklch(0.29 0.012 60); /* = ink */
+  --color-link: oklch(0.555 0.142 23); /* = accent */
+  --color-quote: oklch(0.555 0.142 23); /* = accent */
+
+  /* ---- Spacing (4px base) ----------------------------------------------- */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* ---- Radius (the scale the whole UI now adopts) ----------------------- */
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 999px;
+
+  /* ---- Elevation (warm, soft; dark overrides below) --------------------- */
+  --shadow-sm: 0 1px 2px oklch(0.3 0.02 60 / 0.06), 0 1px 1px oklch(0.3 0.02 60 / 0.04);
+  --shadow-md: 0 2px 8px oklch(0.3 0.02 60 / 0.08), 0 1px 2px oklch(0.3 0.02 60 / 0.05);
+  --shadow-lg: 0 8px 30px oklch(0.3 0.02 60 / 0.1), 0 2px 6px oklch(0.3 0.02 60 / 0.06);
+
+  /* ---- Motion (durations collapse to 0 under reduced-motion below) ------ */
+  --dur-instant: 80ms;
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --dur-slow: 420ms;
+  --dur-slower: 720ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Reduced-motion: zero out durations. Unlayered :root beats @theme's layer. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-instant: 0ms;
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+    --dur-slower: 0ms;
+  }
 }
 
 @layer base {
@@ -250,32 +365,90 @@
       color-scheme: light;
     }
 
+    /* DARK — warm near-black; chart hues lift in L, ease off C so they glow
+     * without going neon. Overriding the palette base tokens here cascades to
+     * the legacy aliases (background/foreground/primary) via their var() maps;
+     * accent-2 / link / quote are re-stated as literals for Canvas reads. */
     &[data-theme="dark"] {
       color-scheme: dark;
-      --color-background: oklch(23.64% 0 0);
-      --color-foreground: oklch(83.54% 0 264);
-      --color-primary: oklch(0.546 0.245 262.881);
-      --color-primary-foreground: oklch(0.379 0.146 265.522);
-      --color-link: oklch(55.44% 0.0431 185.69);
-      --color-accent: oklch(70.91% 0.1415 163.7);
-      --color-accent-2: oklch(94.66% 0 0);
-      --color-quote: oklch(94.8% 0.106 136.49);
+
+      --color-bg: oklch(0.205 0.008 65);
+      --color-surface: oklch(0.245 0.009 65);
+      --color-surface-2: oklch(0.285 0.01 65);
+      --color-ink: oklch(0.925 0.008 82);
+      --color-ink-muted: oklch(0.72 0.01 75);
+      --color-ink-faint: oklch(0.55 0.01 70);
+      --color-line: oklch(0.33 0.009 65);
+      --color-line-strong: oklch(0.44 0.01 65);
+
+      --color-accent: oklch(0.78 0.15 162);
+      --color-accent-hover: oklch(0.83 0.15 162);
+      --color-accent-weak: oklch(0.78 0.15 162 / 0.18);
+      --color-accent-contrast: oklch(0.2 0.02 162);
+
+      --color-cat-1: oklch(0.665 0.15 24);
+      --color-cat-2: oklch(0.705 0.12 48);
+      --color-cat-3: oklch(0.79 0.108 82);
+      --color-cat-4: oklch(0.72 0.105 150);
+      --color-cat-5: oklch(0.7 0.092 235);
+      --color-cat-6: oklch(0.68 0.105 305);
+
+      --color-seq-accent-1: oklch(0.34 0.05 165);
+      --color-seq-accent-2: oklch(0.44 0.08 164);
+      --color-seq-accent-3: oklch(0.54 0.105 163);
+      --color-seq-accent-4: oklch(0.64 0.125 162);
+      --color-seq-accent-5: oklch(0.72 0.14 162);
+      --color-seq-accent-6: oklch(0.8 0.15 162);
+
+      --color-seq-steel-1: oklch(0.32 0.04 235);
+      --color-seq-steel-2: oklch(0.41 0.058 235);
+      --color-seq-steel-3: oklch(0.5 0.072 235);
+      --color-seq-steel-4: oklch(0.59 0.082 235);
+      --color-seq-steel-5: oklch(0.685 0.09 235);
+      --color-seq-steel-6: oklch(0.77 0.085 235);
+
+      --color-seq-neutral-1: oklch(0.3 0.008 65);
+      --color-seq-neutral-2: oklch(0.4 0.008 70);
+      --color-seq-neutral-3: oklch(0.52 0.009 72);
+      --color-seq-neutral-4: oklch(0.64 0.009 75);
+      --color-seq-neutral-5: oklch(0.77 0.008 78);
+      --color-seq-neutral-6: oklch(0.9 0.007 80);
+
+      --color-positive: oklch(0.7 0.115 150);
+      --color-positive-weak: oklch(0.7 0.115 150 / 0.2);
+      --color-negative: oklch(0.665 0.15 27);
+      --color-negative-weak: oklch(0.665 0.15 27 / 0.2);
+
+      --color-grid: oklch(0.32 0.008 65);
+      --color-axis: oklch(0.45 0.009 68);
+      --color-track: oklch(0.33 0.009 65);
+      --color-placeholder: oklch(0.4 0.009 65);
+      --color-highlight: oklch(0.78 0.15 162 / 0.16);
+
+      /* literal restatements for Canvas reads */
+      --color-accent-2: oklch(0.925 0.008 82); /* = ink */
+      --color-link: oklch(0.78 0.15 162); /* = accent */
+      --color-quote: oklch(0.78 0.15 162); /* = accent */
+
+      --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.4), 0 1px 1px oklch(0 0 0 / 0.3);
+      --shadow-md: 0 2px 10px oklch(0 0 0 / 0.45), 0 1px 2px oklch(0 0 0 / 0.35);
+      --shadow-lg: 0 10px 36px oklch(0 0 0 / 0.55), 0 2px 8px oklch(0 0 0 / 0.4);
     }
   }
   body {
-    @apply font-plex-sans;
+    @apply font-sans;
     min-height: 100%;
     background-color: var(--color-background);
   }
   /* Default heading family is writer (Inter). The named title utilities
    * (page-title, article-title, title) and prose headings opt
-   * back into plexSerif themselves; this is just the fallback for "naked"
+   * back into serif themselves; this is just the fallback for "naked"
    * headings. Plain (not :where) so font-weight beats Preflight's
    * `h1, h2, h3, h4, h5, h6 { font-weight: inherit }` — Inter Variable spans the
    * full weight range, so 500 is stated outright. Utilities (font-medium, the
    * named title utilities, prose typography) sit in later layers and override. */
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-alias-writer);
+    font-family: var(--font-writer);
     font-weight: 500;
   }
   /* Only the top two headings keep Medium; h3–h6 drop to normal weight so CJK
@@ -285,7 +458,7 @@
   }
 
   :where(code, kbd, samp, pre) {
-    font-family: var(--font-alias-plexMono);
+    font-family: var(--font-mono);
   }
 
   /* Inline-code chip for non-article code (e.g. the "xdanger" handle): a faint
@@ -346,17 +519,17 @@ a.not-prose {
 }
 
 @utility title {
-  @apply text-accent-2 font-plex-serif-medium text-2xl font-medium;
+  @apply text-accent-2 font-serif-medium text-2xl font-medium;
 }
 
 /* Reusable inline typography classes, applied element-by-element.
  * note → body-ish small sans; date → mono timestamps; heading → small writer-font title. */
 @utility note {
-  @apply font-plex-sans text-[13px];
+  @apply font-sans text-[13px];
 }
 
 @utility date {
-  @apply font-plex-mono text-[13px];
+  @apply font-mono text-[13px];
 }
 
 @utility heading {
@@ -383,11 +556,11 @@ a.not-prose {
 }
 
 @utility page-title {
-  @apply text-accent-2 font-plex-serif-medium text-4xl leading-tight font-medium sm:text-5xl;
+  @apply text-accent-2 font-serif-medium text-4xl leading-tight font-medium sm:text-5xl;
 }
 
 @utility article-title {
-  @apply text-accent-2 font-plex-serif-medium text-2xl leading-tight font-medium sm:text-4xl;
+  @apply text-accent-2 font-serif-medium text-2xl leading-tight font-medium sm:text-4xl;
 }
 
 @utility subtitle {
@@ -395,7 +568,7 @@ a.not-prose {
 }
 
 @utility section {
-  @apply font-plex-sans text-xl font-medium;
+  @apply font-sans text-xl font-medium;
 }
 
 @layer components {
@@ -479,14 +652,14 @@ a.not-prose {
   --tw-prose-quotes: var(--color-quote);
   --tw-prose-th-borders: #666;
 
-  font-family: var(--font-alias-writer);
+  font-family: var(--font-writer);
 
   :where(h1, h2, h3, h4, h5, h6) {
-    font-family: var(--font-alias-plexSerif);
+    font-family: var(--font-serif);
   }
 
   :where(code, kbd, samp) {
-    font-family: var(--font-alias-plexMono);
+    font-family: var(--font-mono);
   }
 
   /* Inline code matches the chrome `xdanger` chip: faint neutral bg, rounded, no

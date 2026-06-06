@@ -36,7 +36,7 @@ export default {
               fontStyle: "italic",
             },
             strong: {
-              fontFamily: "var(--font-alias-writerMedium)",
+              fontFamily: "var(--font-writer-medium)",
               fontWeight: "500",
             },
             sup: {

@@ -31,9 +31,7 @@ const subtitle = post.data.subtitle?.trim();
   <FormattedDate class="date text-muted order-3 shrink-0" date={post.data.publishDate} />
   {
     subtitle && (
-      <p class="font-plex-sans text-muted order-2 w-full text-sm leading-snug sm:order-4">
-        {subtitle}
-      </p>
+      <p class="text-muted order-2 w-full font-sans text-sm leading-snug sm:order-4">{subtitle}</p>
     )
   }
 </article>
