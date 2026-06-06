@@ -247,8 +247,9 @@ const {
         ctx.stroke();
       }
       ctx.globalAlpha = 1;
-      // 彗头（仅动画进行中）。
-      if (head < M) {
+      // 彗头（仅动画进行中）。head 在 wrap 帧被置 0，须 `> 0` 守卫，否则
+      // `px[head - 1]` 读到 px[-1]（undefined）→ NaN 进 ctx.arc。
+      if (head > 0 && head < M) {
         ctx.beginPath();
         ctx.arc(this.sx(this.px[head - 1]), this.sy(this.pz[head - 1]), 2.6, 0, Math.PI * 2);
         ctx.fillStyle = this.accent;
