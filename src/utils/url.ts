@@ -72,9 +72,38 @@ export function getCanonicalUrl(post: CollectionEntry<"post">): string {
 }
 
 /**
- * 笔记对外路径。笔记文件命名约定为 `<slug>-<YYYYMMDD>.md`，故 `note.id` 已含日期，
- * URL 直接为 `/notes/<id>`（在 `build.format: "directory"` 下输出为干净 URL）。
+ * 笔记命名约定：按年分目录、日期前缀 `YYYY/MMDD-slug`（slug 不含 `/`，与文章 Astro 期同构）。
+ * MM 限定 `01–12`、DD 限定 `01–31`，挡掉 `1399` 这类非法日期（避免静默产出错误 URL）。
+ */
+const ASTRO_NOTE_RE = /^(\d{4})\/((?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01]))-([^/]+)$/;
+
+/**
+ * 笔记 slug（路由 slug 与对外 URL 共用，无前导 `/`、时区无关）。
+ *
+ * 文件命名约定为 `_notes/<YYYY>/<MMDD>-<slug>.md`（id 形如 `YYYY/MMDD-slug`），
+ * 翻成干净的 `<slug>-<YYYYMMDD>`。不符合约定的文件名直接抛错，避免静默产出错误 URL。
+ */
+function noteSlug(id: string): string {
+  const bare = bareId(id);
+  const match = bare.match(ASTRO_NOTE_RE);
+  if (!match) {
+    throw new Error(
+      `笔记文件名不符合约定 \`_notes/<YYYY>/<MMDD>-<slug>.md\`：${bare}`,
+    );
+  }
+  const [, year, mmdd, slug] = match;
+  return `${slug}-${year}${mmdd}`;
+}
+
+/** 笔记的路由 slug（`getStaticPaths` 用，决定 dist 落盘路径）。 */
+export function getNoteRouteSlug(note: CollectionEntry<"note">): string {
+  return noteSlug(note.id);
+}
+
+/**
+ * 笔记对外路径：`/notes/<slug>-<YYYYMMDD>`
+ * （在 `build.format: "directory"` 下输出为干净 URL）。
  */
 export function getNotePath(note: CollectionEntry<"note">): string {
-  return `/notes/${bareId(note.id)}`;
+  return `/notes/${noteSlug(note.id)}`;
 }

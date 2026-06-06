@@ -100,7 +100,7 @@ const NOTE_SCHEMA = {
   required: ["path", "slug", "title", "publishDate", "layersUsed", "filesChanged", "summary"],
   additionalProperties: false,
   properties: {
-    path: { type: "string", description: "新建的 note 文件路径，_notes/<slug>-<YYYYMMDD>.mdx" },
+    path: { type: "string", description: "新建的 note 文件路径，_notes/<YYYY>/<MMDD>-<slug>.mdx" },
     slug: { type: "string" },
     title: { type: "string", description: "≤60 chars" },
     publishDate: { type: "string", description: "ISO8601 带 offset，等于 issue createdAt 当日" },
@@ -146,14 +146,16 @@ Read and obey these conventions (single source of truth):
   reduced-motion, a11y, client:* defaults, import paths, not-prose).
 - src/content.config.ts → the "note" collection schema (frontmatter: title ≤60; description
   optional but PROVIDE one; publishDate ISO8601 with offset).
-- src/utils/url.ts → note filename/URL rule: _notes/<slug>-<YYYYMMDD>.mdx → /notes/<slug>-<YYYYMMDD>.
+- src/utils/url.ts → note filename/URL rule: _notes/<YYYY>/<MMDD>-<slug>.mdx → /notes/<slug>-<YYYYMMDD>
+  (year-foldered, date-prefixed; a filename that doesn't match the convention fails the build).
 - AGENTS.md → "Notes on Chinese typography" (space between CJK and ASCII/numbers, except ° %).
-- _notes/interactive-notes-20260605.mdx is the living style template — mirror its structure.
+- _notes/2026/0605-interactive-notes.mdx is the living style template — mirror its structure.
 
 Task:
 1. Read ${issue.file}.
-2. Create a NEW note _notes/<slug>-<YYYYMMDD>.mdx, where YYYYMMDD = the issue createdAt date,
-   slug = a short kebab topic slug derived from the issue.
+2. Create a NEW note _notes/<YYYY>/<MMDD>-<slug>.mdx, where <YYYY> and <MMDD> = the issue createdAt
+   date (year folder + MMDD prefix, e.g. _notes/2026/0605-<slug>.mdx), slug = a short kebab topic
+   slug derived from the issue.
 3. Content MUST be ACCURATE and OBJECTIVE: render ONLY facts present in the issue. No invented
    numbers, dates, citations, or claims. Preserve the issue's language. Keep it tight.
 4. Add interactivity ONLY where it genuinely aids understanding, choosing the LIGHTEST layer
@@ -207,7 +209,8 @@ return { ...draft, pass: verdict.pass, problems: verdict.problems };
 
 - workflow 返回 `pass=false`（2 轮后仍有 blocker）→ **不建 PR**，按下面收尾：
   - **清理草稿（带白名单防越界）**：`filesChanged` 来自读过**不可信** issue 的 agent，不能无脑信。
-    先逐个校验路径匹配白名单 —— `_notes/*.md(x)` / `src/components/viz/*.astro` /
+    先逐个校验路径匹配白名单 —— `_notes/<YYYY>/<MMDD>-<slug>.md(x)`（年目录 + 日期前缀，挡掉
+    `..`/越级与扁平旧布局）/ `src/components/viz/*.astro` /
     `src/components/interactive/*.tsx`；不匹配就**中止报错**（疑似注入）。通过后再清理：已跟踪文件
     `git checkout -- <file>`、未跟踪新文件 `rm <file>`。**绝不用 `git checkout -- .` /
     `git reset --hard`**（会清掉无关 WIP）。

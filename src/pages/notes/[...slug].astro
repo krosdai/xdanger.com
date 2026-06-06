@@ -3,13 +3,14 @@ import { getCollection } from "astro:content";
 
 import Note from "@/components/note/Note.astro";
 import PageLayout from "@/layouts/Base.astro";
+import { getNoteRouteSlug } from "@/utils/url";
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 // if you're using an adaptor in SSR mode, getStaticPaths wont work -> https://docs.astro.build/en/guides/routing/#modifying-the-slug-example-for-ssr
 export const getStaticPaths = (async () => {
   const allNotes = await getCollection("note");
   return allNotes.map((note) => ({
-    params: { slug: note.id },
+    params: { slug: getNoteRouteSlug(note) },
     props: { note },
   }));
 }) satisfies GetStaticPaths;
