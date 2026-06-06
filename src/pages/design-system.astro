@@ -28,10 +28,10 @@ const accent = [
   { var: "--color-accent-contrast", role: "text on accent" },
 ];
 const categorical = [
-  { var: "--color-cat-1", role: "crimson" },
+  { var: "--color-cat-1", role: "carmine" },
   { var: "--color-cat-2", role: "terracotta" },
   { var: "--color-cat-3", role: "ochre" },
-  { var: "--color-cat-4", role: "sage" },
+  { var: "--color-cat-4", role: "jade" },
   { var: "--color-cat-5", role: "steel" },
   { var: "--color-cat-6", role: "plum" },
 ];
@@ -99,7 +99,7 @@ const series = [
   [80, 74, 68, 72, 64, 58, 62, 54, 50, 46],
   [44, 48, 46, 54, 58, 64, 60, 68, 74, 78],
 ];
-const lineNames = ["crimson", "terracotta", "ochre", "sage", "steel"];
+const lineNames = ["carmine", "terracotta", "ochre", "jade", "steel"];
 const LW = 620,
   LH = 220,
   LPL = 8,
@@ -166,7 +166,8 @@ const bars = [22, 30, 38, 47, 57, 68, 80, 93].map((h, i) => ({
 
       <h3 class="ds-group-title">brand accent</h3>
       <p class="ds-group-note">
-        主角色——并且 <em>跨主题换色</em>：浅色绯红、深色翠绿，与站点一致。
+        主角色——并且 <em>跨主题换色</em>：浅色胭红（carmine）、深色玉绿（jade），即 Ember · Jade
+        方案。
         <code>--color-accent</code> 承载所有主操作、链接、单序列标记与焦点。浅色下它即分类色第 1 槽；分类色本身保持稳定（见下），多序列图在两套主题里都不丢身份。
       </p>
       <div class="ds-swatch-grid">
