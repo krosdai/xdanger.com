@@ -28,13 +28,10 @@ const subtitle = post.data.subtitle?.trim();
     aria-hidden="true"
     class="border-foreground/5 order-2 hidden min-w-6 flex-1 self-center border-t sm:block dark:border-white/5"
   ></span>
-  <FormattedDate
-    class="date order-3 shrink-0 text-gray-600 dark:text-gray-400"
-    date={post.data.publishDate}
-  />
+  <FormattedDate class="date text-muted order-3 shrink-0" date={post.data.publishDate} />
   {
     subtitle && (
-      <p class="font-plex-sans order-2 w-full text-sm leading-snug text-gray-600 sm:order-4 dark:text-gray-400">
+      <p class="font-plex-sans text-muted order-2 w-full text-sm leading-snug sm:order-4">
         {subtitle}
       </p>
     )

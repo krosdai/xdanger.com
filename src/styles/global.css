@@ -363,6 +363,12 @@ a.not-prose {
   @apply font-writer text-base;
 }
 
+/* Muted secondary text (timestamps, taglines, captions) — one pair that flips
+ * with the theme, instead of hand-writing `text-gray-600 dark:text-gray-400`. */
+@utility text-muted {
+  @apply text-gray-600 dark:text-gray-400;
+}
+
 @utility page-shell {
   @apply container mx-auto max-w-3xl px-4 sm:px-6;
 }

@@ -2,6 +2,7 @@
 import { type CollectionEntry, render } from "astro:content";
 import FormattedDate from "@/components/FormattedDate.astro";
 import { getNotePath } from "@/utils/url";
+import { PROSE_ARTICLE } from "@/utils/prose";
 import type { HTMLTag, Polymorphic } from "astro/types";
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
@@ -50,7 +51,7 @@ const noteUrl = getNotePath(note);
     class:list={[
       isPreview
         ? "note line-clamp-6 max-w-none [&_a]:relative [&_a]:z-10"
-        : "prose prose-base prose-headings:font-plex-serif-medium prose-headings:font-medium prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none max-w-none",
+        : `${PROSE_ARTICLE} max-w-none`,
     ]}
   >
     <Content />

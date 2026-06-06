@@ -36,13 +36,13 @@ const meta = {
 const paginationProps = {
   ...(page.url.prev && {
     prevUrl: {
-      text: "← Previous Tags",
+      text: "← Previous Page",
       url: page.url.prev,
     },
   }),
   ...(page.url.next && {
     nextUrl: {
-      text: "Next Tags →",
+      text: "Next Page →",
       url: page.url.next,
     },
   }),
@@ -52,7 +52,7 @@ const paginationProps = {
 <PageLayout meta={meta}>
   <section class="page-section pt-0">
     <div class="page-shell">
-      <div class="font-plex-mono mb-6 text-gray-600 dark:text-gray-400">
+      <div class="font-plex-mono text-muted mb-6">
         <a class="cactus-link text-accent" href="/tags"
           ><span class="sr-only">All {" "}</span>Tags</a
         >

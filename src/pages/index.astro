@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import AboutMe from "@/components/AboutMe.astro";
-import HomePostPreview from "@/components/blog/HomePostPreview.astro";
+import FeaturedPostPreview from "@/components/blog/FeaturedPostPreview.astro";
 import Note from "@/components/note/Note.astro";
 import { getAllPosts } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
@@ -34,7 +34,7 @@ const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
         {
           allPostsByDate.map((p) => (
             <li>
-              <HomePostPreview as="h3" post={p} />
+              <FeaturedPostPreview as="h3" post={p} />
             </li>
           ))
         }
