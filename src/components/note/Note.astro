@@ -21,7 +21,7 @@ const noteUrl = getNotePath(note);
   ]}
   data-pagefind-body={!isPreview}
 >
-  <Tag class:list={[isPreview ? "heading text-accent-2" : "page-title mb-3"]}>
+  <Tag class:list={[isPreview ? "heading text-accent-2" : "article-title mb-3"]}>
     {
       isPreview ? (
         <a
@@ -46,8 +46,12 @@ const noteUrl = getNotePath(note);
     date={note.data.publishDate}
   />
   <div
-    class="prose prose-sm sm:prose-base mt-4 max-w-none [&>p:last-of-type]:mb-0"
-    class:list={{ "line-clamp-6 [&_a]:relative [&_a]:z-10": isPreview }}
+    class="mt-4 [&>p:last-of-type]:mb-0"
+    class:list={[
+      isPreview
+        ? "note line-clamp-6 max-w-none [&_a]:relative [&_a]:z-10"
+        : "prose prose-base prose-headings:font-plex-serif-medium prose-headings:font-medium prose-headings:text-accent-2 prose-headings:before:absolute prose-headings:before:-ms-4 prose-headings:before:text-gray-600 prose-headings:hover:before:text-accent sm:prose-headings:before:content-['#'] sm:prose-th:before:content-none max-w-none",
+    ]}
   >
     <Content />
   </div>

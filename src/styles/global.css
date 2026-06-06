@@ -483,6 +483,23 @@ a.not-prose {
     font-family: var(--font-alias-plexMono);
   }
 
+  /* Inline code matches the chrome `xdanger` chip: faint neutral bg, rounded, no
+   * border, no backtick quotes, normal weight — overriding Typography's bordered
+   * `code` + `::before/::after: "`"`. Code blocks (`pre code`) keep expressive-code. */
+  :where(code):not(:where(pre code, [class~="not-prose"], [class~="not-prose"] *)) {
+    border: none;
+    border-radius: 0.25rem;
+    background-color: color-mix(in oklab, var(--color-foreground) 5%, transparent);
+    padding-inline: 0.375rem;
+    padding-block: 0.125rem;
+    font-size: 0.9em;
+    font-weight: inherit;
+  }
+  :where(code):not(:where(pre code, [class~="not-prose"], [class~="not-prose"] *))::before,
+  :where(code):not(:where(pre code, [class~="not-prose"], [class~="not-prose"] *))::after {
+    content: none;
+  }
+
   /* Break long unbroken strings (URLs, hashes) so they wrap instead of
    * widening the column and dragging the sticky header off on h-scroll. */
   overflow-wrap: break-word;
