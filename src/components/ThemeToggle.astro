@@ -1,25 +1,48 @@
 ---
-import { Icon } from "astro-icon/components";
+/**
+ * Theme toggle — the bordered circular "icon-btn" look lifted from the design
+ * system reference: a radius-full chip with a hairline border, ink-muted sun /
+ * moon glyph that turns accent (border + icon together) on hover. Sun shows in
+ * light, crescent moon in dark, swapped via the `dark:` variant (mapped to
+ * `data-theme` in global.css). The site's own theme-change mechanism (custom
+ * event → ThemeProvider) and the header's scroll-collapse sizing are preserved.
+ */
 ---
 
 <theme-toggle class="flex flex-col">
   <button
-    class="text-accent-2 hover:text-accent focus-visible:outline-accent flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+    class="text-ink-muted hover:text-accent hover:border-accent border-line-strong focus-visible:outline-accent grid size-[34px] shrink-0 cursor-pointer place-items-center rounded-full border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
     type="button"
   >
     <span class="sr-only">Toggle theme</span>
-    <Icon
+    <svg
       aria-hidden="true"
-      class="block h-5 w-5 dark:hidden"
+      class="block size-[18px] dark:hidden"
+      fill="none"
       focusable="false"
-      name="solar:sun-outline"
-    />
-    <Icon
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="1.6"
+      viewBox="0 0 24 24"
+    >
+      <circle cx="12" cy="12" r="4.2"></circle>
+      <path
+        d="M12 2.5v2.4M12 19.1v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"
+      ></path>
+    </svg>
+    <svg
       aria-hidden="true"
-      class="hidden h-5 w-5 dark:block"
+      class="hidden size-[18px] dark:block"
+      fill="none"
       focusable="false"
-      name="circum:dark"
-    />
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.6"
+      viewBox="0 0 24 24"
+    >
+      <path d="M20 14.5A8 8 0 1 1 9.5 4a6.3 6.3 0 0 0 10.5 10.5z"></path>
+    </svg>
   </button>
 </theme-toggle>
 
