@@ -24,6 +24,7 @@ import { rehypeHeadingIds, unified } from "@astrojs/markdown-remark";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
+import { rehypePullQuotes } from "./src/plugins/rehype-pull-quotes"; /* short quotes → .pull */
 import rehypeUnwrapImages from "rehype-unwrap-images";
 
 // Optional HTTPS for remote debugging over Tailscale via anyip.dev.
@@ -163,6 +164,7 @@ export default defineConfig({
         ],
         [rehypeKatex, { strict: true }],
         rehypeUnwrapImages,
+        rehypePullQuotes,
       ],
       remarkPlugins: [remarkReadingTime, remarkDirective, remarkAdmonitions, remarkMath],
       remarkRehype: {
