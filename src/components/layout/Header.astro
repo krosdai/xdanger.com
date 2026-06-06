@@ -78,6 +78,14 @@ import { siteConfig } from "@/site.config";
     padding-block: var(--header-padding-y);
   }
 
+  /* Collapsed bar mirrors the design-system topbar: the 34px icon-btn toggle
+     pins the row height and the shrunk title sits vertically centered against
+     it. The expanded masthead keeps `items-start` so the toggle aligns to the
+     title's top line above the tagline. */
+  :global(#site-header[data-collapsed="true"]) .site-header-shell {
+    align-items: center;
+  }
+
   .site-header-tagline {
     /* Bump one step over .note's 13px; the scoped selector outweighs the utility. */
     font-size: 14px;
@@ -107,46 +115,17 @@ import { siteConfig } from "@/site.config";
     :global(#site-header[data-collapsed="true"]) .site-header-title {
       font-size: 1.25rem;
     }
-
-    /* Theme toggle eases down with the title so the collapsed row narrows to
-       20px (taking the fully-collapsed bar to ~44px) and the two stay matched.
-       The button keeps `color` + `border-color` transitions so ThemeToggle's
-       hover fade (icon and the bordered chip turning accent together) survives
-       this shorthand override. */
-    :global(#site-header theme-toggle button) {
-      transition:
-        color 150ms ease,
-        border-color 150ms ease,
-        height 500ms ease,
-        width 500ms ease;
-    }
-    :global(#site-header theme-toggle button svg) {
-      transition:
-        height 500ms ease,
-        width 500ms ease;
-    }
-    :global(#site-header[data-collapsed="true"] theme-toggle button) {
-      height: 1.25rem;
-      width: 1.25rem;
-    }
-    :global(#site-header[data-collapsed="true"] theme-toggle button svg) {
-      height: 1rem;
-      width: 1rem;
-    }
   }
 
-  /* Hold animations still while the script samples collapse geometry, and honor
-     reduced-motion. */
-  :global(#site-header.is-measuring) .site-header-title,
-  :global(#site-header.is-measuring theme-toggle button),
-  :global(#site-header.is-measuring theme-toggle button svg) {
+  /* Hold the title-shrink transition still while the script samples collapse
+     geometry, and honor reduced-motion. (The toggle no longer resizes on
+     collapse, so only the title font-size needs freezing.) */
+  :global(#site-header.is-measuring) .site-header-title {
     transition: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .site-header-title,
-    :global(#site-header theme-toggle button),
-    :global(#site-header theme-toggle button svg) {
+    .site-header-title {
       transition: none;
     }
   }
@@ -159,6 +138,9 @@ import { siteConfig } from "@/site.config";
 </style>
 
 <script>
+  // Collapsed bar matches the design-system topbar (59px): 12px (--space-3)
+  // top/bottom padding + the 34px icon-btn toggle (which pins the row height,
+  // since the title shrinks to 1.25rem) + the 1px bottom hairline.
   const COMPACT_PADDING_Y = 12;
   const COMPACT_PADDING_Y_SM = 12;
   const COMPACT_PADDING_Y_MD = 12;
