@@ -226,7 +226,10 @@ const {
       if (w <= 0 || h <= 0 || this.px.length === 0) return;
       ctx.clearRect(0, 0, w, h);
       const M = this.px.length;
-      const head = Math.min(this.head || M, M);
+      // `head` 是已绘进度；wrap 时 syncPlayback 把它置 0，这里照实取 0（画 0 点、干净
+      // 重启），不能用 `head || M` ——那会把 0 当 falsy 翻成满画，每圈闪一整条 attractor。
+      // reduced-motion / 不可见路径另行显式置 head = px.length，故满画不依赖这里。
+      const head = Math.min(this.head, M);
       ctx.lineWidth = 1.1;
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
