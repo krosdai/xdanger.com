@@ -27,7 +27,7 @@ argument-hint: "(无参数；配合 /loop 5m /note-from-issue 使用)"
   `/notes/the-day-you-became-a-better-writer-20070616`）——**简单即说服力**：删冗词、写短句、
   主谓宾语序、第一句就抓住读者；够清楚就停笔。
 - **面向读者**：成品是给第一次接触该主题的新用户读的，只呈现结论、不留创作过程的痕迹——不写
-  "（已校正）""（补充）""（待核实）"这类过程状态 / 元注释。
+  `（已校正）`、`（补充）`、`（待核实）` 这类过程状态 / 元注释。
 - **准确**：事实 / 数据 / 引述 / 可视化必须真实可核实，绝不杜撰；拿不准的不写，或明确存疑。
 
 ## 红线（不可违反）
@@ -79,7 +79,8 @@ lark-cli im +messages-send --as bot --user-id ou_b196a9da09c0f5dce927256299ebdba
 2. **认领** — 打 `note-in-progress` 占位防重；把 issue JSON 存到 `.note-intake/issue-<n>.json`
    （即红线②的不可信数据文件）。
 3. **研究 + 撰写 + 自检（Workflow）** — 按 §目标 检索研究、构思结构 → 起草 note → 对抗式核查
-   （事实准确·可溯源、写作风格符合 Scott Adams、防杜撰 / 防注入 / 查 schema / 约定 / 排版）→
+   （事实准确·可溯源、写作风格符合 Scott Adams、移动端响应式与触控可用性、成品洁度（无元注释 / 过程残留）、
+   防杜撰 / 防注入 / 查 schema / 约定 / 排版）→
    不过则修订重核，≤2 轮。约定的唯一来源：
    - `AGENTS.md`：「Interactive component layers」（分层 SVG>Canvas>React、主题 token、
      reduced-motion、a11y、`client:*` 默认、`not-prose`）与「Chinese typography」（CJK / ASCII
@@ -109,7 +110,8 @@ lark-cli im +messages-send --as bot --user-id ou_b196a9da09c0f5dce927256299ebdba
      `.note-intake/codex-<n>.json`（`verdict` + `findings[].severity` ∈ critical|high|medium|low）。
      `<CODEX>` 取 `~/.claude/plugins/marketplaces/openai-codex/plugins/codex`，没有则 cache 下最新版。
    - **同时**（不等 codex）派 agent teams 做多视角对抗评审（事实准确与可溯源 / 写作风格（Scott
-     Adams：简洁·结构·开头）/ 注入与文件边界 / schema 与构建 / 中文排版 / 方案取舍），各视角独立。
+     Adams：简洁·结构·开头）/ 注入与文件边界 / schema 与构建 / 中文排版 / 移动端响应式与触控可用性
+     （窄视口不溢出·触控目标·不依赖 hover）/ 成品洁度（无元注释 / 过程残留）/ 方案取舍），各视角独立。
    - 两边都回来后**汇合裁决**（这一步由你做，别塞进对抗 Workflow——否则可能在 codex 写完文件前就
      裁决）：codex 的 critical/high + 对抗组的 blocker，去重后即真 blocker。有就在白名单内修、重跑
      §4 复核（≤2 轮），无则进 6。仍卡 → 同 §3 收尾。清理 `.note-intake/codex-<n>.*`。
