@@ -200,7 +200,7 @@ same sources to true **308** permanent redirects on Vercel. Keep the two source/
 
 ## Commit style
 
-Conventional Commits + Gitmoji (see `.cursor/rules/git-commit.mdc`):
+Conventional Commits + Gitmoji:
 
 ```
 <gitmoji> <type>(<scope>)[!]: <subject>
