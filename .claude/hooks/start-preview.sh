@@ -8,6 +8,15 @@ PORT=4321
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 LOG_FILE="${TMPDIR:-/tmp}/astro-dev-preview.log"
 
+# Inside a worktree, defer to worktree-setup.sh: it installs deps first and then
+# re-invokes this script with WORKTREE_SETUP_DONE set. Without this, a fresh
+# worktree would launch `pnpm dev` before node_modules exists, the dev server
+# would die silently, and nothing would relaunch it after deps land.
+case "$PROJECT_DIR" in
+  */.claude/worktrees/*)
+    [ -n "${WORKTREE_SETUP_DONE:-}" ] || exit 0 ;;
+esac
+
 # Already serving? Don't spawn a second server.
 if lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; then
   exit 0

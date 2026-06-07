@@ -38,6 +38,9 @@
 # Claude Code runtime locks
 **/.claude/scheduled_tasks.lock
 
+# Claude Code worktrees (nested checkouts; never committed from the parent repo)
+**/.claude/worktrees/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

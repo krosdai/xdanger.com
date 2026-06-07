@@ -10,6 +10,16 @@
             "statusMessage": "Starting Astro dev server for Preview…"
           }
         ]
+      },
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR}/.claude/hooks/worktree-setup.sh\"",
+            "statusMessage": "Installing worktree dependencies…"
+          }
+        ]
       }
     ]
   }
