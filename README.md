@@ -1,6 +1,6 @@
 # xdanger.com
 
-这是 [xdanger.com](https://www.xdanger.com/) 个人博客网站的源代码仓库，使用 [Astro](https://astro.build/) 框架构建。
+这是 [xdanger.com](https://xdanger.com/) 个人博客网站的源代码仓库，使用 [Astro](https://astro.build/) 框架构建。
 
 > AI agents (Claude Code, Codex, Cursor 等) 请阅读 [`AGENTS.md`](./AGENTS.md) 获取项目规范。
 

@@ -22,7 +22,7 @@ export const siteConfig: SiteConfig = {
   // Used to construct the meta title property found in src/components/BaseHead.astro L:11, and webmanifest name found in astro.config.ts L:42
   title: "Kros Dai",
   // ! Please remember to replace the following site property with your own domain, used in astro.config.ts
-  url: "https://www.xdanger.com/",
+  url: "https://xdanger.com/",
 };
 
 // https://expressive-code.com/reference/configuration/

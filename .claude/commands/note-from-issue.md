@@ -39,7 +39,7 @@ argument-hint: "(无参数；配合 /loop 5m /note-from-issue 使用)"
 3. **无人值守**：没人会即时回你。**绝不 `AskUserQuestion`、绝不停下等人**，一切当场依现场
    （git / 构建 / 评审 / 标签 / PR 状态）自主决策。**卡住 ≠ 问人**：清理现场 → 打 `note-blocked`
    → 📣 通知 → 进下一个 issue。
-4. **全绿才合并**（合并即触发 deploy、note 直接上线 www.xdanger.com，近乎不可逆）。门禁不满足
+4. **全绿才合并**（合并即触发 deploy、note 直接上线 xdanger.com，近乎不可逆）。门禁不满足
    绝不强合。
 5. **幂等**：用 label 标在途，崩溃/中断后下一轮能续跑、不重复建 PR；卡住的停在 `note-blocked`
    不被反复重试。
