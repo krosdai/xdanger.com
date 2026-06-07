@@ -1280,7 +1280,7 @@ const bars = [22, 30, 38, 47, 57, 68, 80, 93].map((h, i) => ({
     } catch {
       // writeText 被拒（非安全上下文 / 权限）——保持 ok=false
     }
-    toast.textContent = ok ? (label ?? `copied  ${text}`) : `copy failed  ${text}`;
+    toast.textContent = ok ? (label ?? `copied ${text}`) : `copy failed ${text}`;
     toast.classList.add("show");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove("show"), 1600);
@@ -1289,7 +1289,7 @@ const bars = [22, 30, 38, 47, 57, 68, 80, 93].map((h, i) => ({
   for (const el of document.querySelectorAll<HTMLElement>("[data-token]")) {
     el.addEventListener("click", () => {
       const t = el.getAttribute("data-token")!;
-      copy(`var(${t})`, `copied  var(${t})`);
+      copy(`var(${t})`, `copied var(${t})`);
     });
   }
 
