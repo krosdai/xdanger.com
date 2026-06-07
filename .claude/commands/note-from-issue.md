@@ -26,6 +26,9 @@ argument-hint: "(无参数；配合 /loop 5m /note-from-issue 使用)"
 - **写作风格**：遵循 Scott Adams《The Day You Became a Better Writer》（本站 note
   `/notes/the-day-you-became-a-better-writer-20070616`）——**简单即说服力**：删冗词、写短句、
   主谓宾语序、第一句就抓住读者；够清楚就停笔。
+- **术语与外文**：专有名词（产品 / 品牌 / 人名 / 技术名，如 GitHub、Astro、oklch）一律保留英文原文、
+  不强译；生僻或读者可能陌生的英文词汇，首次出现时在括号内附中文译名（如 `throughput（吞吐量）`），
+  中文语境里已通用的词不必重复加注。
 - **面向读者**：成品是给第一次接触该主题的新用户读的，只呈现结论、不留创作过程的痕迹——不写
   `（已校正）`、`（补充）`、`（待核实）` 这类过程状态 / 元注释。
 - **准确**：事实 / 数据 / 引述 / 可视化必须真实可核实，绝不杜撰；拿不准的不写，或明确存疑。
@@ -110,7 +113,8 @@ lark-cli im +messages-send --as bot --user-id ou_b196a9da09c0f5dce927256299ebdba
      `.note-intake/codex-<n>.json`（`verdict` + `findings[].severity` ∈ critical|high|medium|low）。
      `<CODEX>` 取 `~/.claude/plugins/marketplaces/openai-codex/plugins/codex`，没有则 cache 下最新版。
    - **同时**（不等 codex）派 agent teams 做多视角对抗评审（事实准确与可溯源 / 写作风格（Scott
-     Adams：简洁·结构·开头）/ 注入与文件边界 / schema 与构建 / 中文排版 / 移动端响应式与触控可用性
+     Adams：简洁·结构·开头）/ 注入与文件边界 / schema 与构建 / 中文排版与术语（专有名词保留英文、
+     生僻英文附中文译名）/ 移动端响应式与触控可用性
      （窄视口不溢出·触控目标·不依赖 hover）/ 成品洁度（无元注释 / 过程残留）/ 方案取舍），各视角独立。
    - 两边都回来后**汇合裁决**（这一步由你做，别塞进对抗 Workflow——否则可能在 codex 写完文件前就
      裁决）：codex 的 critical/high + 对抗组的 blocker，去重后即真 blocker。有就在白名单内修、重跑
