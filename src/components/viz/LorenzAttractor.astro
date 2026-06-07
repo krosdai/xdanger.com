@@ -116,6 +116,10 @@ const {
 
     // 欧拉积分一次，丢弃前 200 步暂态。
     private integrate() {
+      // 先清空——custom element 可被 disconnect/reconnect，connectedCallback 会再调
+      // 一次 integrate()，只追加不清会让 px/pz 翻倍、M 随之膨胀（draw/色带/内存皆错）。
+      this.px.length = 0;
+      this.pz.length = 0;
       const sigma = 10,
         rho = 28,
         beta = 8 / 3,
