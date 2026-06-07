@@ -1,0 +1,84 @@
+---
+/**
+ * NomineeTimeline — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：新加坡居民董事 / 名义董事监管演进的纵向时间轴。把分散在数十年里的
+ * 关键节点收成一条线，高亮 2025-06-09 这个把「挂名」变成「持牌」的转折。
+ *
+ * 主题契约：轴线 / 圆点用 `currentColor`（继承 `--color-foreground`）与
+ * `--color-accent`，文字同理——切 `data-theme` 时零 JS 自动变色。纯静态，
+ * 天然满足 reduced-motion。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+type Event = { date: string; label: string; highlight?: boolean };
+const events: Event[] = [
+  { date: "1967", label: "《公司法》s.145：至少 1 名居民董事" },
+  { date: "2017-03-31", label: "设立 RORC + ROND（Part 11A）" },
+  { date: "2022-10-04", label: "新增 RONS（名义股东登记册）" },
+  { date: "2024-07", label: "CSP Act 经国会通过" },
+  { date: "2025-06-09", label: "CSP Act 生效：名义董事须经持牌 CSP", highlight: true },
+  { date: "2025-12-09", label: "CSP 注册截止" },
+  { date: "2025-12-31", label: "既有实体中央登记册申报截止" },
+  { date: "2026-05-06", label: "CALA 2025 生效：s.157 罚款升至 S$20,000" },
+];
+
+const padTop = 22;
+const gap = 52;
+const axisX = 16;
+const W = 470;
+const H = padTop * 2 + (events.length - 1) * gap;
+const cy = (i: number) => padTop + i * gap;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>新加坡名义董事监管时间线</title>
+    <desc id={`${uid}-d`}
+      >从 1967 年《公司法》s.145 居民董事要求，到 2025 年 6 月 9 日 CSP Act
+      生效要求名义董事须经持牌企业服务商安排的监管演进。</desc
+    >
+    <line
+      x1={axisX}
+      y1={cy(0)}
+      x2={axisX}
+      y2={cy(events.length - 1)}
+      stroke="currentColor"
+      stroke-opacity="0.22"
+      stroke-width="2"></line>
+    {
+      events.map((e, i) => (
+        <Fragment>
+          <circle
+            cx={axisX}
+            cy={cy(i)}
+            r={e.highlight ? 7 : 4.5}
+            fill={e.highlight ? "var(--color-accent)" : "currentColor"}
+            fill-opacity={e.highlight ? 1 : 0.55}
+          />
+          <text x={axisX + 22} y={cy(i)} dominant-baseline="central" font-size="13">
+            <tspan font-weight="700" fill={e.highlight ? "var(--color-accent)" : "currentColor"}>
+              {e.date}
+            </tspan>
+            <tspan dx="8" fill="currentColor" opacity={e.highlight ? 1 : 0.82}>
+              {e.label}
+            </tspan>
+          </text>
+        </Fragment>
+      ))
+    }
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>

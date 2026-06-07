@@ -1,0 +1,130 @@
+---
+/**
+ * ComplianceDecision — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：非居民创始人怎么满足 s.145 居民董事要求的合规决策路径。一次分叉——
+ * 有合资格本地居民则直接任命（最省）；否则须经 ACRA 持牌 CSP 安排名义董事。
+ *
+ * 主题契约：中性框用 `currentColor`，推荐路径用 `--color-positive`、受监管路径用
+ * `--color-negative`（各自带 `*-weak` 填充；用 negative 而非 accent，因 accent 跨主题翻色，
+ * 暗色下会与 positive 同偏绿、丢失红绿对比，negative 则两套主题都稳红）——切 `data-theme` 时零 JS 变色。
+ * 纯静态，天然满足 reduced-motion。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+const W = 440;
+const H = 300;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>满足居民董事要求的合规决策路径</title>
+    <desc id={`${uid}-d`}
+      >若公司有合资格本地居民可出任董事，则直接任命；否则自 2025 年 6 月 9 日起须经 ACRA
+      持牌企业服务商安排名义董事。受雇于本公司的员工出任董事属例外。</desc
+    >
+
+    <!-- 连接线 -->
+    <g fill="none" stroke="currentColor" stroke-opacity="0.38" stroke-width="1.6">
+      <path d="M220,56 V78"></path>
+      <path d="M220,134 V156 H120 V176"></path>
+      <path d="M220,134 V156 H328 V176"></path>
+    </g>
+    <g fill="currentColor" fill-opacity="0.5">
+      <polygon points="216,78 224,78 220,84"></polygon>
+      <polygon points="116,176 124,176 120,182"></polygon>
+      <polygon points="324,176 332,176 328,182"></polygon>
+    </g>
+
+    <!-- 分支标签 -->
+    <text x="150" y="150" font-size="12" fill="var(--color-positive)" font-weight="600">有</text>
+    <text x="296" y="150" font-size="12" fill="var(--color-negative)" font-weight="600">无</text>
+
+    <!-- Start -->
+    <rect
+      x="110"
+      y="14"
+      width="220"
+      height="42"
+      rx="8"
+      fill="currentColor"
+      fill-opacity="0.04"
+      stroke="currentColor"
+      stroke-opacity="0.4"></rect>
+    <text x="220" y="39" text-anchor="middle" font-size="13" fill="currentColor"
+      >公司需 ≥1 名居民董事（s.145）</text
+    >
+
+    <!-- Decision -->
+    <rect
+      x="78"
+      y="84"
+      width="284"
+      height="50"
+      rx="8"
+      fill="currentColor"
+      fill-opacity="0.04"
+      stroke="currentColor"
+      stroke-opacity="0.4"></rect>
+    <text x="220" y="105" text-anchor="middle" font-size="13" fill="currentColor"
+      >有合资格本地居民可任董事？</text
+    >
+    <text x="220" y="123" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.65"
+      >公民 / PR / EP / PEP / ONE Pass</text
+    >
+
+    <!-- Result A：直接任命 -->
+    <rect
+      x="24"
+      y="182"
+      width="192"
+      height="70"
+      rx="8"
+      fill="var(--color-positive-weak)"
+      stroke="var(--color-positive)"
+      stroke-width="1.4"></rect>
+    <text x="120" y="208" text-anchor="middle" font-size="13" fill="currentColor" font-weight="600"
+      >直接任命该居民董事</text
+    >
+    <text x="120" y="230" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.7"
+      >成本最低 · 无须 CSP</text
+    >
+
+    <!-- Result B：持牌 CSP -->
+    <rect
+      x="232"
+      y="182"
+      width="192"
+      height="70"
+      rx="8"
+      fill="var(--color-negative-weak)"
+      stroke="var(--color-negative)"
+      stroke-width="1.4"></rect>
+    <text x="328" y="203" text-anchor="middle" font-size="13" fill="currentColor" font-weight="600"
+      >经 ACRA 持牌 CSP</text
+    >
+    <text x="328" y="221" text-anchor="middle" font-size="13" fill="currentColor" font-weight="600"
+      >安排名义董事</text
+    >
+    <text x="328" y="240" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7"
+      >fit &amp; proper + AML 尽调</text
+    >
+
+    <!-- 例外旁注 -->
+    <text x="220" y="282" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.6"
+      >例外：受雇于本公司的员工出任董事，无须经 CSP</text
+    >
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>
