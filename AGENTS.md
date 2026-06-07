@@ -216,9 +216,11 @@ Conventional Commits + Gitmoji:
 ## Deployment
 
 GitHub Actions (`.github/workflows/deploy.yml`) builds via `withastro/action@v3` (which
-auto-detects pnpm from the lockfile) and deploys to GitHub Pages. Vercel is configured via
-`vercel.json` for the canonical site at `xdanger.com` (see `src/site.config.ts`; the `www`
-subdomain redirects to the apex `xdanger.com`).
+auto-detects pnpm from the lockfile) and deploys to GitHub Pages. The canonical host is the apex
+`xdanger.com`: the base URL lives in `src/site.config.ts` (`url`) and feeds `astro.config.ts`
+(`site:`), which drives the generated canonical/OG/RSS/sitemap URLs. `vercel.json` only configures
+`cleanUrls` and page-level redirects — the `www` → apex host redirect is set in Vercel's domain
+settings, not in `vercel.json`.
 
 ## Automation: issue → note
 
