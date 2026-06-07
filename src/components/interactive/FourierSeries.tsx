@@ -36,7 +36,9 @@ const CAT = [
 ];
 
 export default function FourierSeries({ terms: terms0 = 5, maxTerms = 12 }: Props) {
-  const [terms, setTerms] = useState(terms0);
+  // 把初始项数 clamp 到 [1, maxTerms]，否则越界的 prop 会让受控 range input 的 value
+  // 落到 min/max 之外（React 告警 + 交互异常）。
+  const [terms, setTerms] = useState(() => Math.min(maxTerms, Math.max(1, terms0)));
   const uid = useId();
 
   const xs = useMemo(() => Array.from({ length: SAMPLES + 1 }, (_, i) => (i / SAMPLES) * Math.PI * 2), []);
