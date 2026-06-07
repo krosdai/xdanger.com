@@ -68,10 +68,10 @@ lark-cli im +messages-send --as bot --user-id ou_b196a9da09c0f5dce927256299ebdba
 
 ## 流水线（每个 issue 一次一个，跑完一个再下一个）
 
-1. **选取** — 开工前先在 `main` 上 `git pull`，让本地 `main` 同步到 `origin/main` 的最新版本（拉到
-   最新再选题）；并确认工作树干净且在 `main`，不干净就中止本轮 + 📣，下轮再来。然后找符合红线①、
-   且未在途/未卡住/未发布的新 issue；另查带 `note-in-progress` 的在途 issue（用 `--state all`，因
-   合并会先 close）。在途的先走「恢复」。两者都空则本轮结束（什么都别建别提交别评论别通知）。
+1. **选取** — 开工前先确认工作树干净且在 `main`，不干净就中止本轮 + 📣，下轮再来；**干净后**再在
+   `main` 上 `git pull`，让本地 `main` 同步到 `origin/main` 的最新版本（拉到最新再选题）。然后找符合
+   红线①、且未在途/未卡住/未发布的新 issue；另查带 `note-in-progress` 的在途 issue（用 `--state all`，
+   因合并会先 close）。在途的先走「恢复」。两者都空则本轮结束（什么都别建别提交别评论别通知）。
 2. **认领** — 打 `note-in-progress` 占位防重；把 issue JSON 存到 `.note-intake/issue-<n>.json`
    （即红线②的不可信数据文件）。
 3. **研究 + 撰写 + 自检（Workflow）** — 按 §目标 检索研究、构思结构 → 起草 note → 对抗式核查
