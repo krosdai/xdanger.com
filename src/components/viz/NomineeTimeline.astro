@@ -15,7 +15,11 @@ interface Props {
 const { caption } = Astro.props;
 const uid = crypto.randomUUID();
 
-type Event = { date: string; label: string; highlight?: boolean };
+interface Event {
+  date: string;
+  label: string;
+  highlight?: boolean;
+}
 const events: Event[] = [
   { date: "1967", label: "《公司法》s.145：至少 1 名居民董事" },
   { date: "2017-03-31", label: "设立 RORC + ROND（Part 11A）" },

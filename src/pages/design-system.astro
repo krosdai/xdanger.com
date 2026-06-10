@@ -1241,7 +1241,10 @@ const bars = [22, 30, 38, 47, 57, 68, 80, 93].map((h, i) => ({
   document.body.appendChild(probe);
   const pc = document.createElement("canvas");
   pc.width = pc.height = 1;
-  const pctx = pc.getContext("2d", { willReadFrequently: true })!;
+  // 经局部 const 收窄类型——TS 不会把模块级 throw 守卫的收窄带进嵌套函数
+  const pctxMaybe = pc.getContext("2d", { willReadFrequently: true });
+  if (!pctxMaybe) throw new Error("canvas 2d context unavailable");
+  const pctx = pctxMaybe;
 
   function resolve(varName: string) {
     probe.style.background = "transparent";
@@ -1270,7 +1273,9 @@ const bars = [22, 30, 38, 47, 57, 68, 80, 93].map((h, i) => ({
   }
   refresh();
 
-  const toast = document.getElementById("ds-toast")!;
+  const toastMaybe = document.getElementById("ds-toast");
+  if (!toastMaybe) throw new Error("#ds-toast missing");
+  const toast = toastMaybe;
   let toastTimer: ReturnType<typeof setTimeout>;
   async function copy(text: string, label?: string) {
     let ok = false;
@@ -1287,8 +1292,9 @@ const bars = [22, 30, 38, 47, 57, 68, 80, 93].map((h, i) => ({
   }
 
   for (const el of document.querySelectorAll<HTMLElement>("[data-token]")) {
+    const t = el.getAttribute("data-token");
+    if (!t) continue;
     el.addEventListener("click", () => {
-      const t = el.getAttribute("data-token")!;
       copy(`var(${t})`, `copied var(${t})`);
     });
   }

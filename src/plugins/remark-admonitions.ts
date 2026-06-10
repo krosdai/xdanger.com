@@ -50,11 +50,11 @@ function transformUnhandledDirective(
 }
 
 /** From Astro Starlight: Function that generates an mdast HTML tree ready for conversion to HTML by rehype. */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function h(el: string, attrs: Properties = {}, children: any[] = []): P {
+// children 实际可含块级节点（如 div 包裹的目录内容），借 paragraph 的 hName 机制转 HTML，故需断言
+function h(el: string, attrs: Properties = {}, children: unknown[] = []): P {
   const { properties, tagName } = _h(el, attrs);
   return {
-    children,
+    children: children as P["children"],
     data: { hName: tagName, hProperties: properties },
     type: "paragraph",
   };
@@ -75,7 +75,7 @@ export const remarkAdmonitions: Plugin<[], Root> = () => (tree) => {
     let titleNode: PhrasingContent[] = [{ type: "text", value: title }];
 
     // Check if there's a custom title
-    const firstChild = node.children[0];
+    const firstChild = node.children.at(0);
     if (
       firstChild?.type === "paragraph" &&
       firstChild.data &&

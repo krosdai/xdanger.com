@@ -10,7 +10,7 @@ export function getFormattedDate(
   }
 
   return new Intl.DateTimeFormat(siteConfig.date.locale, {
-    ...(siteConfig.date.options as Intl.DateTimeFormatOptions),
+    ...siteConfig.date.options,
     ...options,
   }).format(date);
 }

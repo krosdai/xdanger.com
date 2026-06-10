@@ -61,9 +61,36 @@ export default function CompoundInterest({
   };
 
   const sliders = [
-    { id: `${uid}-p`, label: "本金", value: principal, min: 100, max: 10000, step: 100, set: setPrincipal, fmt: (n: number) => fmt(n) },
-    { id: `${uid}-r`, label: "年利率", value: rate, min: 0, max: 20, step: 0.5, set: setRate, fmt: (n: number) => `${n}%` },
-    { id: `${uid}-y`, label: "年数", value: years, min: 1, max: 40, step: 1, set: setYears, fmt: (n: number) => `${n} 年` },
+    {
+      id: `${uid}-p`,
+      label: "本金",
+      value: principal,
+      min: 100,
+      max: 10000,
+      step: 100,
+      set: setPrincipal,
+      fmt: (n: number) => fmt(n),
+    },
+    {
+      id: `${uid}-r`,
+      label: "年利率",
+      value: rate,
+      min: 0,
+      max: 20,
+      step: 0.5,
+      set: setRate,
+      fmt: (n: number) => `${n}%`,
+    },
+    {
+      id: `${uid}-y`,
+      label: "年数",
+      value: years,
+      min: 1,
+      max: 40,
+      step: 1,
+      set: setYears,
+      fmt: (n: number) => `${n} 年`,
+    },
   ];
 
   return (
@@ -85,17 +112,16 @@ export default function CompoundInterest({
               max={s.max}
               step={s.step}
               value={s.value}
-              onChange={(e) => s.set(Number(e.target.value))}
+              onChange={(e) => {
+                s.set(Number(e.target.value));
+              }}
             />
           </div>
         ))}
       </div>
 
       {/* 装饰性增长条：每年一条，高度按复利占比。数据已在下方以文本给出。 */}
-      <div
-        aria-hidden="true"
-        className="mt-5 flex h-24 items-end gap-[2px]"
-      >
+      <div aria-hidden="true" className="mt-5 flex h-24 items-end gap-[2px]">
         {series.map((v, i) => (
           <div
             key={i}

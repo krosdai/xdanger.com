@@ -246,7 +246,7 @@ function legacyHtmlFlattener(): AstroIntegration {
       "astro:build:done": async ({ dir, pages, logger }) => {
         let flattened = 0;
         for (const { pathname } of pages) {
-          const match = pathname.match(LEGACY_PAGE_RE);
+          const match = LEGACY_PAGE_RE.exec(pathname);
           if (!match) continue;
           const rel = match[1];
           const fromFile = fileURLToPath(new URL(`${rel}/index.html`, dir));

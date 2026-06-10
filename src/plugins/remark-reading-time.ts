@@ -10,15 +10,9 @@ export const remarkReadingTime: Plugin<[], Root> =
     const textOnPage = mdastToString(tree);
     const readingTime = getReadingTime(textOnPage);
 
-    // Make sure data.astro exists
-    if (!data.astro) {
-      data.astro = {};
-    }
-
-    // Make sure data.astro.frontmatter exists
-    if (!data.astro.frontmatter) {
-      data.astro.frontmatter = {};
-    }
+    // Make sure data.astro and data.astro.frontmatter exist
+    data.astro ??= {};
+    data.astro.frontmatter ??= {};
 
     // Add reading time to frontmatter
     data.astro.frontmatter.readingTime = readingTime.text;

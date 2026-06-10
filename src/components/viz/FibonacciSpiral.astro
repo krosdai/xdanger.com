@@ -21,7 +21,12 @@ const fibs = [1, 1, 2, 3, 5, 8, 13, 21];
 
 // 螺旋方块平铺：方向按 R→U→L→D 循环逆时针外扩，每块边长正好等于所贴的那条边。
 // 抽象坐标 y 向上；(x0,y0) 为方块的 min-x / min-y 角。
-type Rect = { x0: number; y0: number; f: number; i: number };
+interface Rect {
+  x0: number;
+  y0: number;
+  f: number;
+  i: number;
+}
 const rects: Rect[] = [];
 let minx = 0,
   maxx = 0,

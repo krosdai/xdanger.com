@@ -42,7 +42,7 @@ export function isLegacyPost(post: CollectionEntry<"post">): boolean {
 /** Astro 期文章的 ④ 路径（含前导 `/`、无 `.html`）；非 Astro 形态则原样兜底 */
 function astroPostPath(id: string): string {
   const bare = bareId(id);
-  const match = bare.match(ASTRO_POST_RE);
+  const match = ASTRO_POST_RE.exec(bare);
   if (!match) return `/${bare}`;
   const [, year, mmdd, slug] = match;
   return `/${slug}-${year}${mmdd}`;
@@ -85,11 +85,9 @@ const ASTRO_NOTE_RE = /^(\d{4})\/((?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01]))-([^/
  */
 function noteSlug(id: string): string {
   const bare = bareId(id);
-  const match = bare.match(ASTRO_NOTE_RE);
+  const match = ASTRO_NOTE_RE.exec(bare);
   if (!match) {
-    throw new Error(
-      `笔记文件名不符合约定 \`_notes/<YYYY>/<MMDD>-<slug>.md\`：${bare}`,
-    );
+    throw new Error(`笔记文件名不符合约定 \`_notes/<YYYY>/<MMDD>-<slug>.md\`：${bare}`);
   }
   const [, year, mmdd, slug] = match;
   return `${slug}-${year}${mmdd}`;

@@ -41,7 +41,10 @@ export default function FourierSeries({ terms: terms0 = 5, maxTerms = 12 }: Prop
   const [terms, setTerms] = useState(() => Math.min(maxTerms, Math.max(1, terms0)));
   const uid = useId();
 
-  const xs = useMemo(() => Array.from({ length: SAMPLES + 1 }, (_, i) => (i / SAMPLES) * Math.PI * 2), []);
+  const xs = useMemo(
+    () => Array.from({ length: SAMPLES + 1 }, (_, i) => (i / SAMPLES) * Math.PI * 2),
+    [],
+  );
 
   const { harmonics, sum, square } = useMemo(() => {
     const harmonics: { k: number; vals: number[] }[] = [];
@@ -56,7 +59,10 @@ export default function FourierSeries({ terms: terms0 = 5, maxTerms = 12 }: Prop
 
   const toPath = (vals: number[]) =>
     vals
-      .map((v, i) => `${(PAD + (i / SAMPLES) * (W - 2 * PAD)).toFixed(1)},${(MIDY - v * AMP).toFixed(1)}`)
+      .map(
+        (v, i) =>
+          `${(PAD + (i / SAMPLES) * (W - 2 * PAD)).toFixed(1)},${(MIDY - v * AMP).toFixed(1)}`,
+      )
       .join(" ");
 
   return (
@@ -78,7 +84,9 @@ export default function FourierSeries({ terms: terms0 = 5, maxTerms = 12 }: Prop
           max={maxTerms}
           step={1}
           value={terms}
-          onChange={(e) => setTerms(Number(e.target.value))}
+          onChange={(e) => {
+            setTerms(Number(e.target.value));
+          }}
         />
       </div>
 

@@ -97,7 +97,9 @@ try {
   const { validTo } = new X509Certificate(readFileSync(certTmp)); // reject a non-cert body
   createPrivateKey(readFileSync(keyTmp)); // reject a non-key body
   await Promise.all([rename(certTmp, certPath), rename(keyTmp, keyPath)]);
-  console.log(`✓ anyip cert fetched into .cert/anyip/ (valid until ${validTo}) — dev serves HTTPS on :4321`);
+  console.log(
+    `✓ anyip cert fetched into .cert/anyip/ (valid until ${validTo}) — dev serves HTTPS on :4321`,
+  );
 } catch (err) {
   // Renewal failed (offline / anyip down / stalled / bad body). Exit 0 either
   // way so the chained `astro dev` still starts. Keep the existing pair while
@@ -110,7 +112,9 @@ try {
     console.warn(`⚠ anyip cert refresh failed (${reason}); keeping the existing valid cert`);
   } else {
     await rm(dir, { recursive: true, force: true });
-    console.warn(`⚠ anyip cert fetch failed (${reason}); removed unusable cert → dev falls back to localhost HTTP`);
+    console.warn(
+      `⚠ anyip cert fetch failed (${reason}); removed unusable cert → dev falls back to localhost HTTP`,
+    );
   }
   process.exit(0);
 }

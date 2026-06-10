@@ -59,7 +59,7 @@ async function fetchWebmentions(timeFrom: string | null, perPage = 1000) {
 function mergeWebmentions(a: WebmentionsCache, b: WebmentionsFeed): WebmentionsChildren[] {
   return Array.from(
     [...a.children, ...b.children]
-      .reduce((map, obj) => map.set(obj["wm-id"], obj), new Map())
+      .reduce((map, obj) => map.set(obj["wm-id"], obj), new Map<number, WebmentionsChildren>())
       .values(),
   );
 }
@@ -103,7 +103,10 @@ function isWebmentionsCache(value: unknown): value is WebmentionsCache {
   const lastFetchedOk = cache.lastFetched === null || typeof cache.lastFetched === "string";
   if (!lastFetchedOk || !Array.isArray(cache.children)) return false;
   return cache.children.every(
-    (c) => typeof c === "object" && c !== null && typeof (c as Record<string, unknown>)["wm-id"] === "number",
+    (c) =>
+      typeof c === "object" &&
+      c !== null &&
+      typeof (c as Record<string, unknown>)["wm-id"] === "number",
   );
 }
 
@@ -147,10 +150,10 @@ async function getAndCacheWebmentions() {
   return cache;
 }
 
-let webMentions: WebmentionsCache;
+let webMentions: WebmentionsCache | undefined;
 
 export async function getWebmentionsForUrl(url: string) {
-  if (!webMentions) webMentions = await getAndCacheWebmentions();
+  webMentions ??= await getAndCacheWebmentions();
 
   return webMentions.children.filter((entry) => entry["wm-target"] === url);
 }

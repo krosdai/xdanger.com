@@ -15,7 +15,12 @@ interface Props {
 const { caption } = Astro.props;
 const uid = crypto.randomUUID();
 
-type Layer = { n: number; title: string; sub: string; step: number };
+interface Layer {
+  n: number;
+  title: string;
+  sub: string;
+  step: number;
+}
 // 自顶向下渲染；step 取 sequential steel 阶梯序号（底层最深）。
 const layers: Layer[] = [
   { n: 5, title: "生态联盟", sub: "TSMC OIP · Samsung SAFE · Intel Foundry", step: 2 },

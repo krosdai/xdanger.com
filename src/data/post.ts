@@ -13,14 +13,17 @@ export async function getAllPosts(): Promise<CollectionEntry<"post">[]> {
  *  Note: This function doesn't filter draft posts, pass it the result of getAllPosts above to do so.
  */
 export function groupPostsByYear(posts: CollectionEntry<"post">[]) {
-  return posts.reduce<Record<string, CollectionEntry<"post">[]>>((acc, post) => {
-    const year = post.data.publishDate.getFullYear();
-    if (!acc[year]) {
-      acc[year] = [];
+  const grouped = new Map<string, CollectionEntry<"post">[]>();
+  for (const post of posts) {
+    const year = String(post.data.publishDate.getFullYear());
+    const group = grouped.get(year);
+    if (group) {
+      group.push(post);
+    } else {
+      grouped.set(year, [post]);
     }
-    acc[year]?.push(post);
-    return acc;
-  }, {});
+  }
+  return Object.fromEntries(grouped);
 }
 
 /** returns all tags created from posts (inc duplicate tags)
