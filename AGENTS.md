@@ -14,14 +14,15 @@ etc.) working in this repository.
 
 ## Toolchain
 
-| Concern        | Tool                                                |
-| -------------- | --------------------------------------------------- |
-| Package mgr    | **pnpm** (≥ 10). Do NOT use `npm`, `yarn`, or `bun` |
-| TS/JS linter   | **ESLint** (flat config, `eslint.config.js`)        |
-| Formatter      | **Prettier** (`.prettierrc.json`)                   |
-| CJK text lint  | **AutoCorrect** (`.autocorrectrc`)                  |
-| Markdown lint  | `markdownlint-cli2` (run on demand for `.mdx`)      |
-| Type checker   | `astro check` (uses `tsconfig.json`)                |
+| Concern         | Tool                                                                     |
+| --------------- | ------------------------------------------------------------------------ |
+| Package mgr     | **pnpm** (≥ 10). Do NOT use `npm`, `yarn`, or `bun`                      |
+| TS/JS linter    | **Oxlint** (type-aware via `oxlint-tsgolint`, `.oxlintrc.json`)          |
+| TS/JS formatter | **Oxfmt** (`.oxfmtrc.jsonc`)                                             |
+| Other formats   | **Prettier** (`.prettierrc.json`) — `.astro`, Markdown, JSON, YAML, CSS… |
+| CJK text lint   | **AutoCorrect** (`.autocorrectrc`)                                       |
+| Markdown lint   | `markdownlint-cli2` (run on demand for `.mdx`)                           |
+| Type checker    | `astro check` (uses `tsconfig.json`)                                     |
 
 ### Commands
 
@@ -35,8 +36,8 @@ pnpm build:debug    # Astro build with NODE_OPTIONS=--trace-warnings
 pnpm run rebuild        # Astro-only rebuild; reuse cached OG image PNG and fill missing ones
 pnpm run rebuild:og     # force-refresh all OG image PNG in the local cache
 pnpm preview        # serve dist/ via scripts/preview-server.mjs — faithful prod static mirror (try_files $uri $uri/index.html =404); do NOT use `astro preview` for URL checks
-pnpm lint           # autocorrect + prettier --check + eslint + astro check
-pnpm fix            # autocorrect + prettier --write + eslint --fix
+pnpm lint           # autocorrect + oxfmt --check + prettier --check + oxlint + astro check
+pnpm fix            # autocorrect + oxfmt + prettier --write + oxlint --fix
 ```
 
 ### Remote debugging over Tailscale
@@ -69,10 +70,15 @@ documented in the note atop `astro.config.ts`.
 
 When you edit a file by hand, run the appropriate checks before committing:
 
-- `.astro`, `.tsx`, `.ts`, `.mjs`, `.jsx`, `.js`, `.json`, `.mdx`:
+- `.tsx`, `.ts`, `.mjs`, `.jsx`, `.js`:
   ```bash
-  pnpm exec prettier --write <file> && pnpm exec eslint --fix <file> && pnpm exec autocorrect --fix <file>
+  pnpm exec oxfmt <file> && pnpm exec oxlint --fix <file> && pnpm exec autocorrect --fix <file>
   ```
+- `.astro`, `.json`, `.mdx`:
+  ```bash
+  pnpm exec prettier --write <file> && pnpm exec autocorrect --fix <file>
+  ```
+  （`.astro` frontmatter 同时受 oxlint 检查：`pnpm exec oxlint <file>`）
 - `.mdx`:
   ```bash
   pnpm exec markdownlint-cli2 --fix <file>
@@ -98,8 +104,9 @@ src/
   utils/              # Helpers (url, date, etc.)
 astro.config.ts       # Astro config (integrations, fonts, markdown pipeline)
 tailwind.config.ts    # Tailwind config (mainly for typography plugin)
-eslint.config.js      # ESLint flat config
-.prettierrc.json      # Prettier config
+.oxlintrc.json        # Oxlint config (JS/TS lint, type-aware)
+.oxfmtrc.jsonc        # Oxfmt config (JS/TS formatting)
+.prettierrc.json      # Prettier config (.astro / docs / config file types)
 .autocorrectrc        # AutoCorrect config
 ```
 
@@ -109,11 +116,11 @@ Notes and posts can carry interactive components. Pick the **lightest layer that
 job** — JS cost rises as you go down. This section is the canonical authoring spec; the
 issue→note automation (`/note-from-issue`) generates notes against these same rules.
 
-| Layer            | Directory                         | Use when                                                          |
-| ---------------- | --------------------------------- | ----------------------------------------------------------------- |
-| **animated-SVG** | `src/components/viz/*.astro`      | Geometric / coordinate figures, limited element count. Zero JS.   |
+| Layer            | Directory                                 | Use when                                                                      |
+| ---------------- | ----------------------------------------- | ----------------------------------------------------------------------------- |
+| **animated-SVG** | `src/components/viz/*.astro`              | Geometric / coordinate figures, limited element count. Zero JS.               |
 | **Canvas + JS**  | `src/components/viz/*.astro` + `<script>` | Many points / continuous curves / per-frame recompute (waveforms, particles). |
-| **React 19**     | `src/components/interactive/*.tsx` | State linkage across inputs, chart libs, deep component trees.    |
+| **React 19**     | `src/components/interactive/*.tsx`        | State linkage across inputs, chart libs, deep component trees.                |
 
 ### Theme linkage contract (non-negotiable)
 
@@ -159,9 +166,9 @@ import OrbitDiagram from "@/components/viz/OrbitDiagram.astro";
 import WaveField from "@/components/viz/WaveField.astro";
 import CompoundInterest from "@/components/interactive/CompoundInterest.tsx";
 
-<OrbitDiagram />                     {/* SVG: no directive */}
-<WaveField />                        {/* Canvas: no directive — its <script> bundles globally */}
-<CompoundInterest client:visible />  {/* React: client:visible by default */}
+<OrbitDiagram /> {/* SVG: no directive */}
+<WaveField /> {/* Canvas: no directive — its <script> bundles globally */}
+<CompoundInterest client:visible /> {/* React: client:visible by default */}
 ```
 
 - `.astro` components (SVG, Canvas) take **no** client directive.

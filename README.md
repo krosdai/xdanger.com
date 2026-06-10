@@ -28,17 +28,17 @@ pnpm install
 
 ### 开发命令
 
-| 命令            | 说明                                                         |
-| --------------- | ------------------------------------------------------------ |
-| `pnpm dev`      | 启动开发服务器                                               |
-| `pnpm build`        | 构建生产版本，并生成 Pagefind 搜索索引                       |
-| `pnpm build:site`   | 只运行 Astro 构建，适合本地快速验证                          |
-| `pnpm build:debug`  | 带 `NODE_OPTIONS=--trace-warnings` 运行 Astro 构建            |
-| `pnpm run rebuild`    | 只重新执行 Astro 构建，复用已有 OG image PNG，只补缺失图片 |
-| `pnpm run rebuild:og` | 强制刷新全部 OG image PNG，并写回本地缓存                  |
-| `pnpm preview`      | 用 `scripts/preview-server.mjs`（忠实复刻线上 `try_files $uri $uri/index.html =404`）伺服 `dist/`，1:1 复现线上 URL 行为 |
-| `pnpm lint`         | 运行 autocorrect / prettier / eslint / astro check 全套检查 |
-| `pnpm fix`          | 自动修复格式与可修复的 lint 问题                             |
+| 命令                  | 说明                                                                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `pnpm dev`            | 启动开发服务器                                                                                                           |
+| `pnpm build`          | 构建生产版本，并生成 Pagefind 搜索索引                                                                                   |
+| `pnpm build:site`     | 只运行 Astro 构建，适合本地快速验证                                                                                      |
+| `pnpm build:debug`    | 带 `NODE_OPTIONS=--trace-warnings` 运行 Astro 构建                                                                       |
+| `pnpm run rebuild`    | 只重新执行 Astro 构建，复用已有 OG image PNG，只补缺失图片                                                               |
+| `pnpm run rebuild:og` | 强制刷新全部 OG image PNG，并写回本地缓存                                                                                |
+| `pnpm preview`        | 用 `scripts/preview-server.mjs`（忠实复刻线上 `try_files $uri $uri/index.html =404`）伺服 `dist/`，1:1 复现线上 URL 行为 |
+| `pnpm lint`           | 运行 autocorrect / oxfmt / prettier / oxlint / astro check 全套检查                                                      |
+| `pnpm fix`            | 自动修复格式与可修复的 lint 问题                                                                                         |
 
 ### 项目结构
 
@@ -57,23 +57,19 @@ pnpm install
 `src/utils/url.ts`（`getPostPath` / `getPostRouteSlug` / `getCanonicalUrl` / `getNotePath`，单一事实来源）为准：
 
 1. MoveableType 时期的文章（发布日期 < `2013-05-31`）：
-
    - 文件路径：`_posts/YYYY/MM/DD/SEQ.mdx`
    - URL 形态：`/YYYY/MM/DD/SEQ.html`（与原博客完全一致）
 
 2. Jekyll 时期的文章（`2013-05-31` <= 发布日期 < `2025-02-28`）：
-
    - 文件路径：`_posts/YYYY/MM/DD/title.mdx`
    - URL 形态：`/YYYY/MM/DD/title.html`（与原博客完全一致）
 
 3. Astro 时期的文章（`2025-02-28` <= 发布日期）：
-
    - 文件路径：`_posts/YYYY/MMDD-title.mdx`
    - URL 形态：`/title-YYYYMMDD`（干净 URL，slug 取自文件名 `MMDD-` 之后那段，日期取自 `YYYY`+`MMDD`）
    - 历史上短暂用过的 `/YYYY/MMDD-title`（无后缀）及更早 `/YYYY/MMDD-title.html` 形态，统一重定向到此形态（机制见下）
 
 4. 笔记（notes）：
-
    - 文件路径：`_notes/<YYYY>/<MMDD>-<slug>.md`（按年分目录、日期前缀，与文章 Astro 期对齐）
    - URL 形态：`/notes/<slug>-<YYYYMMDD>`（干净 URL，日期取自路径，时区无关；文件名不符合约定会导致构建失败）
 
@@ -93,8 +89,9 @@ pnpm install
 ### 工具链
 
 - **包管理器**：pnpm (`packageManager` 字段已锁定版本)
-- **代码格式化**：Prettier (含 `prettier-plugin-astro` / `prettier-plugin-tailwindcss` / `prettier-plugin-autocorrect`)
-- **TypeScript/JS lint**：ESLint (flat config，`eslint.config.js`)
+- **TypeScript/JS 格式化**：[Oxfmt](https://oxc.rs/docs/guide/usage/formatter)（`.oxfmtrc.jsonc`，Prettier 兼容输出）
+- **其余格式化**：Prettier (含 `prettier-plugin-astro` / `prettier-plugin-tailwindcss` / `prettier-plugin-autocorrect`)，负责 `.astro` / Markdown / JSON / YAML / CSS 等
+- **TypeScript/JS lint**：[Oxlint](https://oxc.rs/docs/guide/usage/linter)（type-aware，经 `oxlint-tsgolint`，`.oxlintrc.json`）
 - **中文文本规范**：[AutoCorrect](https://github.com/huacnlee/autocorrect)
 - **类型检查**：`astro check`
 
@@ -116,7 +113,7 @@ pnpm install
 ### SSG 模式下的改进
 
 - [x] 深入解决 URL 的处理，让生成的 URL 合理，让内链的 URL 符合预期
-- [x] 确保 linter/formatter 正确有效（已统一为 prettier + eslint + autocorrect + astro check）
+- [x] 确保 linter/formatter 正确有效（已统一为 oxfmt + prettier + oxlint + autocorrect + astro check）
 - [x] Upgrade Astro to v6
 - [x] Switch package manager to pnpm (移除 bun / biomejs / deno 工具链)
 - [ ] Use Cypress/Playwright to establish an e2e tests framework
