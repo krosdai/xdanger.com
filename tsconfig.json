@@ -4,7 +4,9 @@
       "@/*": ["./src/*"]
     },
     "jsx": "react-jsx",
-    "jsxImportSource": "react"
+    "jsxImportSource": "react",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "exclude": ["dist", "node_modules", "public"],
   "extends": "astro/tsconfigs/base"
