@@ -72,7 +72,7 @@ PmWiki 允许你将配置文件单独存放于 `local/`目录下，或者是 PmW
   $ScriptUrl = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME'];
   ```
 
-- **\$ScriptDir** ：如果你修改过$ScriptUrl，那就必须增加次项：
+- **\$ScriptDir** ：如果你修改过\$ScriptUrl，那就必须增加次项：
 
   ```
   $ScriptDir = preg_replace("#/[^/]*$#","",$ScriptUrl,1);
@@ -114,7 +114,7 @@ PmWiki 允许你将配置文件单独存放于 `local/`目录下，或者是 PmW
    这些\*nix 转化过来的程序最好绝对路径中都不要包含空格，否则基本都会出错。这个也不例外，虽然可以成功安装，但是等一下还是无法使用。
 
 3. 将下载的 patch-2.5.4-3-bin.exe 更名为 patch.exe 放到 C:\GnuWin32\bin\下。
-4. 设置 local.php，加上刚才没有设置的 $SysDiffCmd 和 $DefaultPasswords：
+4. 设置 local.php，加上刚才没有设置的 \$SysDiffCmd 和 \$DefaultPasswords：
 
    ```
    $SysDiffCmd = 'C:\\GnuWin32\\bin\\diff.exe';
@@ -189,6 +189,6 @@ PmWiki 允许你将配置文件单独存放于 `local/`目录下，或者是 PmW
    Patch_BackOld();
    ```
 
-5. 最后别忘了在$HTTPHeaders（如果 local.php 里有的$HTTPHeaders 话，在 local.php 里修改）中，将 charset 设为 gb2312。
+5. 最后别忘了在\$HTTPHeaders（如果 local.php 里有的\$HTTPHeaders 话，在 local.php 里修改）中，将 charset 设为 gb2312。
 
 这个方法不适合 UTF-8 的编码方式。
