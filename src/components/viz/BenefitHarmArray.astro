@@ -21,7 +21,8 @@ const cols = 50;
 const total = 2000;
 const nBenefit = 1;
 const nOvertreated = 10;
-const nFalseAlarm = 200;
+const nFalseAlarm = 210; // 逾 200，与「more than 200」(Cochrane) 一致
+const nNone = total - nBenefit - nOvertreated - nFalseAlarm;
 
 type Kind = "benefit" | "overtreated" | "falsealarm" | "none";
 const kindOf = (i: number): Kind => {
@@ -44,10 +45,10 @@ const opacityOf: Record<Kind, number> = {
 };
 
 const cell = 5;
-const step = 6.6;
 const padX = 16;
-const gridW = (cols - 1) * step + cell;
-const W = padX * 2 + gridW;
+const W = 360; // 与同目录其他 viz 统一为整数 viewBox
+const gridW = W - padX * 2;
+const step = (gridW - cell) / (cols - 1); // 由 W 精确反推格距
 const padTop = 28;
 const rowsN = Math.ceil(total / cols);
 const gridH = (rowsN - 1) * step + cell;
@@ -56,7 +57,7 @@ const legend = [
   { kind: "benefit" as Kind, label: "1 人免于死于乳腺癌" },
   { kind: "overtreated" as Kind, label: "10 人被过度诊断、接受不必要治疗" },
   { kind: "falsealarm" as Kind, label: "逾 200 人经历假阳性惊吓" },
-  { kind: "none" as Kind, label: "其余近 1789 人结局无变化" },
+  { kind: "none" as Kind, label: `其余约 ${nNone} 人结局无变化` },
 ];
 const legendLineH = 20;
 const legendTop = padTop + gridH + 14;
@@ -77,8 +78,9 @@ const cells = Array.from({ length: total }, (_, i) => i);
   >
     <title id={`${uid}-t`}>每 2000 名女性做 10 年乳腺钼靶的获益与代价</title>
     <desc id={`${uid}-d`}
-      >2000 格点阵：1 格代表免于死于乳腺癌的获益，10 格代表被过度诊断并接受不必要治疗，逾 200
-      格代表假阳性惊吓，其余近 1789 格结局无变化。数字源自 Cochrane 综述。</desc
+      >{
+        `2000 格点阵：1 格代表免于死于乳腺癌的获益，10 格代表被过度诊断并接受不必要治疗，逾 200 格（${nFalseAlarm} 格）代表假阳性惊吓，其余约 ${nNone} 格结局无变化。数字源自 Cochrane 综述。`
+      }</desc
     >
     {
       cells.map((i) => {

@@ -94,7 +94,7 @@ const rowY = (i: number) => padTop + i * rowH;
               width={segW}
               height={segH}
               rx="3"
-              fill={s < r.specific ? "var(--color-seq-steel-5)" : "currentColor"}
+              fill={s < r.specific ? `var(--color-seq-steel-${4 + s})` : "currentColor"}
               fill-opacity={s < r.specific ? 0.9 : 0.1}
             />
           ))}
