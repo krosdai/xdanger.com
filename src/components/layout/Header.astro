@@ -21,6 +21,10 @@ import { siteConfig } from "@/site.config";
         </p>
       </div>
       <div class="site-header-actions flex items-center gap-6">
+        <nav class="site-header-nav flex items-center gap-4 text-base" aria-label="Primary">
+          <a href="/posts" data-astro-prefetch>writings</a>
+          <a href="/notes" data-astro-prefetch>notes</a>
+        </nav>
         <slot name="nav" />
         <ThemeToggle />
       </div>
@@ -29,6 +33,21 @@ import { siteConfig } from "@/site.config";
 </header>
 
 <style>
+  /* Primary nav opts out of the chrome `Style A` (no-underline) link treatment
+     and back into the body `Style B`: a faint 1px underline that firms up to the
+     accent colour on hover, matching the prose links in the page body. Scoped,
+     so the `data-astro-cid` attribute outweighs global.css's `:is(header) a`. */
+  .site-header-nav a {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: color-mix(in oklab, currentColor 30%, transparent);
+  }
+  .site-header-nav a:hover {
+    color: inherit;
+    text-decoration-color: var(--color-accent);
+  }
+
   #site-header {
     --header-collapse-offset: 0px;
     --header-padding-y: 3rem;
