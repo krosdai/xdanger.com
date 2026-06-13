@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "audience-aware-comms": {
+      "source": "daihaus/skills",
+      "sourceType": "github",
+      "skillPath": "skills/audience-aware-comms/SKILL.md",
+      "computedHash": "a9014ae15bd924ac0628035a7dd191629ccba66b9ec7ab9713b05d3aebc81bda"
+    },
+    "deep-dive": {
+      "source": "daihaus/skills",
+      "sourceType": "github",
+      "skillPath": "skills/deep-dive/SKILL.md",
+      "computedHash": "383d9c06679df43b1981ea74e99ee32eb39fb164b04f669ce78e83f87fcf8490"
+    }
+  }
+}
