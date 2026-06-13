@@ -88,7 +88,7 @@ modes of "narrative" writing are exactly the moves a sourced writer must not mak
 - **No manufactured cliffhanger** that withholds a known answer ("但接下来发生的事改变了一切"). Allowed
   only: questions the *field* has not answered, attributed. Test: *do I actually know the answer I'm
   hiding?* If yes, reveal it or end elsewhere.
-- **No purple prose / evaluative adjectives** (惊人地, 触目惊心, 令人发指) doing the work a cited number
+- **No purple prose / evaluative adjectives** (惊人地，触目惊心，令人发指) doing the work a cited number
   should do. Cut the adjective, supply the figure; let the restrained register carry the weight.
 - **No vague / unquantified stakes** ("this changes everything"); **no question lead as a crutch** ("你有
   没有想过…"); **no false-summary / forced-moral tail** ("这告诉我们…", "归根结底…"). The prior concrete
