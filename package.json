@@ -9,6 +9,7 @@
     "pnpm": ">=11"
   },
   "scripts": {
+    "postinstall": "node scripts/ensure-autocorrect-native.mjs",
     "dev": "node scripts/ensure-anyip-cert.mjs && astro dev",
     "start": "pnpm run dev",
     "cert:anyip": "node scripts/ensure-anyip-cert.mjs --force",

@@ -40,6 +40,17 @@ pnpm lint           # autocorrect + oxfmt --check + prettier --check + oxlint + 
 pnpm fix            # autocorrect + oxfmt + prettier --write + oxlint --fix
 ```
 
+### Native binding prestep (linux-arm64)
+
+`autocorrect-node` ships no prebuilt binary for linux-arm64, which would break the
+`autocorrect` CLI and prettier-plugin-autocorrect — and with them `pnpm lint`/`fix`. A
+`postinstall` prestep (`scripts/ensure-autocorrect-native.mjs`) repairs this: it builds the
+binding once from the pinned upstream tag with the local Rust toolchain and caches it in
+`~/.cache/autocorrect-node/<version>/<platform>-<arch>/`, so later reinstalls are an instant copy. On every
+platform with upstream binaries it is a silent no-op, and it fails open (warns, never blocks
+install) when cargo/git/network are missing. Drop the hook once upstream ships linux-arm64
+binaries (<https://github.com/huacnlee/autocorrect>).
+
 ### Remote debugging over Tailscale
 
 `pnpm dev` provisions an [anyip.dev](https://anyip.dev) wildcard cert into `.cert/anyip/` before
