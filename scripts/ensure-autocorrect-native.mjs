@@ -8,8 +8,9 @@
 //
 //   1. If `require("autocorrect-node")` already works, exit silently — every
 //      platform with an upstream binary (CI, Vercel, macOS) takes this path.
-//   2. Otherwise copy a previously built binding from the per-version cache
-//      (~/.cache/autocorrect-node/<version>/) into the package directory.
+//   2. Otherwise copy a previously built binding from the per-version,
+//      per-triple cache (~/.cache/autocorrect-node/<version>/<platform>-<arch>/)
+//      into the package directory.
 //   3. On a cache miss, build it from the pinned upstream tag with the local
 //      Rust toolchain (`napi build`), then cache + install it.
 //
@@ -33,6 +34,15 @@ import { fileURLToPath } from "node:url";
 const require = createRequire(import.meta.url);
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const UPSTREAM = "https://github.com/huacnlee/autocorrect";
+// Pin the builder: `@napi-rs/cli@2` floats to the latest 2.x on every run, so a
+// minor with a `napi build` CLI change would silently drop us to the warning
+// path. This satisfies autocorrect-node's own `^2.16.5` constraint.
+const NAPI_CLI = "@napi-rs/cli@2.18.4";
+
+/** napi-rs names every artifact `autocorrect-node.<triple>.node` and loads only
+ *  that family — so matching the prefix skips unrelated/stale `.node` modules
+ *  that may share the cache or crate dir, and never copies a wrong-arch binding. */
+const isBinding = (f) => f.startsWith("autocorrect-node.") && f.endsWith(".node");
 
 /** The binding loads in a clean child process (the parent's failed-load state
  *  can't linger there), so this is the one source of truth for "is it fixed". */
@@ -49,18 +59,34 @@ function bindingLoads() {
 }
 
 function installFromDir(srcDir, pkgDir) {
-  const nodeFiles = existsSync(srcDir)
-    ? readdirSync(srcDir).filter((f) => f.endsWith(".node"))
-    : [];
+  const nodeFiles = existsSync(srcDir) ? readdirSync(srcDir).filter(isBinding) : [];
   for (const f of nodeFiles) copyFileSync(join(srcDir, f), join(pkgDir, f));
   return nodeFiles.length > 0;
 }
 
 if (bindingLoads()) process.exit(0);
 
-const pkgDir = dirname(require.resolve("autocorrect-node/package.json"));
-const { version } = require("autocorrect-node/package.json");
-const cacheDir = join(homedir(), ".cache", "autocorrect-node", version);
+// `autocorrect-node` is a devDependency, so a production install (`--prod`)
+// omits it entirely: `bindingLoads()` is false, yet there's nothing to repair
+// and nothing will call it. Resolving it then throws — guard so the documented
+// "install never blocks" contract holds (also covers a partial/aborted install
+// or a future package.json without a `version`).
+let pkgDir, version;
+try {
+  pkgDir = dirname(require.resolve("autocorrect-node/package.json"));
+  ({ version } = require("autocorrect-node/package.json"));
+} catch {
+  process.exit(0);
+}
+// Namespace the cache by triple: an NFS home shared between x86_64 and arm64
+// hosts would otherwise pool incompatible bindings under one version dir.
+const cacheDir = join(
+  homedir(),
+  ".cache",
+  "autocorrect-node",
+  version,
+  `${process.platform}-${process.arch}`,
+);
 
 // Fast path: a binding built on a previous install is cached for this version.
 if (installFromDir(cacheDir, pkgDir) && bindingLoads()) {
@@ -83,11 +109,11 @@ try {
   const crateDir = join(buildDir, "autocorrect-node");
   // `--platform` names the artifact after the host triple — the same name the
   // napi loader looks for — so no triple detection is needed here.
-  execFileSync("npx", ["-y", "@napi-rs/cli@2", "build", "--platform", "--release"], {
+  execFileSync("npx", ["-y", NAPI_CLI, "build", "--platform", "--release"], {
     cwd: crateDir,
     stdio: "inherit",
   });
-  for (const f of readdirSync(crateDir).filter((f) => f.endsWith(".node"))) {
+  for (const f of readdirSync(crateDir).filter(isBinding)) {
     try {
       execFileSync("strip", [join(crateDir, f)], { stdio: "ignore" });
     } catch {
