@@ -139,7 +139,8 @@ try {
   console.warn(
     `⚠ autocorrect-node has no prebuilt binding for ${process.platform}-${process.arch} and ` +
       `repairing it failed (${reason}); install continues, but \`autocorrect\` and ` +
-      `prettier-plugin-autocorrect won't run until this is fixed (needs cargo, git and network)`,
+      `prettier-plugin-autocorrect won't run until this is fixed ` +
+      `(needs cargo, git, npx and network)`,
   );
 } finally {
   // `force: true` ignores a missing path but not EACCES/EBUSY etc.; a throw here
