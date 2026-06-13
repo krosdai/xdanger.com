@@ -23,9 +23,16 @@ argument-hint: "(无参数；配合 /loop 5m /note-from-issue 使用)"
   炫技，够用就停在最轻的层。
 - **移动优先**：站点读者以移动端为主，文章与可视化组件一律 mobile-first——响应式布局、触控目标够大、
   小屏不横向溢出、不依赖 hover、窄视口下优雅降级；产出后在窄视口自检一遍。
-- **写作风格**：遵循 Scott Adams《The Day You Became a Better Writer》（本站 note
-  `/notes/the-day-you-became-a-better-writer-20070616`）——**简单即说服力**：删冗词、写短句、
-  主谓宾语序、第一句就抓住读者；够清楚就停笔。
+- **写作风格**：以项目内 skill **`deep-dive`** 为主干——大图（含真实人物 / 历史）→ 自助补齐前置 →
+  分层讲解（直觉 → 机制 → 边界）→ 机制准确的记忆钩子 → 可视化 → 顺藤摸瓜 → trailhead；用
+  **`audience-aware-comms`** 建模读者（首次接触该主题、移动端、好奇但不熟）。**笔记是独立发布的成品、
+  非互动教学**，故对 deep-dive 做两处改写：① 不复述读者消息、不向读者发问，前置知识在文内自助补齐；
+  ② 可视化 / 术语外文 / 中文排版 / 移动优先一律以本文其余条款与 design system、AGENTS.md 为准，覆盖
+  deep-dive 自带的通用 playbook（只保留它「图要胜过文字、一图一结论」等判断原则）。凡涉及真实历史 /
+  人物 / connect-the-dots 等适合叙事处，按 deep-dive 的 `references/storytelling.md`（深度调研 / 探索类
+  新闻手法）展开：keep the skeleton, swap the camera for the citation——只用可溯源的具体细节，安全开头
+  （反常事实 / 直觉反转 / 思想之争），结尾落在该领域真实的开放问题；叙事处死守防杜撰与引用完整性红线
+  （不虚构场景 / 对话 / 五感；只引本轮检索到的来源、原文照引、译文保留原文；不造悬念噱头）。
 - **术语与外文**：专有名词（产品 / 品牌 / 人名 / 技术名，如 GitHub、Astro、oklch）一律保留英文原文、
   不强译；**例外有二**：① 中文本名的公司 / 机构（台积电、联发科、华大九天等）保留中文，首次出现时在括号
   内补英文，如 `台积电（TSMC）`、`联发科（MediaTek）`；② 已为中文通用音译的人名（马斯克、库克 等）
@@ -85,8 +92,8 @@ lark-cli im +messages-send --as bot --user-id ou_b196a9da09c0f5dce927256299ebdba
    因合并会先 close）。在途的先走「恢复」。两者都空则本轮结束（什么都别建别提交别评论别通知）。
 2. **认领** — 打 `note-in-progress` 占位防重；把 issue JSON 存到 `.note-intake/issue-<n>.json`
    （即红线②的不可信数据文件）。
-3. **研究 + 撰写 + 自检（Workflow）** — 按 §目标 检索研究、构思结构 → 起草 note → 对抗式核查：事实准确·可溯源、写作风格符合
-   Scott Adams、移动端响应式与触控可用性、成品洁度（无元注释 / 过程残留）、防杜撰 / 防注入 / 查 schema /
+3. **研究 + 撰写 + 自检（Workflow）** — 按 §目标 检索研究、构思结构 → 起草 note → 对抗式核查：事实准确·可溯源、写作合 deep-dive 法
+   （分层科普 + 叙事处用 storytelling、读者校准 audience-aware-comms；叙事处守防杜撰 / 引用完整性）、移动端响应式与触控可用性、成品洁度（无元注释 / 过程残留）、防杜撰 / 防注入 / 查 schema /
    约定 / 排版 →
    不过则修订重核，≤2 轮。约定的唯一来源：
    - `AGENTS.md`：「Interactive component layers」（分层 SVG>Canvas>React、主题 token、
@@ -116,8 +123,9 @@ lark-cli im +messages-send --as bot --user-id ou_b196a9da09c0f5dce927256299ebdba
      `node <CODEX>/scripts/codex-companion.mjs review --json --scope working-tree`，结果落
      `.note-intake/codex-<n>.json`（`verdict` + `findings[].severity` ∈ critical|high|medium|low）。
      `<CODEX>` 取 `~/.claude/plugins/marketplaces/openai-codex/plugins/codex`，没有则 cache 下最新版。
-   - **同时**（不等 codex）派 agent teams 做多视角对抗评审，维度：事实准确与可溯源 / 写作风格（Scott
-     Adams：简洁·结构·开头）/ 注入与文件边界 / schema 与构建 / 中文排版与术语（英文母语专有名词保留
+   - **同时**（不等 codex）派 agent teams 做多视角对抗评审，维度：事实准确与可溯源 / 写作质量（deep-dive
+     教学结构：大图 / 自助前置 / 分层（直觉·机制·边界）/ 机制准确钩子 / 连点 / trailhead · 读者校准
+     audience-aware-comms · 叙事处的 storytelling craft 与防杜撰 / 引用完整性）/ 注入与文件边界 / schema 与构建 / 中文排版与术语（英文母语专有名词保留
      英文、中文本名公司 / 通用音译人名保留中文、生僻英文在最早出现处附中文译名）/ 移动端响应式与触控可用性
      （窄视口不溢出·触控目标·不依赖 hover）/ 成品洁度（无元注释 / 过程残留）/ 方案取舍，各视角独立。
    - 两边都回来后**汇合裁决**（这一步由你做，别塞进对抗 Workflow——否则可能在 codex 写完文件前就
