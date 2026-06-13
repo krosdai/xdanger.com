@@ -1,0 +1,128 @@
+---
+/**
+ * KLevelLadder — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：沟通里的「思维博弈阶梯」。自上而下 L0→L3，逐层加深对读者心智的建模。
+ * 下两层（L0/L1）用 sequential steel，表示这是 LLM 默认覆盖的区间；上两层（L2/L3）
+ * 用 `--color-accent`，表示人类高手日常工作、而 AI 常缺席的「潜台词层」。右侧括标
+ * L2–L3 为「人类日常工作区」，L1 旁标「LLM 默认到此」。
+ *
+ * 主题契约：accent 用 token、steel 用 `--color-seq-steel-{n}`，文字 / 轨线用
+ * currentColor，切 `data-theme` 时零 JS 自动变色。纯静态，天然满足 reduced-motion；
+ * 纵向堆叠、viewBox 自适应，窄屏不溢出。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+interface Rung {
+  level: string;
+  title: string;
+  sub: string;
+  accent?: boolean;
+  step?: number; // sequential steel 阶梯序号
+}
+const rungs: Rung[] = [
+  { level: "L0", title: "字面读者", sub: "逐字吸收每个 token（即「CPU」）", step: 6 },
+  { level: "L1", title: "说全说清", sub: "为字面读者补齐信息 · LLM 的 RLHF 默认档", step: 4 },
+  { level: "L2", title: "读出潜台词", sub: "从「怎么写、省了什么」反推作者意图", accent: true },
+  { level: "L3", title: "揣摩对方的揣摩", sub: "你知道对方在猜你为何这么说", accent: true },
+];
+
+const W = 360;
+const padY = 14;
+const padX = 14;
+const rowH = 56;
+const gap = 10;
+const indent = 13; // 每深一层右移，视觉上「越往下越深」
+const braceX = W - 10;
+const H = padY * 2 + rungs.length * rowH + (rungs.length - 1) * gap;
+const rowY = (i: number) => padY + i * (rowH + gap);
+const boxL = (i: number) => padX + i * indent;
+const fillFor = (r: Rung) =>
+  r.accent ? "var(--color-accent)" : `var(--color-seq-steel-${r.step})`;
+// 人类工作区括标：覆盖 L2–L3（index 2..3）
+const humanTop = rowY(2);
+const humanBot = rowY(3) + rowH;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>思维博弈的四层阶梯</title>
+    <desc id={`${uid}-d`}
+      >从 L0 到 L3 逐层加深对读者心智的建模：L0 字面读者、L1 为字面读者说全说清、L2 读出潜台词、L3
+      揣摩对方对你的揣摩。LLM 默认停在 L1，人类高手日常工作在 L2–L3。</desc
+    >
+    {
+      rungs.map((r, i) => (
+        <Fragment>
+          <rect
+            x={boxL(i)}
+            y={rowY(i)}
+            width={W - boxL(i) - 26}
+            height={rowH}
+            rx="10"
+            fill={fillFor(r)}
+            fill-opacity="0.16"
+            stroke={fillFor(r)}
+            stroke-width={r.accent ? 1.8 : 1.4}
+          />
+          <text
+            x={boxL(i) + 14}
+            y={rowY(i) + 23}
+            font-size="13"
+            font-weight="700"
+            fill={r.accent ? "var(--color-accent)" : "currentColor"}
+          >
+            <tspan font-size="11" opacity="0.8">
+              {r.level}
+            </tspan>
+            <tspan dx="7" font-size="14">
+              {r.title}
+            </tspan>
+          </text>
+          <text x={boxL(i) + 14} y={rowY(i) + 42} font-size="11" fill="currentColor" opacity="0.74">
+            {r.sub}
+          </text>
+        </Fragment>
+      ))
+    }
+    {/* L1 标注：LLM 默认到此 */}
+    <text
+      x={W - 26}
+      y={rowY(1) + 31}
+      text-anchor="end"
+      font-size="10.5"
+      font-weight="600"
+      fill="currentColor"
+      opacity="0.6">LLM 默认到此 ↑</text
+    >
+    {/* 人类工作区括标：L2–L3 */}
+    <path
+      d={`M ${braceX - 6} ${humanTop} L ${braceX} ${humanTop} L ${braceX} ${humanBot} L ${braceX - 6} ${humanBot}`}
+      fill="none"
+      stroke="var(--color-accent)"
+      stroke-width="1.6"></path>
+    <text
+      x={braceX - 3}
+      y={(humanTop + humanBot) / 2}
+      text-anchor="middle"
+      dominant-baseline="central"
+      font-size="11"
+      font-weight="700"
+      fill="var(--color-accent)"
+      transform={`rotate(90 ${braceX - 3} ${(humanTop + humanBot) / 2})`}>人类日常工作区</text
+    >
+  </svg>
+  {caption && <figcaption class="max-w-prose text-sm opacity-70">{caption}</figcaption>}
+</figure>

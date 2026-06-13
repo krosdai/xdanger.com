@@ -1,0 +1,93 @@
+---
+/**
+ * KLevelTimeline — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：从凯恩斯选美比赛到「推理模型」的纵向时间轴——k-level reasoning、语用学与
+ * AI 心智理论三条线在此交汇。高亮两处转折：2024-09 o1 开启 reasoning model 范式
+ * （能力跃迁），2025-09 anti-scheming 训练（刻意压制战略表达）——正是「能不能」与
+ * 「该不该」这对张力。
+ *
+ * 主题契约：轴线 / 圆点 / 文字用 currentColor 与 `--color-accent`，切 `data-theme`
+ * 时零 JS 自动变色。纯静态，天然满足 reduced-motion；viewBox 自适应，窄屏不溢出。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+interface Event {
+  date: string;
+  label: string;
+  highlight?: boolean;
+}
+const events: Event[] = [
+  { date: "1936", label: "Keynes 选美比赛：博弈的层级直觉" },
+  { date: "1967", label: "Grice 提出 implicature（会话含义）" },
+  { date: "1982", label: "Crawford & Sobel：分歧越大、语言越模糊" },
+  { date: "1995", label: "Nagel 实验：人类多停在 1–2 层" },
+  { date: "2012", label: "Frank & Goodman：RSA 语用推理的贝叶斯阶梯" },
+  { date: "2022", label: "Meta CICERO 在 Diplomacy 达人类水平" },
+  { date: "2023", label: "Kosinski 称 ToM 涌现，Ullman 反驳" },
+  { date: "2024", label: "ToMBench 等基准开始系统测 LLM 的 ToM" },
+  { date: "2024-09", label: "o1 发布，开启 reasoning model 范式", highlight: true },
+  { date: "2025", label: "ICML：现有 ToM 基准多已失效" },
+  { date: "2025-09", label: "Apollo×OpenAI：anti-scheming 训练", highlight: true },
+  { date: "2026", label: "「Societies of Thought」：长链即隐式多视角" },
+];
+
+const padTop = 22;
+const gap = 50;
+const axisX = 16;
+const W = 480;
+const H = padTop * 2 + (events.length - 1) * gap;
+const cy = (i: number) => padTop + i * gap;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>k-level reasoning 与 AI 心智理论关键时间线</title>
+    <desc id={`${uid}-d`}
+      >从 1936 年 Keynes 选美比赛、1967 年 Grice 会话含义，到 RSA、CICERO，再到 2024 年 o1
+      推理模型与 2025 年反欺骗训练的关键节点。</desc
+    >
+    <line
+      x1={axisX}
+      y1={cy(0)}
+      x2={axisX}
+      y2={cy(events.length - 1)}
+      stroke="currentColor"
+      stroke-opacity="0.22"
+      stroke-width="2"></line>
+    {
+      events.map((e, i) => (
+        <Fragment>
+          <circle
+            cx={axisX}
+            cy={cy(i)}
+            r={e.highlight ? 7 : 4.5}
+            fill={e.highlight ? "var(--color-accent)" : "currentColor"}
+            fill-opacity={e.highlight ? 1 : 0.55}
+          />
+          <text x={axisX + 22} y={cy(i)} dominant-baseline="central" font-size="13">
+            <tspan font-weight="700" fill={e.highlight ? "var(--color-accent)" : "currentColor"}>
+              {e.date}
+            </tspan>
+            <tspan dx="8" fill="currentColor" opacity={e.highlight ? 1 : 0.82}>
+              {e.label}
+            </tspan>
+          </text>
+        </Fragment>
+      ))
+    }
+  </svg>
+  {caption && <figcaption class="max-w-prose text-sm opacity-70">{caption}</figcaption>}
+</figure>
