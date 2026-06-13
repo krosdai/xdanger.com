@@ -29,7 +29,7 @@ Before diving into the concept itself, situate it. Two or three sentences answer
 
 - **What family does it belong to?** ("Diffusion models are a class of generative models, alongside GANs and VAEs.")
 - **What problem was it invented to solve?** ("Diffusion models came from modeling generation as the reverse of a gradual noising process — an idea rooted in nonequilibrium thermodynamics, Sohl-Dickstein et al. 2015 — not as a fix for GANs.")
-- **Who and when?** Name the key people and the era — historical context and the human story (人物故事) make a concept stick. Don't manufacture drama; do mention the actual humans and the actual moment. → When this human/historical story genuinely carries the concept, narrate it with the craft in [references/storytelling.md](references/storytelling.md).
+- **Who and when?** Name the key people and the era — historical context and the human story (人物故事) make a concept stick. Don't manufacture drama; do mention the actual humans and the actual moment.
 
 If the topic is purely procedural ("how do I use Polars"), the big-picture can be one sentence on what makes Polars distinct from pandas and why someone built it that way.
 
@@ -49,15 +49,6 @@ Format example:
 
 If the topic genuinely has no prerequisites, skip this step — don't manufacture them.
 
-**Writing a standalone artifact (a published note, a doc) rather than teaching live?** Don't ask —
-there's no one to answer. Fold the prerequisite beat into prose: a short paragraph that names what helps
-and supplies it on the spot, then continue. Shape:
-
-> 这部分默认你对 **A**、**B** 有点感觉；没有也不要紧，三句话补上：A 是 …；B 是 …；有这两点就够往下读了。
-
-The calibration becomes a self-serve on-ramp instead of a question. (This is the non-interactive default
-for callers like `/note-from-issue`.)
-
 ### 3. Main exposition (layered)
 
 Walk through the concept in **three layers**, in this order:
@@ -76,7 +67,7 @@ Memory hooks come in flavors; pick the one that fits the concept's shape:
 
 - **Analogies** — for mechanisms (use when the target has a familiar mechanical twin)
 - **Mnemonics / 口诀** — for ordered lists or named entities (the planets, the layers of OSI)
-- **Stories** — for processes that unfold over time (the invention of calculus, why TCP looks the way it does). → When the story is real history or people, narrate it with the craft in [references/storytelling.md](references/storytelling.md).
+- **Stories** — for processes that unfold over time (the invention of calculus, why TCP looks the way it does)
 - **Concrete numbers** — for scales that defy intuition (a neuron fires ~200 times/sec; a CPU clock is ~3×10⁹/sec — 7 orders of magnitude)
 
 See [references/memory-hooks-patterns.md](references/memory-hooks-patterns.md) for worked examples and common traps.
@@ -101,7 +92,7 @@ These rules cover the vast majority of cases. Only consult [references/visualiza
 
 ### 6. Connect the dots
 
-One short paragraph at the end: what _adjacent_ concepts does this unlock or relate to? Where does this fit in the broader map? This is the "I don't know what I don't know" remedy — surface 2–4 neighbors so the user sees what's nearby even if they don't pursue them now. → When connecting the dots becomes a narrative that ties several threads into one picture, narrate it with the craft in [references/storytelling.md](references/storytelling.md).
+One short paragraph at the end: what _adjacent_ concepts does this unlock or relate to? Where does this fit in the broader map? This is the "I don't know what I don't know" remedy — surface 2–4 neighbors so the user sees what's nearby even if they don't pursue them now.
 
 Format example:
 
@@ -172,4 +163,3 @@ That's the shape. Adjust ruthlessly for the topic at hand.
 - [references/memory-hooks-patterns.md](references/memory-hooks-patterns.md) — analogies, mnemonics, stories: when to use which, and what counts as "mechanism-accurate"
 - [references/visualization-playbook.md](references/visualization-playbook.md) — decision matrix for Mermaid vs widget vs SVG vs table, with worked examples
 - [references/bilingual-conventions.md](references/bilingual-conventions.md) — format rules for Chinese/English term pairing and rephrase blocks
-- [references/storytelling.md](references/storytelling.md) — the secondary craft layer for the parts that carry a real story (人物/历史/connect-the-dots): investigative/explanatory-journalism moves for a writer working from sources, with hard fabrication guardrails

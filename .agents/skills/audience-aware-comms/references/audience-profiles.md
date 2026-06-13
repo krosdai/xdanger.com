@@ -41,13 +41,3 @@ Cares about: a crisp question with a clear decision boundary
 Sensitive to: being chased, vague asks that burn billable time
 Default register: formal, respectful, brief
 Leave unsaid by default: parallel options you're weighing elsewhere
-
-### first-time 科普 reader (published note)
-
-Reads how: skims on mobile first; reads closely only if the opening earns it
-Knows: smart and curious, but a first-time, non-specialist reader of this topic
-Doesn't: the jargon, the prerequisites, why this matters to them — assume none of it
-Cares about: "why should I care" and "will I actually understand this" — being let in, not impressed
-Sensitive to: jargon dumps, undefined acronyms, being talked down to, walls of unbroken text, manufactured drama
-Default register: clear and confident; one idea per sentence; warm but not chatty
-Leave unsaid by default: the research journey, hedging, meta-notes (（已校正）/（待核实）), "hope this helps" closers
