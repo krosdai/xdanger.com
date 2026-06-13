@@ -1,6 +1,15 @@
 ---
 import ThemeToggle from "@/components/ThemeToggle.astro";
 import { siteConfig } from "@/site.config";
+
+// Mark the nav link for the section the visitor is currently in. `aria-current`
+// is `page` only when the link points at the exact current URL (e.g. on `/posts`
+// itself); on a child route of the section (`/posts/2`, `/notes/<slug>`) the link
+// is an ancestor, not the page, so it gets the generic `true`. Pure SSR off
+// `Astro.url`, no JS.
+const pathname = Astro.url.pathname.replace(/\/$/, "");
+const navCurrent = (base: string): "page" | "true" | undefined =>
+  pathname === base ? "page" : pathname.startsWith(`${base}/`) ? "true" : undefined;
 ---
 
 <header
@@ -16,11 +25,17 @@ import { siteConfig } from "@/site.config";
         <p class="site-header-title text-accent-2 font-serif-medium leading-none font-medium">
           <a href="/" data-astro-prefetch>{siteConfig.author}</a>
         </p>
-        <p class="site-header-tagline note text-muted max-w-2xl overflow-hidden leading-relaxed">
+        <p
+          class="site-header-tagline note text-muted max-w-2xl overflow-hidden leading-relaxed max-sm:hidden"
+        >
           Notes on tech, products, and life.
         </p>
       </div>
       <div class="site-header-actions flex items-center gap-6">
+        <nav class="site-header-nav flex items-center gap-4 text-base" aria-label="Primary">
+          <a href="/posts" data-astro-prefetch aria-current={navCurrent("/posts")}>writings</a>
+          <a href="/notes" data-astro-prefetch aria-current={navCurrent("/notes")}>notes</a>
+        </nav>
         <slot name="nav" />
         <ThemeToggle />
       </div>
@@ -29,6 +44,30 @@ import { siteConfig } from "@/site.config";
 </header>
 
 <style>
+  /* Primary nav opts out of the chrome `Style A` (no-underline) link treatment
+     and back into the body `Style B`: a faint 1px underline that firms up to the
+     accent colour on hover, matching the prose links in the page body. Scoped,
+     so the `data-astro-cid` attribute outweighs global.css's `:is(header) a`. */
+  .site-header-nav a {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: color-mix(in oklab, currentColor 30%, transparent);
+  }
+  .site-header-nav a:hover {
+    color: inherit;
+    text-decoration-color: var(--color-accent);
+  }
+  /* "You are here": the link for the current section reads in the accent colour
+     with a firm accent underline, so /posts and /notes don't sit in identical
+     resting styles. Matches both the exact-page (`page`) and section-child
+     (`true`) current states. */
+  .site-header-nav a[aria-current="page"],
+  .site-header-nav a[aria-current="true"] {
+    color: var(--color-accent);
+    text-decoration-color: var(--color-accent);
+  }
+
   #site-header {
     --header-collapse-offset: 0px;
     --header-padding-y: 3rem;

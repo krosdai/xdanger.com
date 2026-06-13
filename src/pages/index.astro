@@ -1,62 +1,14 @@
 ---
-import { getCollection } from "astro:content";
 import AboutMe from "@/components/AboutMe.astro";
-import FeaturedPostPreview from "@/components/blog/FeaturedPostPreview.astro";
-import Note from "@/components/note/Note.astro";
-import { getAllPosts } from "@/data/post";
 import PageLayout from "@/layouts/Base.astro";
 import { siteConfig } from "@/site.config";
-import { collectionDateSort } from "@/utils/date";
-
-// Posts
-const MAX_POSTS = 10;
-const allPosts = await getAllPosts();
-const allPostsByDate = allPosts.sort(collectionDateSort).slice(0, MAX_POSTS);
-
-// Notes
-const MAX_NOTES = 5;
-const allNotes = await getCollection("note");
-const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 ---
 
 <PageLayout meta={{ title: "Home" }}>
   <h1 class="sr-only">{siteConfig.author}</h1>
   <section class="pt-0 pb-5 sm:pb-6">
-    <div class="page-shell grid gap-6 md:grid-cols-[9rem_minmax(0,1fr)]">
-      <h2 class="section">about</h2>
+    <div class="page-shell">
       <AboutMe />
     </div>
   </section>
-  <section class="py-5 sm:py-6">
-    <div class="page-shell grid gap-6 md:grid-cols-[9rem_minmax(0,1fr)]">
-      <h2 class="section"><a href="/posts">posts</a></h2>
-      <ul class="[&>li:first-child>article]:pt-0" role="list">
-        {
-          allPostsByDate.map((p) => (
-            <li>
-              <FeaturedPostPreview as="h3" post={p} />
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-  {
-    latestNotes.length > 0 && (
-      <section class="py-5 sm:py-6">
-        <div class="page-shell grid gap-6 md:grid-cols-[9rem_minmax(0,1fr)]">
-          <h2 class="section">
-            <a href="/notes">notes</a>
-          </h2>
-          <ul class="grid gap-4 sm:grid-cols-2" role="list">
-            {latestNotes.map((note) => (
-              <li>
-                <Note note={note} as="h3" isPreview />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-    )
-  }
 </PageLayout>
