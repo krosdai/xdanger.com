@@ -82,26 +82,41 @@ note, reader calibration, and an investigative-journalism
 [`storytelling`](./.agents/skills/note-craft/references/storytelling.md) overlay). The note pipeline is
 `/note-from-issue` (see [`.claude/commands/note-from-issue.md`](./.claude/commands/note-from-issue.md)).
 
-A note should teach a first-time, curious-but-unfamiliar reader — using the **deep-dive** method, with
-investigative-journalism **storytelling** only where the material carries a real story.
+A note should teach a first-time, curious-but-unfamiliar reader who is also a deep finisher — using the
+**deep-dive** method, carried by a narrative **spine** throughout, with full investigative-journalism
+**storytelling vignettes** where the material carries a real, sourced story.
 
 - **Deep-dive structure** (adapted for a standalone, non-interactive note): a big picture that situates
   the topic (incl. the real people/history); prerequisites **folded into prose** (a note never asks the
-  reader questions); layered exposition (intuition → mechanism → edge/limits); at least one
-  **mechanism-accurate** memory hook (an analogy must share the actual mechanism, not just the outcome);
-  visualization only where it beats prose (one figure = one takeaway); connect-the-dots to neighbours; a
-  trailhead of concrete next steps.
-- **Storytelling overlay** (only on narrative-suitable parts — history, people, connect-the-dots): the
-  blocking guardrails in §0 apply. Prefer safe leads (a surprising sourced fact; an intuition-reframe; a
-  real conflict-of-ideas) and an honest-uncertainty ending on a genuine, attributed open question.
+  reader questions); layered exposition (intuition → a **full working-model mechanism**: predictive detail
+  + ≥1 worked example + why-it's-built-this-way → edge/limits); at least one **mechanism-accurate** memory
+  hook (an analogy must share the actual mechanism, not just the outcome); **visualization used generously
+  to make the working model vivid**, each figure carrying one clear idea (many focused figures preferred
+  over few cramped or too-few; animation and interactivity welcome); **connect-the-dots that maps the
+  surrounding territory** (adjacent ideas / history / tangents as transferable-idea links, not a name
+  list); a trailhead of concrete next steps.
+- **Storytelling** — a narrative **spine** runs through every note (one question alive across sections);
+  full **vignettes** (人物 / 历史 / connect-the-dots) only where the material supplies sourced concretes.
+  The blocking guardrails in §0 apply throughout. Prefer safe leads (a surprising sourced fact; an
+  intuition-reframe; a real conflict-of-ideas) and an honest-uncertainty ending on a genuine, attributed
+  open question.
 - **Sourcing quality** (beyond the §0 blockers): tier evidence (peer-reviewed > preprint > reputable
   outlet > press release) and prefer reviews/meta-analyses for "consensus" claims; flag preliminary /
   single-study / industry-funded claims; when sources conflict, report the spread and attribute each
   side; for any scale comparison, show the arithmetic and sanity-check the order of magnitude.
-- **Reader calibration** (note-craft, "first-time 科普 reader"): no jargon dumps or undefined
-  acronyms, no talking down, no walls of unbroken text, no manufactured drama. Ship a clean finished
-  artifact — no process meta-notes (（已校正）/（补充）/（待核实）), no "hope this helps" closers, no
-  visible research journey.
+- **Reader calibration** (note-craft, "first-time 科普 reader, deep finisher"): no jargon dumps or
+  undefined acronyms, no talking down, no manufactured drama. Walls of unbroken text are a defect — but
+  diagnose first: **dense** prose needs **structure** (sectioning, signposting, skippable deep-dives, paced
+  visuals), **padded** prose needs **cuts** — don't shorten dense substance. The reverse also fails: a
+  shallow gloss that names a concept without giving a usable model. Ship a clean
+  finished artifact — no process meta-notes (（已校正）/（补充）/（待核实）), no "hope this helps" closers,
+  no visible research journey.
+- **Depth & density (depth edition).** The note should build a **complete working model** and may run long
+  to do so — reward depth (mechanism detailed enough to predict behavior, worked examples,
+  why-it's-built-this-way), breadth (the surrounding territory, mapped), and a narrative spine (one question
+  alive across sections; mechanism and breadth narrated, not listed). **Do not flag a note for length; flag
+  it for padding** — restatement, hedging, scaffolding, filler that adds no prediction / connection / why.
+  A long dense note passes; a short padded one does not.
 - **Bilingual / terminology.** Keep English proper nouns (products/brands/people/tech) in English;
   Chinese-native company names stay Chinese with English in parens on first mention (台积电（TSMC）);
   gloss unfamiliar English at first appearance (`throughput（吞吐量）`); don't nest full-width parens —

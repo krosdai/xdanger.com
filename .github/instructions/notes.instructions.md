@@ -20,20 +20,29 @@ curious-but-unfamiliar reader.
 ## Meaningful (P2)
 
 - **Deep-dive structure** (standalone, non-interactive): situate the topic incl. real people/history →
-  prerequisites folded into prose (never ask the reader) → intuition → mechanism → edge/limits → at
-  least one **mechanism-accurate** memory hook (shares the real mechanism, not just the outcome) →
-  visualization only where it beats prose (one figure = one takeaway) → connect-the-dots → trailhead of
-  concrete next steps.
-- **Storytelling** only where the material carries a real story (history/people/connect-the-dots):
-  prefer a surprising sourced fact, an intuition-reframe, or a real conflict-of-ideas as the lead; end
+  prerequisites folded into prose (never ask the reader) → intuition → a **full working-model mechanism**
+  (predictive detail + ≥1 worked example + why-it's-built-this-way) → edge/limits → at least one
+  **mechanism-accurate** memory hook (shares the real mechanism, not just the outcome) → **visualization
+  used generously to make the model vivid**, each figure one clear idea (many focused figures preferred
+  over cramped or too-few; animation / interactivity welcome) → **connect-the-dots that maps the
+  surrounding territory** (transferable-idea links, not a name list) → trailhead of concrete next steps.
+- **Storytelling** — a narrative **spine** runs through every note (one question alive across sections);
+  full **vignettes** (history/people/connect-the-dots) only where the material supplies sourced concretes.
+  Prefer a surprising sourced fact, an intuition-reframe, or a real conflict-of-ideas as the lead; end
   on a genuine, attributed open question rather than a forced moral or false summary.
 - **Sourcing depth:** tier evidence (peer-reviewed > preprint > reputable outlet > press release); prefer
   reviews/meta-analyses for "consensus" claims; flag preliminary / single-study / industry-funded claims;
   when sources conflict, report the spread and attribute; for scale comparisons, show the arithmetic and
   sanity-check the order of magnitude.
-- **Reader calibration:** no jargon dumps, no undefined acronyms, no talking down, no walls of text, no
-  manufactured drama. Clean finished artifact — no process meta-notes (（已校正）/（补充）/（待核实）), no
-  "hope this helps" closers, no visible research journey.
+- **Reader calibration:** no jargon dumps, no undefined acronyms, no talking down, no manufactured drama.
+  Walls of unbroken text are a defect — but diagnose first: **dense** prose needs **structure**, **padded**
+  prose needs **cuts** — don't shorten dense substance; a shallow gloss that names a concept without a
+  usable model fails too. Clean finished artifact — no process meta-notes (（已校正）/（补充）/（待核实）), no "hope this
+  helps" closers, no visible research journey.
+- **Depth & density:** the note should build a **complete working model** and may run long to do so —
+  reward depth, breadth (the surrounding territory, mapped), and a narrative spine. **Don't flag length;
+  flag padding** (restatement, hedging, filler that adds no prediction / connection / why). A long dense
+  note passes; a short padded one does not.
 - **Bilingual / terminology:** keep English proper nouns in English; Chinese-native company names stay
   Chinese with English in parens on first mention (台积电（TSMC）); gloss unfamiliar English at first
   appearance (`throughput（吞吐量）`); don't nest full-width parens (use `联电 UMC` or a dash).

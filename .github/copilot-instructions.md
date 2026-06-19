@@ -31,10 +31,13 @@ no hardcoded `.html`/era URL paths (use `src/utils/url.ts`); frontmatter valid p
 typography: space between CJK and ASCII/numbers (except before `°`/`%`), full-width punctuation in
 Chinese text.
 
-**Notes:** follow the deep-dive teaching shape (situate → prerequisites folded into prose → intuition /
-mechanism / limits → mechanism-accurate analogy → visualization that beats prose → connect-the-dots →
-next steps); a note never asks the reader questions. Use storytelling only where there's a real story;
-end on a genuine, attributed open question. Calibrate for a first-time non-specialist reader: no jargon
-dumps, no undefined acronyms, no talking down, no process meta-notes (（已校正）/（待核实）). Keep English
-proper nouns in English; gloss unfamiliar English on first use (`throughput（吞吐量）`); don't nest
-full-width parens. Mobile-first visuals; `pnpm build:site` must pass.
+**Notes:** follow the deep-dive teaching shape (situate → prerequisites folded into prose → intuition →
+full working-model mechanism / limits → mechanism-accurate analogy → visualization that carries real
+information, used generously → connect-the-dots that maps the surrounding territory → next steps); a note
+never asks the reader questions. A note is a depth artifact — it builds a complete working model and may
+run long to do so; **don't flag length, flag padding.** Use a narrative spine throughout, with storytelling
+vignettes only where there's a real, sourced story; end on a genuine, attributed open question. Calibrate
+for a first-time non-specialist reader who is also a deep finisher: no jargon dumps, no undefined acronyms,
+no talking down, no process meta-notes (（已校正）/（待核实）); for walls of text, diagnose first — dense
+prose needs structure, padded prose needs cuts (don't shorten dense substance). Keep English proper nouns in English; gloss unfamiliar English on first use
+(`throughput（吞吐量）`); don't nest full-width parens. Mobile-first visuals; `pnpm build:site` must pass.
