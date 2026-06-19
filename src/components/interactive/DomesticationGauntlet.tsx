@@ -12,7 +12,8 @@ import { useId, useState } from "react";
  * 各关只给「代表性失败者」，不编造逐关数字。
  *
  * 主题契约：配色一律用随 data-theme 翻转的 Tailwind 语义工具类；过渡用 motion-safe:。
- * a11y：每关是真正的 <button>，aria-expanded/aria-controls 关联；图整体 role="group"。
+ * a11y：每关是真正的 <button>，aria-expanded/aria-controls 关联；受控面板始终在 DOM 中、
+ *   仅用 hidden 切换可见（aria-controls 在收起时也指向真实元素）；图整体 role="group" + aria-label。
  *
  * 在 MDX 中以 client:visible 注水：<DomesticationGauntlet client:visible />
  */
@@ -73,7 +74,11 @@ export default function DomesticationGauntlet() {
   const uid = useId();
 
   return (
-    <div className="not-prose border-foreground/10 my-8 rounded-lg border p-4 sm:p-5" role="group">
+    <div
+      className="not-prose border-foreground/10 my-8 rounded-lg border p-4 sm:p-5"
+      role="group"
+      aria-label="驯化的六道关卡：148 种候选，仅 14 种通过"
+    >
       <div className="flex items-baseline justify-between gap-3">
         <p className="text-foreground text-sm font-medium">
           <span className="text-accent font-mono text-base tabular-nums">148</span> 种候选
@@ -111,15 +116,16 @@ export default function DomesticationGauntlet() {
                   </span>
                 </span>
               </button>
-              {isOpen && (
-                <div
-                  id={panelId}
-                  className="border-accent/30 bg-accent/5 mt-1 rounded-md border-l-2 px-3 py-2.5"
-                >
-                  <p className="text-accent text-xs font-semibold">{g.failHead}</p>
-                  <p className="text-foreground/80 mt-1 text-sm leading-relaxed">{g.fail}</p>
-                </div>
-              )}
+              {/* 始终渲染，仅用 hidden 切换可见性：让 button 的 aria-controls
+                  在收起时也能指向真实存在的元素（WAI-ARIA disclosure 约定）。 */}
+              <div
+                id={panelId}
+                hidden={!isOpen}
+                className="border-accent/30 bg-accent/5 mt-1 rounded-md border-l-2 px-3 py-2.5"
+              >
+                <p className="text-accent text-xs font-semibold">{g.failHead}</p>
+                <p className="text-foreground/80 mt-1 text-sm leading-relaxed">{g.fail}</p>
+              </div>
             </li>
           );
         })}

@@ -9,7 +9,9 @@
  * 数字出自《史记·卫将军骠骑列传》/《汉书·卫青霍去病传》：「塞阅官及私马凡十四万匹，
  * 而复入塞者不满三万匹」。不主张「约占全国一半」（无可靠总量来源）。
  *
- * 主题契约：返塞段 --color-positive，未归段 --color-negative，文字 currentColor；
+ * 主题契约：返塞段 --color-positive、未归段 --color-negative；两个数值标签**置于条外**、
+ * 分别用 --color-positive / --color-negative（避免在条内用会随主题翻黑的 --color-background，
+ * 在深色主题下叠红近乎不可读），其余文字 currentColor。
  * 切 data-theme 零 JS 变色，纯静态满足 reduced-motion。viewBox 自适应。
  */
 interface Props {
@@ -72,7 +74,7 @@ const H = 150;
 
     <text
       x={padX + backW / 2}
-      y={barY + barH + 16}
+      y={barY + barH + 17}
       text-anchor="middle"
       font-size="10"
       fill="var(--color-positive)"
@@ -81,17 +83,17 @@ const H = 150;
     </text>
     <text
       x={padX + backW + lostW / 2}
-      y={barY + barH / 2 + 4}
+      y={barY + barH + 17}
       text-anchor="middle"
-      font-size="13"
+      font-size="12"
       font-weight="700"
-      fill="var(--color-background)"
+      fill="var(--color-negative)"
     >
       未归 约 11 万匹
     </text>
     <text
       x={W - padX}
-      y={barY + barH + 16}
+      y={barY + barH + 34}
       text-anchor="end"
       font-size="9"
       fill="currentColor"
