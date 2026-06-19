@@ -19,7 +19,7 @@ curious-but-unfamiliar reader.
 
 ## Meaningful (P2)
 
-- **Deep-dive structure** (standalone, non-interactive): situate the topic incl. real people/history →
+- **Deep-dive structure** (standalone published note): situate the topic incl. real people/history →
   prerequisites folded into prose (never ask the reader) → intuition → a **full working-model mechanism**
   (predictive detail + ≥1 worked example + why-it's-built-this-way) → edge/limits → at least one
   **mechanism-accurate** memory hook (shares the real mechanism, not just the outcome) → **visualization

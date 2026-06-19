@@ -37,8 +37,8 @@ const cellW = (W - padX * 2 - gap) / 2;
 const cellH = 84;
 const top = 12;
 const colX = (c: number) => padX + c * (cellW + gap);
-const rowYy = (r: number) => top + r * (cellH + gap);
-const footTop = rowYy(1) + cellH + 18;
+const rowY = (r: number) => top + r * (cellH + gap);
+const footTop = rowY(1) + cellH + 18;
 const H = footTop + 30;
 ---
 
@@ -64,7 +64,7 @@ const H = footTop + 30;
         const r = Math.floor(idx / 2);
         const col = idx % 2;
         const x = colX(col);
-        const y = rowYy(r);
+        const y = rowY(r);
         const mark = c.ok ? "var(--color-positive)" : "var(--color-negative)";
         return (
           <Fragment>

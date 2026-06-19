@@ -86,7 +86,7 @@ A note should teach a first-time, curious-but-unfamiliar reader who is also a de
 **deep-dive** method, carried by a narrative **spine** throughout, with full investigative-journalism
 **storytelling vignettes** where the material carries a real, sourced story.
 
-- **Deep-dive structure** (adapted for a standalone, non-interactive note): a big picture that situates
+- **Deep-dive structure** (adapted for a standalone published note): a big picture that situates
   the topic (incl. the real people/history); prerequisites **folded into prose** (a note never asks the
   reader questions); layered exposition (intuition → a **full working-model mechanism**: predictive detail
   + ≥1 worked example + why-it's-built-this-way → edge/limits); at least one **mechanism-accurate** memory
