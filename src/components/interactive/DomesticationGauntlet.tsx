@@ -103,7 +103,7 @@ export default function DomesticationGauntlet() {
                 onClick={() => {
                   setOpen(isOpen ? null : g.key);
                 }}
-                className="border-foreground/10 hover:border-accent/40 flex w-full items-center justify-between gap-3 rounded-md border px-3 py-2.5 text-left transition-colors"
+                className="border-foreground/10 hover:border-accent/40 flex w-full items-center justify-between gap-3 rounded-md border px-3 py-2.5 text-left motion-safe:transition-colors"
               >
                 <span className="text-foreground text-sm font-medium">{g.title}</span>
                 <span className="text-foreground/55 flex items-center gap-2 text-xs">
