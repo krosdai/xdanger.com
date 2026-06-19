@@ -1,0 +1,162 @@
+---
+/**
+ * CostExchangeLadder — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：把「攻防双方单发成本」摊在一根**对数轴**上，跨越约 10 个数量级——
+ * 从一发激光（约 $1–10）到一艘 Ford 级航母（$133 亿）。全文的脊柱论点
+ * （便宜的一方总从最弱处掀翻昂贵的王者）在这一张图里一眼可见。
+ *
+ * 诚实边界：单发价差是「好标题、易误导」的数字（CSIS 原话）。本图只画**单发/单价**，
+ * 不主张任何「干净的 200:1」；真正的约束是弹仓深度与消耗速率，正文与 figcaption 点明。
+ *
+ * 主题契约：柱子用 --color-seq-steel 阶梯（越贵越深），网格/文字用 currentColor；
+ * 切 data-theme 零 JS 变色，纯静态满足 reduced-motion。viewBox 自适应，窄屏不溢出。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+interface Row {
+  name: string;
+  cost: number; // 美元
+  label: string; // 右栏数值标注
+  steel: number; // 1–6
+}
+// 升序排列：便宜→昂贵。数值见正文 §来源（CRS / TWZ / CSIS / FY2021 预算文件）。
+const rows: Row[] = [
+  { name: "激光一发", cost: 5, label: "$1–10", steel: 1 },
+  { name: "廉价自杀无人机", cost: 2_000, label: "$2 千", steel: 2 },
+  { name: "Shahed-136 级", cost: 20_000, label: "$2 万", steel: 2 },
+  { name: "ESSM 拦截弹", cost: 1_795_000, label: "$180 万", steel: 3 },
+  { name: "SM-2 IIIC", cost: 2_349_000, label: "$235 万", steel: 4 },
+  { name: "SM-6", cost: 4_320_000, label: "$432 万", steel: 4 },
+  { name: "主战坦克", cost: 6_000_000, label: "$600 万", steel: 4 },
+  { name: "SM-3 IIA", cost: 36_400_000, label: "$3640 万", steel: 5 },
+  { name: "Ford 级航母", cost: 13_300_000_000, label: "$133 亿", steel: 6 },
+];
+
+const W = 360;
+const padX = 8;
+const labelW = 100;
+const numColW = 54;
+const padTop = 12;
+const rowH = 26;
+const barH = 13;
+const axisH = 30;
+
+const barX0 = padX + labelW;
+const barEndMax = W - padX - numColW - 6;
+const barSpan = barEndMax - barX0;
+const logMax = 10.3; // 约 2×10^10 = $1 起到 $200 亿
+const xOf = (logV: number) => barX0 + (logV / logMax) * barSpan;
+const rowY = (i: number) => padTop + i * rowH;
+const H = padTop + rows.length * rowH + axisH;
+
+// 对数网格：$1 · $100 · $1万 · $100万 · $1亿 · $100亿
+const grids = [
+  { log: 0, label: "$1" },
+  { log: 2, label: "$100" },
+  { log: 4, label: "$1万" },
+  { log: 6, label: "$100万" },
+  { log: 8, label: "$1亿" },
+  { log: 10, label: "$100亿" },
+];
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>攻防双方单发成本的对数刻度对照</title>
+    <desc id={`${uid}-d`}
+      >{
+        "横轴为对数刻度，跨越约十个数量级。从一发激光（约 $1–10）、廉价自杀无人机（约 $2 千），到 SM-6 拦截弹（约 $432 万）、SM-3 IIA（约 $3640 万），再到 Ford 级航母（$133 亿）。便宜的攻击手与昂贵的王牌平台之间，单发价差常达数百到上千倍。"
+      }</desc
+    >
+
+    <!-- 对数网格线 + 刻度 -->
+    {
+      grids.map((g) => (
+        <Fragment>
+          <line
+            x1={xOf(g.log)}
+            y1={padTop - 2}
+            x2={xOf(g.log)}
+            y2={padTop + rows.length * rowH + 2}
+            stroke="currentColor"
+            stroke-opacity="0.12"
+            stroke-width="1"
+          />
+          <text
+            x={xOf(g.log)}
+            y={padTop + rows.length * rowH + 14}
+            text-anchor="middle"
+            font-size="9"
+            fill="currentColor"
+            fill-opacity="0.55"
+          >
+            {g.label}
+          </text>
+        </Fragment>
+      ))
+    }
+    <text
+      x={barX0}
+      y={padTop + rows.length * rowH + 26}
+      font-size="8.5"
+      fill="currentColor"
+      fill-opacity="0.45"
+    >
+      ← 对数刻度（每格 ×100）
+    </text>
+
+    {
+      rows.map((r, i) => {
+        const logV = Math.log10(r.cost);
+        const bw = Math.max(2, xOf(logV) - barX0);
+        return (
+          <Fragment>
+            <text
+              x={padX}
+              y={rowY(i) + barH / 2 + 2}
+              dominant-baseline="central"
+              font-size="10.5"
+              fill="currentColor"
+            >
+              {r.name}
+            </text>
+            <rect
+              x={barX0}
+              y={rowY(i)}
+              width={bw}
+              height={barH}
+              rx="3"
+              fill={`var(--color-seq-steel-${r.steel})`}
+            />
+            <text
+              x={W - padX}
+              y={rowY(i) + barH / 2 + 2}
+              dominant-baseline="central"
+              text-anchor="end"
+              font-size="10"
+              font-family="ui-monospace, monospace"
+              fill="currentColor"
+              fill-opacity="0.85"
+            >
+              {r.label}
+            </text>
+          </Fragment>
+        );
+      })
+    }
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>

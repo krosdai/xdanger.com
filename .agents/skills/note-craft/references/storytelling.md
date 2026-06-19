@@ -1,14 +1,17 @@
-# Storytelling Overlay — narrating the narrative parts
+# Storytelling — the note's spine and its narrative parts
 
-This is the **secondary** craft layer for a note: the pedagogical method in `SKILL.md` is the
-spine, and you reach for this file only where a part of the topic genuinely *carries a story* — the real
-human story (人物故事), the historical arc of a discovery (历史故事), or the connect-the-dots that links
-several threads into one picture. It is the craft of deep, investigative/explanatory journalism, adapted
-for a writer who works **from sources, not from first-hand reporting**.
+This is the **narrative** craft layer for a note. The pedagogical method in `SKILL.md` sets the elements;
+this file gives them a narrative shape. It is the craft of deep, investigative/explanatory journalism,
+adapted for a writer who works **from sources, not from first-hand reporting**.
 
-Use it on a section, not the whole piece. A definitional explainer or a how-to needs no story — forcing
-one manufactures false stakes (see guardrails). When the material *is* story-shaped, this layer makes it
-grip.
+This file has two jobs. First, the **note-wide spine**: every note — even a pure definitional explainer —
+needs a narrative shape (a question it answers, a tension it resolves), so the whole piece pulls. Second,
+the **vignette craft**: the high-grip moves for the parts that carry a real human (人物故事) / historical
+(历史故事) story, or a connect-the-dots that links several threads into one picture. The first is **always
+on**; the second is used where the material supplies **sourced concretes**. What is never on: inventing
+drama, stakes, scenes, or quotes the sources don't support (guardrails below). **Narrative sequencing ≠
+dramatization** — you can and should narrate a how-to or a mechanism (the question as protagonist); you may
+not inflate false stakes onto it.
 
 ## The one principle: keep the skeleton, swap the camera for the citation
 
@@ -54,9 +57,9 @@ Pick what fits the part. These are the moves that survive the no-first-hand-repo
   if the next section answers it from a source*; never end on withholding a fact you already have (that is
   a manufactured cliffhanger — see guardrails).
 
-## Structural templates — when a whole note is story-shaped
+## Structural templates — every note picks a whole-note shape
 
-If the topic (not just a section) is a story, pick a shape:
+Every note has a spine; choose the shape that fits the material:
 
 - **Explainer** (question → answer → why-it-matters) — the *default* for an abstract "what is X / why
   now" topic with no real anecdote; near-zero fabrication temptation. Often you want this and only a
@@ -71,6 +74,10 @@ If the topic (not just a section) is a story, pick a shape:
 - **Hourglass** (top-line facts → turn → chronological narrative) — serves skimmers and engaged readers
   at once when there's both a bottom line and a story worth telling in order.
 - **Problem → solution** — "how are people tackling X"; avoid both doom-only and hype-only.
+- **Constraint-driven build (why-it's-this-way)** — open on the problem / constraint the design must
+  satisfy, then let each design decision answer the previous one's leftover problem; the worked example is
+  the payoff. The default spine for a deep mechanism note. (Keep it to documented design rationale —
+  decisions answering constraints — never the artifact "wanting" things.)
 
 ## Hard guardrails — the final self-audit gate
 
@@ -119,8 +126,11 @@ These are the rules most specific to building a note from web research — and c
   don't silently pick one or average them.
 - **Numeracy sanity.** For any "concretize the scale" comparison (e.g. "150 MW ≈ 120,000 households"),
   show the arithmetic, cite both inputs, and sanity-check the order of magnitude before publishing.
-- **When NOT to dramatize.** If the section's one-sentence theme has no real stakes, write it plainly and
-  say so. Don't inflate false stakes onto a mundane topic; the gravity of "narrative" pulls that way.
+- **When NOT to dramatize (but still sequence).** If a passage has no real stakes, do **not** invent them
+  — write it plainly. But plain ≠ flat: even a low-stakes passage earns its place in the spine (it answers
+  the previous beat's open question and sets up the next). The brake is on false **stakes**, never on
+  narrative **order**. Cut a passage that neither advances the spine nor adds real information — that is
+  padding, the true enemy, not length.
 
 ## What good looks like
 
@@ -129,3 +139,11 @@ surprising-fact + intuition-reframe and ends on what evidence still can't settle
 pure conflict-of-ideas ("everyone self-designs — yet they all flow through one fab"); the swiss-verein
 note closes on a genuine, attributed open question. If a strong note seems to "violate" a rule here, the
 rule is wrong — fix the rule, not the note.
+
+The cancer-screening note is not a story *section* — it is one continuous narrative: a sourced 1985
+"miracle" opening immediately called a statistical illusion (the spine question: which screenings actually
+make you live longer?), a recurring 麦田 image threaded through every section, a real conflict-of-ideas
+running through the mechanism and the evidence tables, a full-circle close on the two questions to ask —
+~7.4k chars, every beat sourced, nothing invented. **That is the target: book-like momentum carried
+entirely by real facts and real disagreements.** It proves whole-note narrative and the hard guardrails are
+fully compatible.

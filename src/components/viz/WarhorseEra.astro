@@ -1,0 +1,128 @@
+---
+/**
+ * WarhorseEra — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：马作为武器平台的约 3600 年，以及一个关键事实——这个平台不是一次发明出来的，
+ * 而是**零件历经数百年陆续到齐**：战车在前 2000 年，马镫到约 322 年（中国）才出现、
+ * 直到约 1100 年「夹枪冲锋」才把重马＋高鞍＋马镫＋长枪＋锁甲拼成成熟形态。
+ *
+ * 竖排时间线（移动端友好）：左为年代，右为事件。为避免事件挤在一处采用**等距排布**
+ * （已在 figcaption 注明非等比）；用颜色区分「时代边界」（steel）与「组件到齐」（accent）。
+ *
+ * 主题契约：连线/点/文字用 currentColor 与 --color-accent / --color-seq-steel；
+ * 切 data-theme 零 JS 变色，纯静态满足 reduced-motion。viewBox 自适应。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+interface Ev {
+  year: string;
+  title: string;
+  sub?: string;
+  part?: boolean; // 组件到齐（accent）vs 时代边界（steel）
+}
+const events: Ev[] = [
+  { year: "约前 2000", title: "辐条战车问世", sub: "Sintashta 文化，武器平台的雏形" },
+  {
+    year: "约前 1700",
+    title: "战车随 Hyksos 上战场",
+    sub: "马成为战场武器平台，约 3600 年由此起算",
+  },
+  { year: "约 322", title: "中国双马镫", sub: "南京附近陶俑，最早的成对马镫形象", part: true },
+  { year: "约 600", title: "马镫西传入欧", sub: "阿瓦尔人带入喀尔巴阡盆地", part: true },
+  { year: "8 世纪末", title: "法兰克人采用马镫", part: true },
+  {
+    year: "约 1100",
+    title: "夹枪冲锋成熟",
+    sub: "重马＋高鞍＋马镫＋长枪＋锁甲，平台定型",
+    part: true,
+  },
+  { year: "1918", title: "海法骑兵冲锋", sub: "常被称作最后一次大规模骑兵冲锋" },
+];
+
+const W = 360;
+const padTop = 18;
+const rowH = 48;
+const lineX = 92;
+const dotR = 5;
+const H = padTop + events.length * rowH + 8;
+const cy = (i: number) => padTop + i * rowH + 14;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>马作为武器平台约 3600 年的关键节点</title>
+    <desc id={`${uid}-d`}
+      >{
+        "从约公元前 2000 年的辐条战车，到约 322 年中国出现马镫、约 600 年西传入欧、8 世纪末法兰克采用、约 1100 年夹枪冲锋成熟使骑兵平台定型，直到 1918 年海法的最后一次大规模骑兵冲锋。强调色节点是「平台组件陆续到齐」，钢灰节点是时代边界——组件历经上千年才凑齐。"
+      }</desc
+    >
+
+    <!-- 主轴连线 -->
+    <line
+      x1={lineX}
+      y1={cy(0)}
+      x2={lineX}
+      y2={cy(events.length - 1)}
+      stroke="currentColor"
+      stroke-opacity="0.2"
+      stroke-width="2"></line>
+
+    {
+      events.map((e, i) => {
+        const color = e.part ? "var(--color-accent)" : "var(--color-seq-steel-4)";
+        return (
+          <Fragment>
+            <text
+              x={lineX - 14}
+              y={cy(i)}
+              dominant-baseline="central"
+              text-anchor="end"
+              font-size="10.5"
+              font-family="ui-monospace, monospace"
+              fill="currentColor"
+              fill-opacity="0.75"
+            >
+              {e.year}
+            </text>
+            <circle cx={lineX} cy={cy(i)} r={dotR} fill={color} />
+            <text
+              x={lineX + 14}
+              y={e.sub ? cy(i) - 6 : cy(i)}
+              dominant-baseline="central"
+              font-size="11.5"
+              font-weight="600"
+              fill="currentColor"
+            >
+              {e.title}
+            </text>
+            {e.sub && (
+              <text
+                x={lineX + 14}
+                y={cy(i) + 9}
+                dominant-baseline="central"
+                font-size="9.5"
+                fill="currentColor"
+                fill-opacity="0.6"
+              >
+                {e.sub}
+              </text>
+            )}
+          </Fragment>
+        );
+      })
+    }
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>

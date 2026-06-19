@@ -1,0 +1,106 @@
+---
+/**
+ * MobeiHorseBalance — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：一场战役的「战马账」。漠北之战（前 119）出塞官私马 14 万匹，复入塞者不满 3 万匹——
+ * 约 11 万匹未归。一根满幅长条，左段（返塞，约 21%）填正向色，右段（未归）填负向色，
+ * 一眼看出昂贵平台的真实约束是后勤损耗，不是单场胜负。
+ *
+ * 数字出自《史记·卫将军骠骑列传》/《汉书·卫青霍去病传》：「塞阅官及私马凡十四万匹，
+ * 而复入塞者不满三万匹」。不主张「约占全国一半」（无可靠总量来源）。
+ *
+ * 主题契约：返塞段 --color-positive、未归段 --color-negative；两个数值标签**置于条外**、
+ * 分别用 --color-positive / --color-negative（避免在条内用会随主题翻黑的 --color-background，
+ * 在深色主题下叠红近乎不可读），其余文字 currentColor。
+ * 切 data-theme 零 JS 变色，纯静态满足 reduced-motion。viewBox 自适应。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+const W = 360;
+const padX = 14;
+const barY = 56;
+const barH = 40;
+const barW = W - padX * 2;
+
+const total = 140_000;
+const back = 30_000; // 不满 3 万，取上界（未归约 11 万）
+const backW = (back / total) * barW;
+const lostW = barW - backW;
+const H = 150;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>漠北之战的战马损耗</title>
+    <desc id={`${uid}-d`}
+      >{
+        "公元前 119 年漠北之战，出塞官私马共十四万匹，返塞者不满三万匹，约十一万匹未归。返塞约占两成。此后汉朝「军马少，无以复往」——昂贵平台的真实约束是后勤损耗。"
+      }</desc
+    >
+
+    <text x={padX} y="24" font-size="12.5" font-weight="700" fill="currentColor"
+      >一场战役的战马账 · 漠北之战（前 119）</text
+    >
+    <text x={padX} y="44" font-size="10.5" fill="currentColor" fill-opacity="0.7"
+      >出塞 14 万匹 →</text
+    >
+
+    <rect
+      x={padX}
+      y={barY}
+      width={backW}
+      height={barH}
+      fill="var(--color-positive)"
+      fill-opacity="0.85"></rect>
+    <rect
+      x={padX + backW}
+      y={barY}
+      width={lostW}
+      height={barH}
+      fill="var(--color-negative)"
+      fill-opacity="0.85"></rect>
+
+    <text
+      x={padX + backW / 2}
+      y={barY + barH + 17}
+      text-anchor="middle"
+      font-size="10"
+      fill="var(--color-positive)"
+    >
+      返塞 不足 3 万
+    </text>
+    <text
+      x={padX + backW + lostW / 2}
+      y={barY + barH + 17}
+      text-anchor="middle"
+      font-size="12"
+      font-weight="700"
+      fill="var(--color-negative)"
+    >
+      未归 约 11 万匹
+    </text>
+    <text
+      x={W - padX}
+      y={barY + barH + 34}
+      text-anchor="end"
+      font-size="9"
+      fill="currentColor"
+      fill-opacity="0.55"
+    >
+      此后「军马少，无以复往」
+    </text>
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>
