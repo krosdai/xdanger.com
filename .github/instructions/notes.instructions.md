@@ -12,7 +12,10 @@ curious-but-unfamiliar reader.
 
 - **Citation integrity.** Every fact, number, and quote traces to a real, retrievable source. No
   invented/guessed DOIs, dates, authors, study titles, or statistics. Quotes verbatim; a translated
-  quote keeps the original-language text alongside. Every body figure → a source (no orphans).
+  quote keeps the original-language text alongside. Every body figure → a source (no orphans). A live /
+  interactive readout that recomputes a number from user input is itself a citation claim — allowed only
+  when a rigorous closed-form formula drives it (½mv², unit conversions); never wire an estimated or
+  mechanism-level figure to a recomputing control (a moving number reads as *measured*).
 - **No fabricated narrative.** No invented scenes, sensory color, or 五感白描 over unsourced detail; no
   reconstructed dialogue or inner monologue; no composite / "everyman" characters; no manufactured
   cliffhanger that withholds a known answer. Drama from real sourced facts, not invented atmosphere.

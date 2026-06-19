@@ -178,7 +178,10 @@ mechanism-accuracy test, and the common traps.
 This is a depth note — **visuals are how you make a working model vivid and explorable**, not a last
 resort. Build a visual whenever it **deepens or unlocks understanding** or **lets the reader explore** the
 mechanism: when it shows a process unfolding, makes a relationship spatial, lets the reader move a
-parameter and watch the system respond, or carries information prose can only gesture at. Welcome
+parameter and watch the system respond, or carries information prose can only gesture at. The test for an
+*interactive* figure (vs. a static one) is the **driver test**: the reader must **feel one relationship by
+driving an input** — drag `v`, watch ½mv² quadruple *because* KE ∝ v². Name that single relationship before
+building; a control that moves but reveals nothing is decoration. Welcome
 **animation** (a process in motion) and **interactivity** (the reader drives an input). **One concept can
 earn several linked figures** — an overview, then a zoom, then a "now watch it run" — when each one teaches
 something the previous didn't. The discipline isn't fewer visuals; it's that **every visual carries real
@@ -196,6 +199,14 @@ layers freely when the idea is dynamic or explorable; among layers that fit equa
 | **animated-SVG** | `src/components/viz/*.astro`                | Geometric / coordinate figures, limited element count. Zero JS.     |
 | **Canvas + JS**  | `src/components/viz/*.astro` + `<script>`   | Many points / continuous curves / per-frame recompute.              |
 | **React 19**     | `src/components/interactive/*.tsx`          | State linkage across inputs, chart libraries, deep component trees. |
+
+**Interactive figures** earn the React layer when the lesson is *felt by driving an input* (you grasp the
+v² law by dragging `v`, not by reading it) — "lightest tier wins" breaks ties among layers that teach
+equally well, it never demotes a state-linked lesson. Spec each control→output with its formula in the plan,
+and **only a rigorous, closed-form formula may drive a live readout** — a number recomputing on every drag
+reads as *measured*, so wiring a soft or mechanism-level figure to a control is a citation-integrity hit
+(`REVIEW.md` §0), not styling. See the playbook for the IO spec, the honest-recompute gate, and a worked
+example.
 
 Every visual must honor the repo contract — colors from role-based **design-system tokens** (never
 hardcoded), dark mode via `data-theme`, `prefers-reduced-motion` at every animated layer, `role="img"` +

@@ -38,6 +38,15 @@ Match the layer to the **shape of the idea** (the table below). JS cost rises do
 layers that fit equally well, prefer the lighter — but never downgrade an interactive or animated idea to a
 static figure just to save JS. **Fit beats thrift.**
 
+**The driver test (decides interactive vs. static).** An interactive island earns its weight only when the
+single insight is **felt by driving an input** — the reader changes a value and a _live-derived_ output
+moves with it, and the *moving* is the lesson (drag `v` → ½mv² quadruples, *because* KE ∝ v²). Apply it
+both ways: when manipulation is how the relationship lands, the React island **is the fitting tier, not an
+indulgence** — "lightest tier wins" breaks ties among layers that teach equally well, it never demotes a
+state-linked lesson to a static picture. But when a static or animated SVG already shows the relationship, a
+knob that re-renders the same takeaway is **decoration** — stay static. Name the one relationship the
+manipulation reveals *before you build*; if you can't, you don't have an interactive figure yet.
+
 | Content shape                                                                                  | Layer            | Where                                       |
 | --------------------------------------------------------------------------------------------- | ---------------- | ------------------------------------------- |
 | Comparison across ≥3 items × ≥3 attributes                                                    | **Markdown table** | inline in the `.mdx`                       |
@@ -54,6 +63,40 @@ static figure just to save JS. **Fit beats thrift.**
 - "Watch it run" dynamics (a curve redrawing as a parameter moves, a field animating) → **Canvas**.
 - Only escalate to **React** when there's genuine cross-input state, a chart library, or a deep tree.
   Chart libraries (recharts / visx / d3) are installed **on demand**, not preinstalled.
+
+## Spec the IO before you build (interactive only)
+
+Once the driver test says "interactive," write the input→output contract down *before* writing the
+component — it's the difference between a toy and a teaching instrument:
+
+- **Inputs.** Each control: what it varies, its range, its default, its step. Choose ranges that span the
+  *interesting* regime (where the relationship visibly bends), not arbitrary round numbers. Label every
+  control (it's both an a11y requirement and a comprehension one).
+- **Outputs.** Each live readout: the exact expression that derives it from the inputs, its units, and its
+  rounding. Write the formula in the component's header comment so a reviewer can check it.
+- **The one relationship.** State the single law the reader should feel by dragging (e.g. "KE scales with
+  the *square* of speed but only linearly with mass"). If two controls don't jointly serve one relationship,
+  you have two figures, not one.
+
+### The honest-live-recompute gate
+
+A number that **recomputes on every drag reads as *measured*.** That is a strong, often subconscious claim
+of precision — so a live readout is held to the same bar as a cited figure (see `REVIEW.md` §0,
+citation integrity), not to the bar of decorative chrome. Before wiring any number to a control:
+
+- **Only a rigorous, closed-form formula may drive a live readout.** ½mv², mv, compound interest, unit
+  conversions — exact relationships whose inputs you also expose. The reader can check your arithmetic by
+  hand; that's the point.
+- **Never wire an estimate, a fudge factor, or a mechanism-level quantity to a live number.** If the honest
+  answer is "it depends / roughly / order-of-magnitude," a digit that updates 60×/second lies about its own
+  certainty. Keep that payload **qualitative** (show *direction* and *relative size* — a bar that grows, a
+  band the output crosses into) or freeze it as a single sourced callout with the arithmetic shown.
+- **Anchor live outputs to a _checkable_ reference, not to invented precision.** A live KE bar is honest
+  *because* it sits beside a reference the reader can trust — either **cited**, or **derived in the prose
+  from the same formula** (e.g. a ~95–165 kJ "real car crash" bracket = that same ½mv² for a ~1 t car at
+  ~50–65 km/h). The reader reads *"a heavy horse at the gallop lands in car-crash territory,"* not a
+  spurious exact joule count presented as fact. A reference you _label_ "sourced" but never cite or derive is
+  itself an orphan — the gate applies to the comparison too, not just the live number.
 
 ## The contract — every visual must satisfy it
 
@@ -84,6 +127,11 @@ any of these is **blocking** at review.
   htmlFor>`); mark purely decorative visuals `aria-hidden`.
 - **`not-prose`.** Wrap visuals so the typography plugin doesn't restyle them (the demo components wrap
   themselves).
+- **Interactive islands** (React, driven inputs): controls are **controlled** React state (value + setter,
+  never an uncontrolled DOM input), live outputs derive via `useMemo` from that state, and the lesson works
+  on **tap** — no hover-only reveal. Labels, touch-target size, and overflow are already covered by the
+  a11y and Mobile-first sections — don't re-litigate them, just satisfy them. **One island, one insight:** if
+  it's teaching two relationships, split it.
 - **Import & client directives** (in `.mdx`): `.astro` (SVG, Canvas) take **no** client directive; React
   islands default to **`client:visible`** (`client:load` only if above the fold and immediately
   interactive).
@@ -127,6 +175,17 @@ a chart would add nothing.
 → **React** `interactive/*.tsx`, `client:visible`, Tailwind theme utilities, every input labeled. This
 is the case that justifies the heaviest layer.
 
+**"Why does *charge speed* matter so much more than the horse's *weight*?"**
+→ **React** `interactive/*.tsx`. The lesson is the *asymmetry* (KE ∝ v² vs. ∝ m), and it only lands when the
+reader drags both sliders and watches speed move the energy bar far more violently than mass does — that's
+the driver test passing. IO spec: `speed` 10–45 km/h and `mass` 400–800 kg sliders → a live `½mv²` bar (a
+rigorous closed-form formula, so a live number is honest) shown *against a reader-checkable ~95–165 kJ
+car-crash bracket* (the same ½mv² for a ~1 t car at ~50–65 km/h, **derived in the prose** — not an asserted
+external stat). Keep the *force-concentration* point — why a couched lance hurts more than the same energy
+spread over a body — **out of the live readout**: leave it to prose (or at most a toggle that shows only the
+*direction* of the effect), because a precise contact pressure is a mechanism-level estimate, not a
+closed-form fact (honest-recompute gate). This is exactly what the shipped `CavalryShockEnergy.tsx` does.
+
 **"How does diffusion turn noise into an image?"**
 → A **linked sequence**, because one figure can't hold the whole model: (1) an **SVG** strip showing the
 forward noising schedule (static, annotated steps); (2) a **Canvas** figure animating one reverse
@@ -141,6 +200,14 @@ model. This is the depth-note default for a genuinely multi-stage mechanism — 
   for something static is pure overhead.
 - **Hardcoded color / `--chart-*` / a `.dark` class** — breaks theming; blocking at review.
 - **Hover-only interaction or a desktop-only layout** — fails the site's mobile-first readers.
+- **A control that moves but reveals no relationship** — interactivity with no named insight is decoration
+  with extra JS. If dragging the slider doesn't make the reader *feel* one relationship, cut the control and
+  ship a static figure (fails the driver test).
+- **A live readout recomputing a soft number** — wiring an estimate or a mechanism-level quantity to a
+  control so it re-derives on every drag (e.g. a cavalry widget printing a precise *矛尖压强* live, when the
+  honest payload is the force-concentration *principle*, not a spot pressure). A moving number reads as
+  *measured*; an over-precise one is a citation-integrity hit, not a style nit. Keep the principle and drop
+  the live digits, or freeze the number as a single sourced callout (see the honest-live-recompute gate).
 - **Pie charts for > 5 slices** (humans can't compare angles — use a bar chart); **3D charts** (the third
   dimension distorts); **color-only encoding** (pair with shape / pattern / label).
 - **Decorative motion** — animating something that isn't changing, or motion that carries no information,
