@@ -32,7 +32,7 @@
     "@astrojs/vercel": "^10.0.8",
     "@tailwindcss/vite": "^4.3.0",
     "@vercel/analytics": "^2.0.1",
-    "astro": "^6.4.4",
+    "astro": "^6.4.6",
     "astro-expressive-code": "^0.42.0",
     "astro-icon": "^1.1.5",
     "astro-robots-txt": "^1.0.0",
