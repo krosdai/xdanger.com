@@ -6,10 +6,10 @@
  * 从锚地里的活靶（塔兰托、珍珠港），到航行中的主力舰（威尔士亲王号），再到公海上**双方
  * 水面舰队从未照面**就分出胜负（中途岛）。便宜的一方（飞机）从战列舰够不到的方向（头顶）下手。
  *
- * 竖排时间线（移动端友好）：左为日期，右为「战列舰这次怎么死的」。颜色由 steel→accent 渐变，
- * 暗示绞索收紧。
+ * 竖排时间线（移动端友好）：左为日期，右为「战列舰这次怎么死的」。圆点用 --color-seq-steel
+ * 由浅到深（seq 3→6），暗示绞索收紧。
  *
- * 主题契约：连线/点/文字用 currentColor 与 --color-accent / --color-seq-steel；
+ * 主题契约：连线/文字用 currentColor，圆点用 --color-seq-steel 阶梯；
  * 切 data-theme 零 JS 变色，纯静态满足 reduced-motion。viewBox 自适应。
  */
 interface Props {
