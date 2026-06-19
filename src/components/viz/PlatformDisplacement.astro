@@ -1,0 +1,130 @@
+---
+/**
+ * PlatformDisplacement — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：战列舰被航母取代，是「铁律」最干净的一次演示。空中力量在 19 个月里逐步收紧绞索——
+ * 从锚地里的活靶（塔兰托、珍珠港），到航行中的主力舰（威尔士亲王号），再到公海上**双方
+ * 水面舰队从未照面**就分出胜负（中途岛）。便宜的一方（飞机）从战列舰够不到的方向（头顶）下手。
+ *
+ * 竖排时间线（移动端友好）：左为日期，右为「战列舰这次怎么死的」。颜色由 steel→accent 渐变，
+ * 暗示绞索收紧。
+ *
+ * 主题契约：连线/点/文字用 currentColor 与 --color-accent / --color-seq-steel；
+ * 切 data-theme 零 JS 变色，纯静态满足 reduced-motion。viewBox 自适应。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+interface Ev {
+  date: string;
+  title: string;
+  sub: string;
+  seq: number; // steel 阶梯，越大越「收紧」
+}
+const events: Ev[] = [
+  {
+    date: "1940-11",
+    title: "塔兰托",
+    sub: "21 架剑鱼夜袭，重创锚地里 3 艘战列舰",
+    seq: 3,
+  },
+  {
+    date: "1941-12-07",
+    title: "珍珠港",
+    sub: "8 艘战列舰被炸；3 艘美军航母出海幸免",
+    seq: 4,
+  },
+  {
+    date: "1941-12-10",
+    title: "威尔士亲王号 & 反击号",
+    sub: "首次：航行中的主力舰被空中击沉",
+    seq: 5,
+  },
+  {
+    date: "1942-06",
+    title: "中途岛",
+    sub: "航母对航母，水面舰队从未照面",
+    seq: 6,
+  },
+];
+
+const W = 360;
+const padTop = 16;
+const rowH = 52;
+const lineX = 96;
+const dotR = 5;
+const H = padTop + events.length * rowH + 6;
+const cy = (i: number) => padTop + i * rowH + 16;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>战列舰被空中力量取代的四个节点</title>
+    <desc id={`${uid}-d`}
+      >{
+        "1940 年 11 月塔兰托，舰载机重创锚地战列舰；1941 年 12 月珍珠港，战列舰被炸而航母出海幸免；同年 12 月威尔士亲王号成为首艘航行中被空中击沉的主力舰；1942 年 6 月中途岛，航母对航母、水面舰队从未照面就分出胜负。空中力量从战列舰够不到的头顶逐步收紧绞索。"
+      }</desc
+    >
+
+    <line
+      x1={lineX}
+      y1={cy(0)}
+      x2={lineX}
+      y2={cy(events.length - 1)}
+      stroke="currentColor"
+      stroke-opacity="0.2"
+      stroke-width="2"></line>
+
+    {
+      events.map((e, i) => (
+        <Fragment>
+          <text
+            x={lineX - 12}
+            y={cy(i)}
+            dominant-baseline="central"
+            text-anchor="end"
+            font-size="9.5"
+            font-family="ui-monospace, monospace"
+            fill="currentColor"
+            fill-opacity="0.75"
+          >
+            {e.date}
+          </text>
+          <circle cx={lineX} cy={cy(i)} r={dotR} fill={`var(--color-seq-steel-${e.seq})`} />
+          <text
+            x={lineX + 14}
+            y={cy(i) - 6}
+            dominant-baseline="central"
+            font-size="11.5"
+            font-weight="600"
+            fill="currentColor"
+          >
+            {e.title}
+          </text>
+          <text
+            x={lineX + 14}
+            y={cy(i) + 9}
+            dominant-baseline="central"
+            font-size="9.5"
+            fill="currentColor"
+            fill-opacity="0.6"
+          >
+            {e.sub}
+          </text>
+        </Fragment>
+      ))
+    }
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>

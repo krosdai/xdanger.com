@@ -1,0 +1,136 @@
+---
+/**
+ * CavalryShockEnergy — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：把骑兵冲锋的动能放进读者能掂量的量级里——并**主动拆掉**「像高速车祸」的夸张。
+ * 三根实心柱（冲刺步兵 ~1 kJ、披甲骑兵 ~30 kJ、一吨小车 30 km/h ~35 kJ）落在同一区间；
+ * 右侧那条阴影带（真实车祸 ~85–160 kJ）正是读者脑补、却被夸大的那一档。诚实装置就是这条带。
+ *
+ * 全部 ½mv² 算术：½·600·10² = 30 kJ；½·1000·8.33² ≈ 34.7 kJ；½·80·5² = 1 kJ。
+ *
+ * 主题契约：柱子用 --color-seq-steel / --color-accent（主角骑兵），车祸带用 --color-negative
+ * 低透明度；轴与文字 currentColor。切 data-theme 零 JS 变色，纯静态满足 reduced-motion。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+const W = 360;
+const padX = 10;
+const padTop = 22;
+const labelW = 96;
+const rowH = 34;
+const barH = 16;
+const numColW = 50;
+
+const barX0 = padX + labelW;
+const barEndMax = W - padX - numColW - 4;
+const barSpan = barEndMax - barX0;
+const kjMax = 170;
+const xOf = (kj: number) => barX0 + (kj / kjMax) * barSpan;
+
+interface Bar {
+  name: string;
+  kj: number;
+  label: string;
+  accent?: boolean;
+}
+const bars: Bar[] = [
+  { name: "冲刺步兵", kj: 1, label: "≈1 kJ" },
+  { name: "披甲骑兵", kj: 30, label: "≈30 kJ", accent: true },
+  { name: "一吨小车 30 km/h", kj: 35, label: "≈35 kJ" },
+];
+const crash = { lo: 85, hi: 160 };
+
+const rowY = (i: number) => padTop + i * rowH;
+const bandTop = padTop - 6;
+const bandBot = padTop + bars.length * rowH + 14;
+const H = bandBot + 30;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>骑兵冲锋动能与日常量级的对照</title>
+    <desc id={`${uid}-d`}
+      >{
+        "冲刺步兵约 1 千焦，披甲骑兵冲锋约 30 千焦，一吨小车以 30 km/h 行驶约 35 千焦——三者同一量级。右侧阴影带标出读者常脑补的「真实车祸」约 85–160 千焦，是骑兵冲锋的三到五倍。骑兵的杀伤来自长枪把能量集中到一个点，而非整体动能。"
+      }</desc
+    >
+
+    <!-- 「读者脑补」的车祸带 -->
+    <rect
+      x={xOf(crash.lo)}
+      y={bandTop}
+      width={xOf(crash.hi) - xOf(crash.lo)}
+      height={bandBot - bandTop}
+      fill="var(--color-negative)"
+      fill-opacity="0.1"
+      rx="3"></rect>
+    <text
+      x={(xOf(crash.lo) + xOf(crash.hi)) / 2}
+      y={bandTop + 10}
+      text-anchor="middle"
+      font-size="9"
+      fill="var(--color-negative)"
+      fill-opacity="0.85"
+    >
+      真实车祸 ≈85–160 kJ
+    </text>
+    <text
+      x={(xOf(crash.lo) + xOf(crash.hi)) / 2}
+      y={bandBot + 12}
+      text-anchor="middle"
+      font-size="8.5"
+      fill="currentColor"
+      fill-opacity="0.5"
+    >
+      （读者常脑补的那一档）
+    </text>
+
+    {
+      bars.map((b, i) => (
+        <Fragment>
+          <text
+            x={padX}
+            y={rowY(i) + barH / 2 + 2}
+            dominant-baseline="central"
+            font-size="10.5"
+            fill="currentColor"
+          >
+            {b.name}
+          </text>
+          <rect
+            x={barX0}
+            y={rowY(i)}
+            width={Math.max(2, xOf(b.kj) - barX0)}
+            height={barH}
+            rx="3"
+            fill={b.accent ? "var(--color-accent)" : "var(--color-seq-steel-3)"}
+          />
+          <text
+            x={Math.max(xOf(b.kj) + 4, barX0 + 4)}
+            y={rowY(i) + barH / 2 + 2}
+            dominant-baseline="central"
+            font-size="10"
+            font-family="ui-monospace, monospace"
+            fill="currentColor"
+            fill-opacity="0.85"
+          >
+            {b.label}
+          </text>
+        </Fragment>
+      ))
+    }
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>

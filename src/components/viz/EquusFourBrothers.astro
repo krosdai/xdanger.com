@@ -1,0 +1,131 @@
+---
+/**
+ * EquusFourBrothers — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：马属（Equus）的「四兄弟」是一场天然实验——同属、近缘，结局却两两相反：
+ * 马 ✓、驴 ✓ 被驯化，斑马 ✗、野驴（onager）✗ 终究没有。决定胜负的不是体型或速度，
+ * 而是性情/惊逃这道关。脚注的 kunga（不育杂交种）则是「成本交换律」在生物学上的早期显形。
+ *
+ * 2×2 卡片：名称（中＋英）、✓/✗ 徽标、一句决定性性状。
+ *
+ * 主题契约：✓ 用 --color-positive、✗ 用 --color-negative，边框/文字 currentColor；
+ * 切 data-theme 零 JS 变色，纯静态满足 reduced-motion。viewBox 自适应。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+interface Cell {
+  zh: string;
+  en: string;
+  ok: boolean;
+  trait: string[];
+}
+const cells: Cell[] = [
+  { zh: "马", en: "horse", ok: true, trait: ["黑海-里海草原驯化", "现代血统约 4200 年前"] },
+  { zh: "驴", en: "donkey", ok: true, trait: ["东北非驯化", "约 5000–7000 年前"] },
+  { zh: "斑马", en: "zebra", ok: false, trait: ["性情凶暴", "咬住不松口、难驾驭"] },
+  { zh: "亚洲野驴", en: "onager", ok: false, trait: ["无法驯服", "只能逐代杂交出 kunga"] },
+];
+
+const W = 360;
+const padX = 12;
+const gap = 12;
+const cellW = (W - padX * 2 - gap) / 2;
+const cellH = 84;
+const top = 12;
+const colX = (c: number) => padX + c * (cellW + gap);
+const rowYy = (r: number) => top + r * (cellH + gap);
+const footTop = rowYy(1) + cellH + 18;
+const H = footTop + 30;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>马属四兄弟的驯化结局对照</title>
+    <desc id={`${uid}-d`}
+      >{
+        "同属近缘的四种动物结局相反：马与驴被驯化，斑马与亚洲野驴没有。决定因素是性情与惊逃，而非体型或速度。脚注：美索不达米亚的 kunga 是驴与野驴的不育杂交种，每代都要重新人工杂交，约五百年后被能自我繁殖的家马取代。"
+      }</desc
+    >
+
+    {
+      cells.map((c, idx) => {
+        const r = Math.floor(idx / 2);
+        const col = idx % 2;
+        const x = colX(col);
+        const y = rowYy(r);
+        const mark = c.ok ? "var(--color-positive)" : "var(--color-negative)";
+        return (
+          <Fragment>
+            <rect
+              x={x}
+              y={y}
+              width={cellW}
+              height={cellH}
+              rx="8"
+              fill="none"
+              stroke={mark}
+              stroke-opacity="0.5"
+              stroke-width="1.5"
+            />
+            <text x={x + 12} y={y + 22} font-size="13" font-weight="700" fill="currentColor">
+              {c.zh}
+              <tspan font-size="9.5" font-weight="400" fill-opacity="0.6" dx="4">
+                {c.en}
+              </tspan>
+            </text>
+            <circle cx={x + cellW - 18} cy={y + 18} r="9" fill={mark} fill-opacity="0.15" />
+            <text
+              x={x + cellW - 18}
+              y={y + 18}
+              text-anchor="middle"
+              dominant-baseline="central"
+              font-size="12"
+              font-weight="700"
+              fill={mark}
+            >
+              {c.ok ? "✓" : "✗"}
+            </text>
+            {c.trait.map((t, ti) => (
+              <text
+                x={x + 12}
+                y={y + 44 + ti * 16}
+                font-size="9.5"
+                fill="currentColor"
+                fill-opacity="0.7"
+              >
+                {t}
+              </text>
+            ))}
+          </Fragment>
+        );
+      })
+    }
+
+    <line
+      x1={padX}
+      y1={footTop - 8}
+      x2={W - padX}
+      y2={footTop - 8}
+      stroke="currentColor"
+      stroke-opacity="0.12"></line>
+    <text x={padX} y={footTop + 6} font-size="9.5" fill="currentColor" fill-opacity="0.65">
+      kunga（约前 2500）：野驴太烈，只能逐代杂交出不育的它；
+    </text>
+    <text x={padX} y={footTop + 20} font-size="9.5" fill="currentColor" fill-opacity="0.65">
+      约 500 年后，能自我繁殖的家马把它淘汰——成本交换律的早期显形。
+    </text>
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>

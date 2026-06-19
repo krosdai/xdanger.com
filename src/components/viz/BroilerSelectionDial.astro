@@ -1,0 +1,153 @@
+---
+/**
+ * BroilerSelectionDial — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：性状是「旋钮」，不是天花板。上半图——同样的饲料、并排饲养，2005 年肉鸡 56 天体重
+ * 是 1957 年品系的约 4.6 倍（Zuidhof 2014），差距几乎全是遗传。下半图——但旋钮转得多快，
+ * 受限于「繁殖一代要多久」：鸡约半年，非洲象要十几年。这正是驯化的真正瓶颈。
+ *
+ * 主题契约：体重柱用 --color-seq-accent 阶梯，世代柱用 --color-seq-steel；文字 currentColor；
+ * 切 data-theme 零 JS 变色，纯静态满足 reduced-motion。viewBox 自适应。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+const W = 360;
+const padX = 12;
+const labelW = 64;
+const barX0 = padX + labelW;
+const barEndMax = W - padX - 56;
+const barSpan = barEndMax - barX0;
+
+// 上半：56 天体重（克）
+const wtMax = 4600;
+const wtXOf = (g: number) => barX0 + (g / wtMax) * barSpan;
+const weights = [
+  { yr: "1957", g: 905, seq: 2 },
+  { yr: "1978", g: 1808, seq: 4 },
+  { yr: "2005", g: 4202, seq: 6 },
+];
+
+// 下半：繁殖一代约需（年，到首次产仔）
+const genMax = 15;
+const genXOf = (y: number) => barX0 + (y / genMax) * barSpan;
+const gens = [
+  { name: "鸡", y: 0.5, label: "约半年" },
+  { name: "非洲象", y: 14, label: "约 14 年" },
+];
+
+const top1 = 34;
+const rowH = 24;
+const div = top1 + weights.length * rowH + 16;
+const top2 = div + 28;
+const H = top2 + gens.length * rowH + 14;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>定向选择的威力与它的瓶颈</title>
+    <desc id={`${uid}-d`}
+      >{
+        "上半：同样饲料并排饲养，肉鸡 56 天体重从 1957 年的 905 克升到 2005 年的 4202 克，约 4.6 倍，差距几乎全是遗传。下半：但选择转得多快取决于繁殖周期——鸡约半年完成一代，非洲象到首次产仔要约 14 年，这是驯化与改良的真正瓶颈。"
+      }</desc
+    >
+
+    <text x={padX} y="20" font-size="11.5" font-weight="700" fill="currentColor"
+      >同样的饲料，肉鸡 56 天体重</text
+    >
+    {
+      weights.map((w, i) => {
+        const y = top1 + i * rowH;
+        return (
+          <Fragment>
+            <text
+              x={padX}
+              y={y + 9}
+              dominant-baseline="central"
+              font-size="10.5"
+              font-family="ui-monospace, monospace"
+              fill="currentColor"
+            >
+              {w.yr}
+            </text>
+            <rect
+              x={barX0}
+              y={y}
+              width={Math.max(2, wtXOf(w.g) - barX0)}
+              height={14}
+              rx="3"
+              fill={`var(--color-seq-accent-${w.seq})`}
+            />
+            <text
+              x={W - padX}
+              y={y + 9}
+              dominant-baseline="central"
+              text-anchor="end"
+              font-size="10"
+              font-family="ui-monospace, monospace"
+              fill="currentColor"
+              fill-opacity="0.85"
+            >
+              {w.g} 克
+            </text>
+          </Fragment>
+        );
+      })
+    }
+
+    <line x1={padX} y1={div} x2={W - padX} y2={div} stroke="currentColor" stroke-opacity="0.12"
+    ></line>
+
+    <text x={padX} y={div + 20} font-size="11.5" font-weight="700" fill="currentColor"
+      >繁殖一代约需（到首次产仔）</text
+    >
+    {
+      gens.map((g, i) => {
+        const y = top2 + i * rowH;
+        return (
+          <Fragment>
+            <text
+              x={padX}
+              y={y + 9}
+              dominant-baseline="central"
+              font-size="10.5"
+              fill="currentColor"
+            >
+              {g.name}
+            </text>
+            <rect
+              x={barX0}
+              y={y}
+              width={Math.max(2, genXOf(g.y) - barX0)}
+              height={14}
+              rx="3"
+              fill="var(--color-seq-steel-4)"
+            />
+            <text
+              x={Math.max(genXOf(g.y) + 4, barX0 + 4)}
+              y={y + 9}
+              dominant-baseline="central"
+              font-size="10"
+              fill="currentColor"
+              fill-opacity="0.85"
+            >
+              {g.label}
+            </text>
+          </Fragment>
+        );
+      })
+    }
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>
