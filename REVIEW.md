@@ -20,7 +20,14 @@ the PR touches `_notes/**` or `_posts/**`.
 - **Citation integrity.** Every fact, number, and quote must trace to a real, retrievable source. No
   invented or guessed DOIs, dates, authors, study titles, or statistics. Quotes are verbatim; a
   translated quote keeps the original-language text alongside it. Every figure/number in the body maps to
-  a source (a 来源/Methods entry or inline citation) — no orphans.
+  a source (a 来源/Methods entry or inline citation) — no orphans. **A live / interactive readout that
+  recomputes a number from user input is itself a citation claim** — a moving number reads as *measured*, so
+  it's allowed only when a rigorous, closed-form formula derives it (½mv², compound interest, unit
+  conversions) and its inputs/ranges are either **sourced** or **clearly labeled illustrative** with the
+  realistic, sourced operating point marked (e.g. an exploration slider whose default sits on the cited
+  value). Estimated, fudged, or mechanism-level quantities must **not**
+  drive a live numeric readout — keep them qualitative (direction / relative size) or freeze them as a
+  single sourced callout with the arithmetic shown.
 - **No fabricated narrative detail.** No invented scenes, sensory color, or 五感白描 over unsourced
   detail; no reconstructed dialogue or inner monologue ("she must have felt…"); no composite / "everyman"
   characters (e.g. 想象一下武汉的张医生…); no manufactured cliffhanger that withholds an answer the writer
