@@ -20,8 +20,12 @@ import { useId, useMemo, useState } from "react";
  * 默认 600 kg、36 km/h（=10 m/s）→ ½·600·10² = 30 kJ，复现正文的工作样例。
  *
  * 主题契约：配色一律用随 `data-theme` 翻转的 Tailwind 语义工具类（`text-accent` /
- * `bg-accent` / `bg-negative` / `text-foreground/…`）；唯一动效（条形宽度过渡）用 `motion-safe:`。
- * a11y：两根滑杆各以 `useId()` 关联 `<label>`；读数区 `aria-live="polite"`，装饰条 `aria-hidden`。
+ * `bg-accent` / `bg-negative` / `text-foreground/…`）；所有动效（条形宽度、重置键配色）均以
+ * `motion-safe:` 守护。a11y：两根滑杆各以 `useId()` 关联 `<label>`，并以 `aria-valuetext` 把带单位
+ * 的读数报给读屏；读数区 `aria-live="polite"`，装饰条 `aria-hidden`。
+ *
+ * 输入区间（速度 10–45 km/h、质量 400–800 kg）是**便于探索**的范围、非历史上限：真实战马的工作点
+ * （≈600 kg、36 km/h）由正文的 Exeter「战马考古」佐证，即默认值；放宽只为让 ½mv² 的不对称看得清。
  *
  * 在 MDX 中以 client:visible 注水：<CavalryShockEnergy client:visible />
  */
@@ -119,6 +123,7 @@ export default function CavalryShockEnergy({ caption }: Props) {
                 max={s.max}
                 step={s.step}
                 value={s.value}
+                aria-valuetext={s.fmt(s.value)}
                 onChange={(e) => {
                   s.set(Number(e.target.value));
                 }}
@@ -126,6 +131,11 @@ export default function CavalryShockEnergy({ caption }: Props) {
             </div>
           ))}
         </div>
+
+        <p className="text-foreground/45 mt-2 text-xs leading-relaxed">
+          真实战马约 600 kg、36 km/h（见正文，Exeter「战马考古」），即两杆默认值。范围放宽只为看清
+          ½mv² 的脾气，并非历史上限。
+        </p>
 
         <div aria-live="polite" className="mt-5 flex flex-wrap items-baseline gap-x-6 gap-y-1">
           <p className="text-foreground/60 text-xs">
@@ -167,7 +177,7 @@ export default function CavalryShockEnergy({ caption }: Props) {
           <p className="text-foreground/55 text-xs leading-relaxed">
             速度按<strong className="text-foreground/80">平方</strong>
             进动能、质量只按线性：速度拉一格能量猛跳，质量拉同样一格只微动。
-            {CAVALRY_STAYS_BELOW_CRASH && "而且两杆都拉满，动能仍够不到「真实车祸」——"}
+            {CAVALRY_STAYS_BELOW_CRASH && "而且即便两杆都拉满，动能仍够不到「真实车祸」——"}
             骑兵的杀伤不在这点整体动能，而在把它集中到长枪尖端的那个点上。
           </p>
           {!atDefault && (
@@ -177,7 +187,7 @@ export default function CavalryShockEnergy({ caption }: Props) {
                 setSpeed(SPEED0);
                 setMass(MASS0);
               }}
-              className="text-accent hover:text-foreground shrink-0 cursor-pointer text-xs underline underline-offset-4 transition-colors"
+              className="text-accent hover:text-foreground shrink-0 cursor-pointer text-xs underline underline-offset-4 motion-safe:transition-colors"
             >
               重置
             </button>

@@ -20,8 +20,8 @@ This is an Astro site of bilingual (Chinese + English) science-popularization "n
   DOIs, dates, authors, studies, or stats. Quotes verbatim; a translated quote keeps the original text
   alongside. Every body figure maps to a source (no orphans). A live / interactive readout that recomputes a
   number from user input is itself a citation claim — allowed only when a rigorous closed-form formula drives
-  it; never wire an estimated or mechanism-level figure to a recomputing control (a moving number reads as
-  *measured*).
+  it **and its inputs/ranges are sourced or labeled illustrative**; never wire an estimated or
+  mechanism-level figure to a recomputing control (a moving number reads as *measured*).
 - **No fabricated narrative.** No invented scenes/sensory detail/五感白描, no reconstructed
   dialogue/inner monologue, no composite "everyman" characters, no manufactured cliffhangers.
 

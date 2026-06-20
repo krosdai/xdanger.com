@@ -94,8 +94,10 @@ citation integrity), not to the bar of decorative chrome. Before wiring any numb
 - **Anchor live outputs to a _checkable_ reference, not to invented precision.** A live KE bar is honest
   *because* it sits beside a reference the reader can trust — either **cited**, or **derived in the prose
   from the same formula** (e.g. a ~95–165 kJ "real car crash" bracket = that same ½mv² for a ~1 t car at
-  ~50–65 km/h). The reader reads *"a heavy horse at the gallop lands in car-crash territory,"* not a
-  spurious exact joule count presented as fact. A reference you _label_ "sourced" but never cite or derive is
+  ~50–65 km/h). The reader reads the *direction* — *"a galloping warhorse carries real energy yet still
+  lands well short of a real car crash"* — not a spurious exact joule count presented as fact (and that
+  reading must match what the figure actually shows; don't let the prose overstate the bar). A reference you
+  _label_ "sourced" but never cite or derive is
   itself an orphan — the gate applies to the comparison too, not just the live number.
 
 ## The contract — every visual must satisfy it
