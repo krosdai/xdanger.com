@@ -6,7 +6,7 @@ argument-hint: "(无参数；配合 /loop 5m /note-from-issue 使用)"
 # /note-from-issue — issue → 已发布 note（端到端 · 无人值守）
 
 把 `xdanger` 本人、带 `note-taking` label 的 GitHub issue 自动写成站点 note 并发布。
-**每次调用是一轮**，配合 `/loop 5m /note-from-issue` 使用。仓库：`daihaus/xdanger.com`。
+**每次调用是一轮**，配合 `/loop 5m /note-from-issue` 使用。仓库：`krosdai/xdanger.com`。
 
 > 执行你的也是同样聪明的 Claude——下面只给目标、红线和不可推导的事实，机械细节（具体
 > 命令、轮询、清理）你自己拿捏。
