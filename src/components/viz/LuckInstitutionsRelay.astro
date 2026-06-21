@@ -1,0 +1,175 @@
+---
+/**
+ * LuckInstitutionsRelay — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题（§四）：三层接力——(A) 外生运气 → (B) 把运气兑现的制度 → (C) 自我强化的锁定。
+ * 「运气开了门，制度走了进去，成功再把门焊成护城河。」任何一层缺位，门都会重新关上——
+ * 这也是为什么「光有运气」的国家（如 1900 年的 Argentina）会滑落。
+ *
+ * 三块纵向堆叠的面板（移动端友好），用 categorical --color-cat（跨主题稳定）区分阶段，
+ * 之间以箭头 + 文字衔接。文字 / 边框 / 箭头用 currentColor 或 cat 变量，切 data-theme 零 JS
+ * 变色，纯静态满足 reduced-motion。viewBox 自适应，窄屏不溢出。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+interface Stage {
+  tag: string;
+  title: string;
+  lines: string[];
+  cat: number;
+}
+const stages: Stage[] = [
+  {
+    tag: "A",
+    title: "外生运气",
+    lines: [
+      "两洋屏障 · 大陆尺度 · 资源丰沛",
+      "二战窗口：欧亚资本被毁，美国本土无损",
+      "Bretton Woods 1944 · 流亡科学家 · 英语通用语",
+    ],
+    cat: 3,
+  },
+  {
+    tag: "B",
+    title: "把运气兑现的制度",
+    lines: [
+      "Commerce Clause：宪法级单一市场",
+      "政府 R&D → DARPA / 互联网 / 半导体",
+      "私有油气矿权 · 容错破产法 + VC",
+    ],
+    cat: 4,
+  },
+  {
+    tag: "C",
+    title: "自我强化的锁定",
+    lines: ["美元「嚣张特权」→ 永久压低资本成本", "人才磁极：成功招人，人再造成功"],
+    cat: 1,
+  },
+];
+const arrowLabels = ["运气开门", "制度走进去 → 焊成护城河"];
+
+const W = 360;
+const padX = 10;
+const padTop = 10;
+const headerH = 24;
+const lineH = 16;
+const panelPadBottom = 10;
+const arrowGap = 30;
+
+const panelH = (s: Stage) => headerH + s.lines.length * lineH + panelPadBottom;
+const panelY: number[] = [];
+let cursor = padTop;
+for (const s of stages) {
+  panelY.push(cursor);
+  cursor += panelH(s) + arrowGap;
+}
+const H = cursor - arrowGap + padTop;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>运气 → 制度 → 锁定的三层接力</title>
+    <desc id={`${uid}-d`}
+      >三层接力：外生运气（地理、二战窗口、人才）开了门；制度（宪法级单一市场、政府
+      R&D、私有矿权、容错破产法 + VC）走了进去；自我强化的锁定（美元嚣张特权、人才磁极）
+      把门焊成护城河。任何一层缺位，门都会重新关上。</desc
+    >
+    {
+      stages.map((s, i) => (
+        <Fragment>
+          <rect
+            x={padX}
+            y={panelY[i]}
+            width={W - padX * 2}
+            height={panelH(s)}
+            rx="10"
+            fill={`var(--color-cat-${s.cat})`}
+            fill-opacity="0.12"
+            stroke={`var(--color-cat-${s.cat})`}
+            stroke-width="1.4"
+          />
+          <circle
+            cx={padX + 22}
+            cy={panelY[i] + 17}
+            r="11"
+            fill={`var(--color-cat-${s.cat})`}
+            fill-opacity="0.32"
+          />
+          <text
+            x={padX + 22}
+            y={panelY[i] + 17}
+            text-anchor="middle"
+            dominant-baseline="central"
+            font-size="12"
+            font-weight="700"
+            fill="currentColor"
+          >
+            {s.tag}
+          </text>
+          <text
+            x={padX + 42}
+            y={panelY[i] + 21}
+            font-size="13.5"
+            font-weight="700"
+            fill="currentColor"
+          >
+            {s.title}
+          </text>
+          {s.lines.map((ln, j) => (
+            <text
+              x={padX + 16}
+              y={panelY[i] + headerH + 8 + j * lineH}
+              dominant-baseline="central"
+              font-size="11"
+              fill="currentColor"
+              fill-opacity="0.8"
+            >
+              {ln}
+            </text>
+          ))}
+          {i < stages.length - 1 && (
+            <Fragment>
+              <line
+                x1={W / 2}
+                y1={panelY[i] + panelH(s) + 4}
+                x2={W / 2}
+                y2={panelY[i] + panelH(s) + arrowGap - 8}
+                stroke="currentColor"
+                stroke-opacity="0.5"
+                stroke-width="1.6"
+              />
+              <path
+                d={`M ${W / 2 - 4} ${panelY[i] + panelH(s) + arrowGap - 10} L ${W / 2 + 4} ${panelY[i] + panelH(s) + arrowGap - 10} L ${W / 2} ${panelY[i] + panelH(s) + arrowGap - 3} Z`}
+                fill="currentColor"
+                fill-opacity="0.5"
+              />
+              <text
+                x={W / 2 + 12}
+                y={panelY[i] + panelH(s) + arrowGap / 2 - 2}
+                dominant-baseline="central"
+                font-size="10"
+                fill="currentColor"
+                fill-opacity="0.6"
+              >
+                {arrowLabels[i]}
+              </text>
+            </Fragment>
+          )}
+        </Fragment>
+      ))
+    }
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>
