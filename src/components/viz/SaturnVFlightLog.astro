@@ -4,13 +4,14 @@
  *
  * 主题：Saturn V 全部 13 次发射（1967–1973）的「记录形状」。一眼看清三件事——
  *   ① 乘组从第 3 次发射（Apollo 8）才上箭，且直接绕月；
- *   ② 火箭推进系统在飞行中出严重状况的只有 Apollo 6、Apollo 13 两次，都集中在早期、且都被接住；
+ *   ② 火箭飞行中出严重状况的只有 Apollo 6、Apollo 13、Apollo 15 三次，都集中在早期、且都被接住；
  *   ③ 没有一次损失乘组、没有一次没能入轨。
  *
  * 编码：点填充区分载人（accent）/ 无人（steel-4）；虚线环（cat-3 琥珀，在明暗两套主题里都与
  * accent 的胭红 / 玉绿、与 steel 蓝明显不同色，且用虚线再加一重形状区分）标「火箭飞行中出过
- * 严重状况、但仍成功入轨」。Apollo 12 遭闪电两击但火箭照常入轨，故不打环；Skylab 1 火箭准确入轨、
- * 问题出在载荷防护罩，也不打环——两者都在正文单独交代（见 note）。
+ * 严重状况、但仍成功入轨」（Apollo 6 推力 / pogo、Apollo 13 pogo、Apollo 15 分离余量偏小）。
+ * Apollo 12 遭闪电两击但火箭照常入轨，故不打环；Skylab 1 火箭准确入轨、问题出在载荷防护罩，
+ * 也不打环——两者都在正文单独交代（见 note）。
  *
  * 主题契约：连线 / 点 / 文字用 currentColor 与 --color-accent / --color-seq-steel-4 /
  * --color-cat-3，切 data-theme 零 JS 变色；纯静态，天然满足 reduced-motion。竖排、viewBox
@@ -51,7 +52,13 @@ const flights: Flight[] = [
   },
   { date: "1970.04", m: "Apollo 13", crew: true, anom: true, note: "二级中央机因 pogo 提前停车" },
   { date: "1971.01", m: "Apollo 14", crew: true, anom: false, note: "装上抑 pogo 蓄能器" },
-  { date: "1971.07", m: "Apollo 15", crew: true, anom: false, note: "首载月球车" },
+  {
+    date: "1971.07",
+    m: "Apollo 15",
+    crew: true,
+    anom: true,
+    note: "首载月球车；减重削薄了分离余量",
+  },
   { date: "1972.04", m: "Apollo 16", crew: true, anom: false, note: "" },
   { date: "1972.12", m: "Apollo 17", crew: true, anom: false, note: "最后一次载人登月" },
   {
@@ -86,7 +93,7 @@ const cy = (i: number) => padTop + i * rowH + 13;
     <title id={`${uid}-t`}>Saturn V 全部 13 次发射的飞行记录</title>
     <desc id={`${uid}-d`}
       >{
-        "从 1967 年 Apollo 4 首次无人全状态试飞，到 1973 年 Skylab 1，Saturn V 共发射 13 次。乘组从第三次发射 Apollo 8 才上箭并直接绕月。火箭推进系统在飞行中出严重状况、但仍成功入轨的只有两次：Apollo 6（一级 pogo、二级两台 J-2 提前停车）与 Apollo 13（二级中央发动机因 pogo 提前停车）。Apollo 12 遭闪电两击但火箭照常入轨；Skylab 1 火箭准确入轨、问题出在上升段气动撕掉的载荷防护罩——两者都在正文单独交代。13 次均未损失乘组、均成功入轨。"
+        "从 1967 年 Apollo 4 首次无人全状态试飞，到 1973 年 Skylab 1，Saturn V 共发射 13 次。乘组从第三次发射 Apollo 8 才上箭并直接绕月。火箭在飞行中出严重状况、但仍成功入轨的有三次：Apollo 6（一级 pogo、二级两台 J-2 提前停车）、Apollo 13（二级中央发动机因 pogo 提前停车）、Apollo 15（减重削薄了两级分离余量、一台分离火箭不点火就可能追尾）。Apollo 12 遭闪电两击但火箭照常入轨；Skylab 1 火箭准确入轨、问题出在上升段气动撕掉的载荷防护罩——两者都在正文单独交代。13 次均未损失乘组、均成功入轨。"
       }</desc
     >
 
