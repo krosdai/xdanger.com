@@ -125,7 +125,7 @@ export default function GrowthCompounding({
         <button
           type="button"
           onClick={reset}
-          className="text-accent hover:text-foreground cursor-pointer text-sm underline underline-offset-4 transition-colors"
+          className="text-accent hover:text-foreground motion-safe:transition-colors cursor-pointer text-sm underline underline-offset-4"
         >
           重置
         </button>
