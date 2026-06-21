@@ -1,0 +1,192 @@
+---
+/**
+ * SaturnVFlightLog — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：Saturn V 全部 13 次发射（1967–1973）的「记录形状」。一眼看清三件事——
+ *   ① 乘组从第 3 次发射（Apollo 8）才上箭，且直接绕月；
+ *   ② 火箭飞行中出严重状况的只有 Apollo 6、Apollo 13、Apollo 15 三次，且都被接住；
+ *   ③ 没有一次损失乘组、没有一次没能入轨。
+ *
+ * 编码：点填充区分载人（accent）/ 无人（steel-4）；虚线环（cat-3 琥珀，在明暗两套主题里都与
+ * accent 的胭红 / 玉绿、与 steel 蓝明显不同色，且用虚线再加一重形状区分）标「火箭飞行中出过
+ * 严重状况、但仍成功入轨」（Apollo 6 推力 / pogo、Apollo 13 pogo、Apollo 15 分离余量偏小）。
+ * Apollo 12 遭闪电两击但火箭照常入轨，故不打环；Skylab 1 火箭准确入轨、问题出在载荷防护罩，
+ * 也不打环——两者都在正文单独交代（见 note）。
+ *
+ * 主题契约：连线 / 点 / 文字用 currentColor 与 --color-accent / --color-seq-steel-4 /
+ * --color-cat-3，切 data-theme 零 JS 变色；纯静态，天然满足 reduced-motion。竖排、viewBox
+ * 自适应，窄屏不溢出。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+interface Flight {
+  date: string;
+  m: string;
+  crew: boolean;
+  anom: boolean;
+  note: string;
+}
+const flights: Flight[] = [
+  { date: "1967.11", m: "Apollo 4", crew: false, anom: false, note: "首次「全状态」无人试飞" },
+  {
+    date: "1968.04",
+    m: "Apollo 6",
+    crew: false,
+    anom: true,
+    note: "一级 pogo；二级两台 J-2 提前停车",
+  },
+  { date: "1968.12", m: "Apollo 8", crew: true, anom: false, note: "首次载人，直接绕月" },
+  { date: "1969.03", m: "Apollo 9", crew: true, anom: false, note: "地球轨道试登月舱" },
+  { date: "1969.05", m: "Apollo 10", crew: true, anom: false, note: "绕月「彩排」" },
+  { date: "1969.07", m: "Apollo 11", crew: true, anom: false, note: "首次登月" },
+  {
+    date: "1969.11",
+    m: "Apollo 12",
+    crew: true,
+    anom: false,
+    note: "升空遭闪电两击，火箭照常入轨",
+  },
+  { date: "1970.04", m: "Apollo 13", crew: true, anom: true, note: "二级中央机因 pogo 提前停车" },
+  { date: "1971.01", m: "Apollo 14", crew: true, anom: false, note: "装上抑 pogo 蓄能器" },
+  {
+    date: "1971.07",
+    m: "Apollo 15",
+    crew: true,
+    anom: true,
+    note: "首载月球车；减重削薄了分离余量",
+  },
+  { date: "1972.04", m: "Apollo 16", crew: true, anom: false, note: "" },
+  { date: "1972.12", m: "Apollo 17", crew: true, anom: false, note: "最后一次载人登月" },
+  {
+    date: "1973.05",
+    m: "Skylab 1",
+    crew: false,
+    anom: false,
+    note: "两级型；火箭达标，气动撕掉防护罩＊",
+  },
+];
+
+const W = 360;
+const padTop = 56;
+const rowH = 37;
+const lineX = 80;
+const dotR = 5;
+const ringR = 9.5;
+const H = padTop + flights.length * rowH + 10;
+const cy = (i: number) => padTop + i * rowH + 13;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>Saturn V 全部 13 次发射的飞行记录</title>
+    <desc id={`${uid}-d`}
+      >{
+        "从 1967 年 Apollo 4 首次无人全状态试飞，到 1973 年 Skylab 1，Saturn V 共发射 13 次。乘组从第三次发射 Apollo 8 才上箭并直接绕月。火箭在飞行中出严重状况、但仍成功入轨的有三次：Apollo 6（一级 pogo、二级两台 J-2 提前停车）、Apollo 13（二级中央发动机因 pogo 提前停车）、Apollo 15（减重削薄了两级分离余量、一台分离火箭不点火就可能追尾）。Apollo 12 遭闪电两击但火箭照常入轨；Skylab 1 火箭准确入轨、问题出在上升段气动撕掉的载荷防护罩——两者都在正文单独交代。13 次均未损失乘组、均成功入轨。"
+      }</desc
+    >
+
+    <!-- 图例（两行，避免窄屏拥挤） -->
+    <circle cx={20} cy={15} r={4.5} fill="var(--color-accent)"></circle>
+    <text x={29} y={15} dominant-baseline="central" font-size="9.5" fill="currentColor">载人</text>
+    <circle cx={74} cy={15} r={4.5} fill="var(--color-seq-steel-4)"></circle>
+    <text x={83} y={15} dominant-baseline="central" font-size="9.5" fill="currentColor">无人</text>
+    <circle
+      cx={22}
+      cy={34}
+      r={6.5}
+      fill="none"
+      stroke="var(--color-cat-3)"
+      stroke-width="1.8"
+      stroke-dasharray="3 2.5"></circle>
+    <text x={34} y={34} dominant-baseline="central" font-size="9.5" fill="currentColor"
+      >火箭飞行中出过严重状况（仍成功入轨）</text
+    >
+    <line
+      x1={14}
+      y1={46}
+      x2={W - 14}
+      y2={46}
+      stroke="currentColor"
+      stroke-opacity="0.12"
+      stroke-width="1"></line>
+
+    <!-- 主轴连线 -->
+    <line
+      x1={lineX}
+      y1={cy(0)}
+      x2={lineX}
+      y2={cy(flights.length - 1)}
+      stroke="currentColor"
+      stroke-opacity="0.2"
+      stroke-width="2"></line>
+
+    {
+      flights.map((f, i) => {
+        const fill = f.crew ? "var(--color-accent)" : "var(--color-seq-steel-4)";
+        return (
+          <Fragment>
+            <text
+              x={lineX - 14}
+              y={cy(i)}
+              dominant-baseline="central"
+              text-anchor="end"
+              font-size="9"
+              font-family="ui-monospace, monospace"
+              fill="currentColor"
+              fill-opacity="0.7"
+            >
+              {f.date}
+            </text>
+            {f.anom && (
+              <circle
+                cx={lineX}
+                cy={cy(i)}
+                r={ringR}
+                fill="none"
+                stroke="var(--color-cat-3)"
+                stroke-width="1.8"
+                stroke-dasharray="3 2.5"
+              />
+            )}
+            <circle cx={lineX} cy={cy(i)} r={dotR} fill={fill} />
+            <text
+              x={lineX + 18}
+              y={f.note ? cy(i) - 6 : cy(i)}
+              dominant-baseline="central"
+              font-size="11.5"
+              font-weight="600"
+              fill="currentColor"
+            >
+              {f.m}
+            </text>
+            {f.note && (
+              <text
+                x={lineX + 18}
+                y={cy(i) + 8}
+                dominant-baseline="central"
+                font-size="9.5"
+                fill="currentColor"
+                fill-opacity="0.6"
+              >
+                {f.note}
+              </text>
+            )}
+          </Fragment>
+        );
+      })
+    }
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>

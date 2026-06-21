@@ -1,0 +1,159 @@
+---
+/**
+ * PogoLoop — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题：pogo（纵向耦合振动）为什么会自我放大——一条首尾相接的正反馈回路：
+ *   推力脉动 → 箭体纵向一伸一缩 → 贮箱 / 管路里的推进剂柱跟着颠 → 供给压力脉动
+ *   → 发动机推力又跟着抖（回到起点）。相位一旦叠加，振幅越滚越大。
+ * 以及修复：Apollo 14 起在中央发动机的 LOX 管路上加氦气蓄能器，吸收压力脉动、把这条回路打断。
+ *
+ * 主题契约：环节框 / 箭头用 currentColor；唯一的「修复」节点（蓄能器）用 --color-accent 系列高亮，
+ * 切 data-theme 零 JS 变色；纯静态，天然满足 reduced-motion。viewBox 自适应，窄屏不溢出。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+const W = 360;
+const H = 296;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>pogo 纵向耦合振动的正反馈回路与蓄能器修复</title>
+    <desc id={`${uid}-d`}
+      >{
+        "pogo 是一条首尾相接的正反馈回路：发动机推力脉动让箭体纵向一伸一缩，箭体震动又让贮箱与管路里的推进剂柱上下颠，造成供给压力脉动，压力脉动再让发动机推力跟着抖，回到起点。相位叠加时振幅越滚越大。Apollo 14 起在中央发动机的液氧管路上加装氦气蓄能器，吸收压力脉动，把这条回路打断。"
+      }</desc
+    >
+
+    <defs>
+      <marker
+        id={`${uid}-ah`}
+        markerWidth="9"
+        markerHeight="9"
+        refX="5.5"
+        refY="3"
+        orient="auto"
+        markerUnits="userSpaceOnUse"
+      >
+        <path d="M0,0 L6,3 L0,6 Z" fill="currentColor" fill-opacity="0.6"></path>
+      </marker>
+    </defs>
+
+    <!-- 回路箭头 -->
+    <g fill="none" stroke="currentColor" stroke-opacity="0.55" stroke-width="1.7">
+      <!-- A: 推力脉动 → 箭体纵向振动 -->
+      <path d="M150,68 L92,196" marker-end={`url(#${uid}-ah)`}></path>
+      <!-- B: 箭体纵向振动 → 管路压力脉动 -->
+      <path d="M136,222 L222,222" marker-end={`url(#${uid}-ah)`}></path>
+      <!-- C-下段: 管路压力脉动 → 蓄能器 -->
+      <path d="M272,198 L252,150" marker-end={`url(#${uid}-ah)`}></path>
+      <!-- C-上段: 蓄能器 → 推力脉动（闭合回路） -->
+      <path d="M249,112 L212,68" marker-end={`url(#${uid}-ah)`}></path>
+    </g>
+
+    <!-- 环节 A：推力脉动 -->
+    <rect
+      x="120"
+      y="24"
+      width="120"
+      height="44"
+      rx="9"
+      fill="currentColor"
+      fill-opacity="0.05"
+      stroke="currentColor"
+      stroke-opacity="0.4"></rect>
+    <text x="180" y="41" text-anchor="middle" font-size="12.5" font-weight="700" fill="currentColor"
+      >发动机推力脉动</text
+    >
+    <text x="180" y="57" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.62"
+      >燃烧从来不完全均匀</text
+    >
+
+    <!-- 环节 B：箭体纵向振动 -->
+    <rect
+      x="14"
+      y="200"
+      width="120"
+      height="44"
+      rx="9"
+      fill="currentColor"
+      fill-opacity="0.05"
+      stroke="currentColor"
+      stroke-opacity="0.4"></rect>
+    <text x="74" y="217" text-anchor="middle" font-size="12.5" font-weight="700" fill="currentColor"
+      >箭体纵向一伸一缩</text
+    >
+    <text x="74" y="233" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.62"
+      >像被攥住两端的弹簧</text
+    >
+
+    <!-- 环节 C：管路压力脉动 -->
+    <rect
+      x="226"
+      y="200"
+      width="120"
+      height="44"
+      rx="9"
+      fill="currentColor"
+      fill-opacity="0.05"
+      stroke="currentColor"
+      stroke-opacity="0.4"></rect>
+    <text
+      x="286"
+      y="217"
+      text-anchor="middle"
+      font-size="12.5"
+      font-weight="700"
+      fill="currentColor">推进剂供压脉动</text
+    >
+    <text x="286" y="233" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.62"
+      >管里的液柱跟着颠</text
+    >
+
+    <!-- 修复节点：氦气蓄能器（accent 高亮，坐在回路的回程上） -->
+    <rect
+      x="206"
+      y="112"
+      width="90"
+      height="38"
+      rx="9"
+      fill="var(--color-accent-weak)"
+      stroke="var(--color-accent)"
+      stroke-width="1.7"></rect>
+    <text x="251" y="127" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor"
+      >氦气蓄能器</text
+    >
+    <text x="251" y="141" text-anchor="middle" font-size="8.5" fill="currentColor" opacity="0.75"
+      >吸收压力脉动 · 打断回路</text
+    >
+
+    <!-- 中心标注 -->
+    <text x="150" y="150" text-anchor="middle" font-size="11" font-weight="600" fill="currentColor"
+      >正反馈回路</text
+    >
+    <text x="150" y="166" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.6"
+      >相位叠加 → 振幅越滚越大</text
+    >
+    <text
+      x="206"
+      y="100"
+      text-anchor="end"
+      font-size="8.5"
+      fill="var(--color-accent)"
+      font-weight="600">Apollo 14 起 ↘</text
+    >
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>
