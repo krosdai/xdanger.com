@@ -1,0 +1,203 @@
+---
+/**
+ * EngineOutRecovery — 第 1 层「animated-SVG」（零 JS · 静态 · 示意）。
+ *
+ * 主题：「优雅失败」的核心机制——掉一台发动机，闭环制导靠「多烧一会儿」把亏掉的速度补回来。
+ * 用两张「推力 × 时间」面板把它画清楚：要入轨需要的总冲量（impulse = 推力对时间的积分）大致是定值；
+ * 少一台发动机推力只剩约 4/5，于是把燃烧时间拉长约 5/4 = 1.25 倍，两块阴影面积相等 → 同样的总冲量。
+ *
+ * 面积刻意画成精确相等：上 128×50 = 6400，下 160×40 = 6400（高 4/5、宽 5/4，乘积不变）。
+ * 示意，非按真实秒数 / 真实推力比例的绝对值绘制，只取「高 ×4/5、宽 ×5/4、面积不变」这层关系。
+ *
+ * 主题契约：两块面积同用 --color-accent 系列（同色＝同一个量：总冲量），形状不同；坐标轴 / 参考虚线用
+ * currentColor。切 data-theme 零 JS 变色；纯静态，天然满足 reduced-motion。viewBox 自适应，窄屏不溢出。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+const W = 360;
+const H = 242;
+
+// 面板几何（x0 起点；上柱宽 128、高 50；下柱宽 160、高 40 → 面积均 6400）
+const x0 = 60;
+const planCut = x0 + 128; // 188：计划关机时刻
+const extCut = x0 + 160; // 220：补烧后的实际关机时刻
+const yA = 96; // 上面板基线
+const aTop = yA - 50; // 46：上柱顶
+const yB = 214; // 下面板基线
+const bTop = yB - 40; // 174：下柱顶
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>掉一台发动机后，闭环制导靠多烧时间补回速度</title>
+    <desc id={`${uid}-d`}
+      >{
+        "示意图。上面板：五台发动机全开，按计划时刻关机。下面板：掉了一台、推力只剩约八成（柱子矮一截），闭环制导让发动机多烧约四分之一时间（柱子长一截）。两块阴影的面积——推力乘以时间，即总冲量——画成精确相等，所以仍能凑出同样的入轨速度。非按真实秒数绘制。"
+      }</desc
+    >
+
+    <defs>
+      <marker
+        id={`${uid}-ax`}
+        markerWidth="8"
+        markerHeight="8"
+        refX="5"
+        refY="3"
+        orient="auto"
+        markerUnits="userSpaceOnUse"
+      >
+        <path d="M0,0 L6,3 L0,6 Z" fill="currentColor" fill-opacity="0.5"></path>
+      </marker>
+    </defs>
+
+    <!-- 跨面板参考线：计划关机时刻 -->
+    <line
+      x1={planCut}
+      y1={aTop - 4}
+      x2={planCut}
+      y2={yB}
+      stroke="currentColor"
+      stroke-opacity="0.3"
+      stroke-dasharray="3 3"
+      stroke-width="1.2"></line>
+    <text x={planCut + 4} y={110} font-size="9" fill="currentColor" opacity="0.7">计划关机时刻</text
+    >
+
+    <!-- 上面板：5 台全开 -->
+    <text x={x0} y={28} font-size="11.5" font-weight="700" fill="currentColor"
+      >5 台全开（计划）</text
+    >
+    <rect
+      x={x0}
+      y={aTop}
+      width={planCut - x0}
+      height={yA - aTop}
+      fill="var(--color-accent-weak)"
+      stroke="var(--color-accent)"
+      stroke-width="1.6"></rect>
+    <text
+      x={(x0 + planCut) / 2}
+      y={(aTop + yA) / 2 + 3}
+      text-anchor="middle"
+      font-size="10"
+      fill="currentColor"
+      opacity="0.85">总冲量</text
+    >
+    <line
+      x1={x0}
+      y1={yA}
+      x2={304}
+      y2={yA}
+      stroke="currentColor"
+      stroke-opacity="0.45"
+      stroke-width="1.2"
+      marker-end={`url(#${uid}-ax)`}></line>
+    <line
+      x1={x0}
+      y1={yA}
+      x2={x0}
+      y2={aTop - 8}
+      stroke="currentColor"
+      stroke-opacity="0.45"
+      stroke-width="1.2"
+      marker-end={`url(#${uid}-ax)`}></line>
+    <text x={x0 - 6} y={aTop - 5} text-anchor="end" font-size="9" fill="currentColor" opacity="0.7"
+      >推力</text
+    >
+    <text x={308} y={yA + 3} font-size="9" fill="currentColor" opacity="0.7">时间</text>
+
+    <!-- 下面板：停 1 台 -->
+    <text x={x0} y={146} font-size="11.5" font-weight="700" fill="currentColor"
+      >停 1 台（闭环制导补烧）</text
+    >
+    <!-- 满推力参考高度（5 台会到这）：下柱顶上方 10px = 少约 1/5 -->
+    <line
+      x1={x0}
+      y1={bTop - 10}
+      x2={planCut}
+      y2={bTop - 10}
+      stroke="currentColor"
+      stroke-opacity="0.35"
+      stroke-dasharray="2 2"
+      stroke-width="1"></line>
+    <text x={x0 + 3} y={bTop - 13} font-size="8" fill="currentColor" opacity="0.6"
+      >5 台满推力（柱矮 1/5）</text
+    >
+    <!-- 主烧段 -->
+    <rect
+      x={x0}
+      y={bTop}
+      width={planCut - x0}
+      height={yB - bTop}
+      fill="var(--color-accent-weak)"
+      stroke="var(--color-accent)"
+      stroke-width="1.6"></rect>
+    <!-- 补烧段（计划关机之后多烧的一截，色深一档） -->
+    <rect
+      x={planCut}
+      y={bTop}
+      width={extCut - planCut}
+      height={yB - bTop}
+      fill="var(--color-accent)"
+      fill-opacity="0.3"
+      stroke="var(--color-accent)"
+      stroke-width="1.6"></rect>
+    <text
+      x={(x0 + planCut) / 2}
+      y={(bTop + yB) / 2 + 3}
+      text-anchor="middle"
+      font-size="10"
+      fill="currentColor"
+      opacity="0.85">总冲量</text
+    >
+    <line
+      x1={x0}
+      y1={yB}
+      x2={304}
+      y2={yB}
+      stroke="currentColor"
+      stroke-opacity="0.45"
+      stroke-width="1.2"
+      marker-end={`url(#${uid}-ax)`}></line>
+    <line
+      x1={x0}
+      y1={yB}
+      x2={x0}
+      y2={bTop - 14}
+      stroke="currentColor"
+      stroke-opacity="0.45"
+      stroke-width="1.2"
+      marker-end={`url(#${uid}-ax)`}></line>
+    <text x={x0 - 6} y={bTop - 3} text-anchor="end" font-size="9" fill="currentColor" opacity="0.7"
+      >推力</text
+    >
+    <text
+      x={extCut + 5}
+      y={(bTop + yB) / 2 + 3}
+      font-size="9"
+      fill="var(--color-accent)"
+      font-weight="600">← 多烧这段补回速度</text
+    >
+    <text
+      x={extCut}
+      y={yB + 14}
+      text-anchor="middle"
+      font-size="9"
+      fill="currentColor"
+      opacity="0.7">实际关机</text
+    >
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>
