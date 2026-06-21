@@ -25,8 +25,10 @@ interface Props {
   caption?: string;
 }
 
-// 温度计对数刻度上限：×1 → ×10^LOG_MAX。(1.04)^300 ≈ 1.3×10^5，留足余量。
-const LOG_MAX = 5.5;
+// 温度计对数刻度上限：×1 → ×10^LOG_MAX。取 5，使下方 6 个等距刻度标签（log 0…5）
+// 恰好与对数填充位置（log/LOG_MAX）一一对齐；(1.04)^300 ≈ 1.3×10^5（log≈5.12）略超，
+// 由第 44 行 Math.min(1, …) 夹紧到满格。
+const LOG_MAX = 5;
 
 export default function GrowthCompounding({
   rate: rate0 = 2,
@@ -114,7 +116,7 @@ export default function GrowthCompounding({
       </div>
 
       <div className="border-foreground/10 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t pt-4">
-        <p className="text-foreground text-sm">
+        <p className="text-foreground text-sm" aria-live="polite" aria-atomic="true">
           {years} 年后产出指数（从 1 起算）：
           <span className="text-accent ml-1 font-mono text-xl font-medium tabular-nums">
             ×{fmtMultiple(multiple)}
@@ -129,7 +131,7 @@ export default function GrowthCompounding({
         </button>
       </div>
 
-      {/* 对数温度计：×1（马尔萨斯）→ ×10^5.5。拖动增速时填充大幅移动 = 复利的暴力。 */}
+      {/* 对数温度计：×1（马尔萨斯）→ ×10^5。拖动增速时填充大幅移动 = 复利的暴力。 */}
       <div aria-hidden="true" className="flex flex-col gap-1">
         <div className="bg-foreground/8 relative h-4 w-full overflow-hidden rounded-full">
           <div
@@ -137,7 +139,7 @@ export default function GrowthCompounding({
             style={{ width: `${Math.max(1.5, fill * 100)}%` }}
           />
         </div>
-        <div className="text-foreground/45 flex justify-between font-mono text-[10px] tabular-nums">
+        <div className="text-foreground/45 flex justify-between font-mono text-xs tabular-nums">
           {ticks.map((t) => (
             <span key={t.label}>{t.label}</span>
           ))}
