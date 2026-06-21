@@ -1,0 +1,88 @@
+---
+/**
+ * VCEmergentStack — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题（§六）：VC 不是一部法律，而是一摞东西叠出来的「涌现（emergent property）」——
+ * 缺任一层就塌。五层：幂律 + 网络效应、深厚退出机器、耐心的 LP 资本、单一大市场、
+ * 人才磁极 + 容错文化。这就是它「立不了法、只能长出来」的原因。
+ *
+ * 五块并列的「必要层」（非量级阶梯），用 categorical --color-cat（跨主题稳定）区分。
+ * 文字 / 边框用 currentColor，切 data-theme 零 JS 变色，纯静态满足 reduced-motion。
+ * 纵向堆叠、viewBox 自适应，窄屏不溢出。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+interface Layer {
+  title: string;
+  sub: string;
+  cat: number; // 1–6
+}
+const layers: Layer[] = [
+  { title: "幂律 + 网络效应", sub: "deal flow 密度、套现者回流（如 PayPal Mafia）", cat: 1 },
+  { title: "深厚退出机器", sub: "IPO（Nasdaq）+ 巨头并购", cat: 2 },
+  { title: "耐心的 LP 资本", sub: "养老金长钱（ERISA 1979 松绑）", cat: 3 },
+  { title: "单一大市场", sub: "可规模化的需求与人才池", cat: 4 },
+  { title: "人才磁极 + 容错文化", sub: "移民创业 · 破产法 fresh start · 加州无竞业", cat: 6 },
+];
+
+const W = 360;
+const padX = 10;
+const padY = 12;
+const rowH = 48;
+const gap = 8;
+const H = padY * 2 + layers.length * rowH + (layers.length - 1) * gap;
+const rowY = (i: number) => padY + i * (rowH + gap);
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>VC 是五层叠出来的涌现</title>
+    <desc id={`${uid}-d`}
+      >五层缺一不可：幂律 + 网络效应、深厚退出机器、耐心的 LP 资本、单一大市场、人才磁极 +
+      容错文化。抽掉任一层，VC 生态就立不住——所以它「立不了法、只能长出来」。</desc
+    >
+    {
+      layers.map((l, i) => (
+        <Fragment>
+          <rect
+            x={padX}
+            y={rowY(i)}
+            width={W - padX * 2}
+            height={rowH}
+            rx="9"
+            fill={`var(--color-cat-${l.cat})`}
+            fill-opacity="0.14"
+            stroke={`var(--color-cat-${l.cat})`}
+            stroke-width="1.4"
+          />
+          <circle cx={padX + 22} cy={rowY(i) + rowH / 2} r="6" fill={`var(--color-cat-${l.cat})`} />
+          <text
+            x={padX + 42}
+            y={rowY(i) + 19}
+            font-size="13.5"
+            font-weight="700"
+            fill="currentColor"
+          >
+            {l.title}
+          </text>
+          <text x={padX + 42} y={rowY(i) + 36} font-size="11" fill="currentColor" opacity="0.72">
+            {l.sub}
+          </text>
+        </Fragment>
+      ))
+    }
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>

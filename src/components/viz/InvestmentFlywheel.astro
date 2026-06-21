@@ -1,0 +1,168 @@
+---
+/**
+ * InvestmentFlywheel — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题（§一，全文脊柱）：同一台「投资—回报」机器，正反两个方向都会自我强化。
+ * 左：英国的下行螺旋（投资↓ → 生产率↓ → 工资 / 内需↓ → 预期回报↓ → 投资再↓）；
+ * 右：美国的上行飞轮（同一回路，全部↑）。复利的东西，正反都加速。
+ *
+ * 两列并排（4 节点 + 节点间箭头 + 外侧回流弧 ↺，闭成一个环），移动端友好。
+ * 主题契约：左用 --color-negative、右用 --color-positive；文字用 currentColor。
+ * 切 data-theme 零 JS 变色，纯静态满足 reduced-motion。viewBox 自适应，窄屏不溢出。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+const nodes = ["投资", "生产率", "工资 · 内需", "预期回报"];
+
+const W = 360;
+const nodeW = 132;
+const nodeH = 34;
+const y0 = 44;
+const rowSpacing = 52;
+const H = 250;
+
+interface Col {
+  cx: number; // 节点中心 x
+  x: number; // 节点左缘 x
+  color: string;
+  arrow: string; // ↑ / ↓
+  header: string;
+  side: "L" | "R";
+}
+const cols: Col[] = [
+  {
+    cx: 100,
+    x: 34,
+    color: "var(--color-negative)",
+    arrow: "↓",
+    header: "英国 · 下行螺旋",
+    side: "L",
+  },
+  {
+    cx: 260,
+    x: 194,
+    color: "var(--color-positive)",
+    arrow: "↑",
+    header: "美国 · 上行飞轮",
+    side: "R",
+  },
+];
+
+const nodeY = (i: number) => y0 + i * rowSpacing;
+const midY = (i: number) => nodeY(i) + nodeH / 2;
+// 回流弧：从底节点外缘绕到顶节点外缘
+const returnPath = (c: Col) => {
+  const yb = midY(nodes.length - 1);
+  const yt = midY(0);
+  if (c.side === "L") {
+    const edge = c.x;
+    return `M ${edge} ${yb} C 4 ${yb - 14}, 4 ${yt + 14}, ${edge} ${yt}`;
+  }
+  const edge = c.x + nodeW;
+  return `M ${edge} ${yb} C 356 ${yb - 14}, 356 ${yt + 14}, ${edge} ${yt}`;
+};
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>投资飞轮：英国下行螺旋 vs 美国上行飞轮</title>
+    <desc id={`${uid}-d`}
+      >同一台投资—回报机器：投资 → 生产率 → 工资 / 内需 → 预期回报 → 再回到投资，闭成一个
+      自我强化的环。英国全程向下（螺旋），美国全程向上（飞轮）。</desc
+    >
+    {
+      cols.map((c) => (
+        <Fragment>
+          <text
+            x={c.cx}
+            y={26}
+            text-anchor="middle"
+            font-size="12.5"
+            font-weight="700"
+            fill={c.color}
+          >
+            {c.header}
+          </text>
+
+          {/* 回流弧 ↺ */}
+          <path
+            d={returnPath(c)}
+            fill="none"
+            stroke={c.color}
+            stroke-width="1.6"
+            stroke-opacity="0.7"
+            stroke-dasharray="4 3"
+          />
+          <text
+            x={c.side === "L" ? 9 : 351}
+            y={midY(0) + (midY(nodes.length - 1) - midY(0)) / 2}
+            text-anchor="middle"
+            dominant-baseline="central"
+            font-size="13"
+            fill={c.color}
+          >
+            ↺
+          </text>
+
+          {nodes.map((n, i) => (
+            <Fragment>
+              <rect
+                x={c.x}
+                y={nodeY(i)}
+                width={nodeW}
+                height={nodeH}
+                rx="8"
+                fill={c.color}
+                fill-opacity="0.13"
+                stroke={c.color}
+                stroke-width="1.4"
+              />
+              <text
+                x={c.cx}
+                y={nodeY(i) + nodeH / 2 + 1}
+                text-anchor="middle"
+                dominant-baseline="central"
+                font-size="12.5"
+                font-weight="600"
+                fill="currentColor"
+              >
+                {`${n} ${c.arrow}`}
+              </text>
+              {i < nodes.length - 1 && (
+                <Fragment>
+                  <line
+                    x1={c.cx}
+                    y1={nodeY(i) + nodeH + 2}
+                    x2={c.cx}
+                    y2={nodeY(i + 1) - 6}
+                    stroke={c.color}
+                    stroke-width="1.6"
+                    stroke-opacity="0.7"
+                  />
+                  <path
+                    d={`M ${c.cx - 4} ${nodeY(i + 1) - 8} L ${c.cx + 4} ${nodeY(i + 1) - 8} L ${c.cx} ${nodeY(i + 1) - 1} Z`}
+                    fill={c.color}
+                    fill-opacity="0.7"
+                  />
+                </Fragment>
+              )}
+            </Fragment>
+          ))}
+        </Fragment>
+      ))
+    }
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>

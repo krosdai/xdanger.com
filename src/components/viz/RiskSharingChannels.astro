@@ -1,0 +1,130 @@
+---
+/**
+ * RiskSharingChannels — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题（§三「风险分摊」）：一记打在某个州的冲击（100%），被四块力量分担
+ * （Asdrubali-Sørensen-Yosha, QJE 1996，美国 1963–1990）。最大的减震器不是联邦财政（13），
+ * 而是「跨州交叉持股」的资本市场（39）；信贷 23；剩约 25% 未被抹平、真正砸到当地消费。
+ * 欧元区缺的正是「资本市场」这条最粗的腿（仅 5–10%，见正文 / ECB）。
+ *
+ * 一张水平百分比堆叠条 + 图例。数字见正文 §来源。
+ *
+ * 主题契约：四段用 categorical --color-cat（跨主题稳定），未抹平用中性 seq-neutral；
+ * 文字 / 边框用 currentColor，切 data-theme 零 JS 变色，纯静态满足 reduced-motion。
+ * viewBox 自适应，窄屏不溢出。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+interface Seg {
+  name: string;
+  pct: number;
+  fill: string;
+  smoothed: boolean;
+}
+const segs: Seg[] = [
+  { name: "资本市场（交叉持股）", pct: 39, fill: "var(--color-cat-4)", smoothed: true },
+  { name: "信贷市场", pct: 23, fill: "var(--color-cat-5)", smoothed: true },
+  { name: "联邦财政转移", pct: 13, fill: "var(--color-cat-3)", smoothed: true },
+  { name: "未被抹平（砸到消费）", pct: 25, fill: "var(--color-seq-neutral-4)", smoothed: false },
+];
+
+const W = 360;
+const padX = 10;
+const barY = 16;
+const barH = 34;
+const barW = W - padX * 2;
+const legendTop = barY + barH + 22;
+const legendRowH = 22;
+const H = legendTop + segs.length * legendRowH + 4;
+
+// 累计起点（百分比 → x）
+let acc = 0;
+const segX = segs.map((s) => {
+  const x0 = padX + (acc / 100) * barW;
+  acc += s.pct;
+  return x0;
+});
+const wOf = (pct: number) => (pct / 100) * barW;
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>美国跨州风险分摊的四块分担</title>
+    <desc id={`${uid}-d`}
+      >一记冲击（100%）的分担：资本市场（交叉持股）39%、信贷市场 23%、联邦财政转移 13%、未被抹平
+      25%（Asdrubali-Sørensen-Yosha, QJE 1996）。</desc
+    >
+
+    {
+      segs.map((s, i) => (
+        <Fragment>
+          <rect
+            x={segX[i]}
+            y={barY}
+            width={Math.max(1, wOf(s.pct) - 1)}
+            height={barH}
+            fill={s.fill}
+            fill-opacity={s.smoothed ? 0.85 : 0.4}
+            stroke={s.smoothed ? "none" : "currentColor"}
+            stroke-opacity="0.25"
+            stroke-dasharray={s.smoothed ? "none" : "3 2"}
+          />
+          <text
+            x={segX[i] + wOf(s.pct) / 2}
+            y={barY + barH / 2 + 1}
+            dominant-baseline="central"
+            text-anchor="middle"
+            font-size="11"
+            font-weight="700"
+            font-family="ui-monospace, monospace"
+            fill="currentColor"
+          >
+            {s.pct}
+          </text>
+        </Fragment>
+      ))
+    }
+
+    {
+      segs.map((s, i) => (
+        <Fragment>
+          <rect
+            x={padX}
+            y={legendTop + i * legendRowH}
+            width="11"
+            height="11"
+            rx="2"
+            fill={s.fill}
+            fill-opacity={s.smoothed ? 0.85 : 0.4}
+            stroke={s.smoothed ? "none" : "currentColor"}
+            stroke-opacity="0.25"
+            stroke-dasharray={s.smoothed ? "none" : "3 2"}
+          />
+          <text
+            x={padX + 18}
+            y={legendTop + i * legendRowH + 6}
+            dominant-baseline="central"
+            font-size="11"
+            fill="currentColor"
+            fill-opacity="0.85"
+          >
+            {`${s.name} · ${s.pct}%`}
+          </text>
+        </Fragment>
+      ))
+    }
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>

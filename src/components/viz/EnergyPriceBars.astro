@@ -1,0 +1,133 @@
+---
+/**
+ * EnergyPriceBars — 第 1 层「animated-SVG」（零 JS · 静态）。
+ *
+ * 主题（§二「五条腿」之能源）：把工业电价以「美国 = 1 倍」摊出来。2023 年英国是 24 个
+ * IEA 报数国里工业电价最高的，约为美 / 加 4 倍、比 IEA 中位数高约 46%（ONS / DESNZ / IEA）。
+ * 法、德也贵（约美国的 2.7 倍，由 ONS「英国比法德约高五成」反推：4.0 / 1.5 ≈ 2.7）——
+ * 所以美国便宜，不只是相对英国，连对靠核电的法国都便宜。
+ *
+ * 诚实边界：US=1 与 UK=4 为 ONS / IEA 口径直接给出；法 / 德 2.7 由「比法德约高五成」反算
+ * （4.0 / 1.5 ≈ 2.7）；IEA 中位数 ≈2.7（4.0 / 1.46）画成**虚线基准**而非第四国，避免与法 / 德
+ * 同高的实心柱被误读成重复行——换算已在 caption 标注。
+ *
+ * 主题契约：柱子用 --color-seq-steel 阶梯（越贵越深），基准线 / 刻度 / 文字用 currentColor；
+ * 切 data-theme 零 JS 变色，纯静态满足 reduced-motion。viewBox 自适应，窄屏不溢出。
+ */
+interface Props {
+  caption?: string;
+}
+const { caption } = Astro.props;
+const uid = crypto.randomUUID();
+
+interface Row {
+  name: string;
+  mult: number; // 相对美国的倍数
+  label: string;
+  steel: number; // 1–6
+}
+const rows: Row[] = [
+  { name: "美国", mult: 1.0, label: "1.0×", steel: 2 },
+  { name: "法国 / 德国", mult: 2.7, label: "≈2.7×", steel: 4 },
+  { name: "英国", mult: 4.0, label: "4.0×", steel: 6 },
+];
+const medianMult = 2.74; // IEA 中位数（虚线基准）
+
+const W = 360;
+const padX = 8;
+const labelW = 86;
+const numColW = 46;
+const padTop = 22;
+const rowH = 40;
+const barH = 20;
+const axisH = 14;
+
+const barX0 = padX + labelW;
+const barEndMax = W - padX - numColW - 6;
+const barSpan = barEndMax - barX0;
+const maxMult = 4.0;
+const xOf = (m: number) => barX0 + (m / maxMult) * barSpan;
+const rowY = (i: number) => padTop + i * rowH;
+const barsBottom = padTop + rows.length * rowH;
+const H = barsBottom + axisH;
+const medianX = xOf(medianMult);
+---
+
+<figure class="not-prose text-foreground my-8 flex flex-col items-center gap-3">
+  <svg
+    aria-labelledby={`${uid}-t ${uid}-d`}
+    class="h-auto max-w-full"
+    height={H}
+    role="img"
+    viewBox={`0 0 ${W} ${H}`}
+    width={W}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title id={`${uid}-t`}>工业电价（以美国为 1 倍，2023）</title>
+    <desc id={`${uid}-d`}
+      >以美国为 1 倍的工业电价对照（2023，IEA / ONS）：美国 1.0 倍，法国 / 德国约 2.7 倍，英国约 4.0
+      倍（24 个报数国中最高）；IEA 中位数约 2.7 倍画为虚线基准。</desc
+    >
+
+    {/* IEA 中位数虚线基准 */}
+    <line
+      x1={medianX}
+      y1={padTop - 6}
+      x2={medianX}
+      y2={barsBottom}
+      stroke="currentColor"
+      stroke-opacity="0.4"
+      stroke-width="1"
+      stroke-dasharray="3 2"></line>
+    <text
+      x={medianX}
+      y={padTop - 10}
+      text-anchor="middle"
+      font-size="8.5"
+      fill="currentColor"
+      fill-opacity="0.6"
+    >
+      IEA 中位 ≈2.7×
+    </text>
+
+    {
+      rows.map((r, i) => (
+        <Fragment>
+          <text
+            x={padX}
+            y={rowY(i) + barH / 2 + 2}
+            dominant-baseline="central"
+            font-size="11"
+            fill="currentColor"
+          >
+            {r.name}
+          </text>
+          <rect
+            x={barX0}
+            y={rowY(i)}
+            width={Math.max(2, xOf(r.mult) - barX0)}
+            height={barH}
+            rx="3"
+            fill={`var(--color-seq-steel-${r.steel})`}
+          />
+          <text
+            x={W - padX}
+            y={rowY(i) + barH / 2 + 2}
+            dominant-baseline="central"
+            text-anchor="end"
+            font-size="11"
+            font-family="ui-monospace, monospace"
+            fill="currentColor"
+            fill-opacity="0.85"
+          >
+            {r.label}
+          </text>
+        </Fragment>
+      ))
+    }
+    <text x={barX0} y={barsBottom + 6} font-size="8.5" fill="currentColor" fill-opacity="0.45">
+      ← 倍数（以美国为 1）
+    </text>
+  </svg>
+  {caption && <figcaption class="text-sm opacity-70">{caption}</figcaption>}
+</figure>
