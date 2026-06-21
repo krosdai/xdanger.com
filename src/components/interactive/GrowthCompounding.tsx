@@ -107,6 +107,7 @@ export default function GrowthCompounding({
               max={s.max}
               step={s.step}
               value={s.value}
+              aria-valuetext={s.fmt(s.value)}
               onChange={(e) => {
                 s.set(Number(e.target.value));
               }}
@@ -149,7 +150,7 @@ export default function GrowthCompounding({
       <p className="text-foreground/65 text-xs leading-relaxed">
         参照：<span className="font-mono tabular-nums">0%</span> = 马尔萨斯世界，再久也几乎
         ×1；前沿经济体长期实际人均增速约 <span className="font-mono tabular-nums">1.5–2%</span>，250
-        年复利约 ×140。
+        年复利约 ×42（1.5%）到 ×140（2%）。
       </p>
 
       {caption && <figcaption className="text-foreground/70 text-sm">{caption}</figcaption>}
