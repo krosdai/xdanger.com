@@ -17,7 +17,7 @@ etc.) working in this repository.
 | Concern         | Tool                                                                       |
 | --------------- | -------------------------------------------------------------------------- |
 | Toolchain mgr   | **mise** (`mise.toml`) — pins Node, pnpm, and the AutoCorrect CLI          |
-| Package mgr     | **pnpm** (≥ 11, pinned via `packageManager`). Do NOT use `npm`/`yarn`/`bun` |
+| Package mgr     | **pnpm** 11.7.0 (`packageManager` + `mise.toml` pin the same version). Do NOT use `npm`/`yarn`/`bun` |
 | TS/JS linter    | **Oxlint** (type-aware via `oxlint-tsgolint`, `.oxlintrc.json`)            |
 | TS/JS formatter | **Oxfmt** (`.oxfmtrc.jsonc`)                                               |
 | Other formats   | **Prettier** (`.prettierrc.json`) — `.astro`, JSON, YAML, CSS… (NOT Markdown) |
@@ -28,6 +28,7 @@ etc.) working in this repository.
 ### Commands
 
 ```bash
+mise trust          # first clone only: trust this repo's mise.toml (required in CI / non-interactive)
 mise install        # install pinned toolchain: Node, pnpm, AutoCorrect CLI (or: mise run setup)
 pnpm install        # install deps
 pnpm dev            # dev server; auto-provisions anyip cert → HTTPS on all interfaces (:4321)
