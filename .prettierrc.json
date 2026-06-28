@@ -1,9 +1,5 @@
 {
-  "plugins": [
-    "prettier-plugin-astro",
-    "prettier-plugin-autocorrect",
-    "prettier-plugin-tailwindcss"
-  ],
+  "plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
   "printWidth": 100,
   "trailingComma": "all",
   "overrides": [

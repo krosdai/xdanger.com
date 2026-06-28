@@ -9,7 +9,6 @@
     "pnpm": ">=11"
   },
   "scripts": {
-    "postinstall": "node scripts/ensure-autocorrect-native.mjs",
     "dev": "node scripts/ensure-anyip-cert.mjs && astro dev",
     "start": "pnpm run dev",
     "cert:anyip": "node scripts/ensure-anyip-cert.mjs --force",
@@ -20,8 +19,8 @@
     "rebuild": "pnpm run build:site",
     "rebuild:og": "cross-env REFRESH_OG_IMAGES=1 pnpm run build:site",
     "preview": "node scripts/preview-server.mjs",
-    "lint": "autocorrect --lint --strict . && oxfmt --check && prettier --check --no-error-on-unmatched-pattern \"**/*.{astro,md,mdx,markdown,json,jsonc,json5,yaml,yml,html,htm,css,scss,less,vue,graphql,gql,hbs,handlebars}\" && oxlint && astro check --tsconfig tsconfig.json",
-    "fix": "autocorrect --fix . && oxfmt && prettier --write --no-error-on-unmatched-pattern \"**/*.{astro,md,mdx,markdown,json,jsonc,json5,yaml,yml,html,htm,css,scss,less,vue,graphql,gql,hbs,handlebars}\" && oxlint --fix"
+    "lint": "mise run autocorrect:lint && oxfmt --check && prettier --check --no-error-on-unmatched-pattern \"**/*.{astro,json,jsonc,json5,yaml,yml,html,htm,css,scss,less,vue,graphql,gql,hbs,handlebars}\" && oxlint && astro check --tsconfig tsconfig.json",
+    "fix": "mise run autocorrect:fix && oxfmt && prettier --write --no-error-on-unmatched-pattern \"**/*.{astro,json,jsonc,json5,yaml,yml,html,htm,css,scss,less,vue,graphql,gql,hbs,handlebars}\" && oxlint --fix"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.0",
@@ -71,7 +70,6 @@
     "@types/mdast": "^4.0.4",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "autocorrect-node": "^2.14.0",
     "autoprefixer": "^10.5.0",
     "cross-env": "^10.1.0",
     "glob": "^13.0.6",
@@ -81,7 +79,6 @@
     "pagefind": "^1.5.2",
     "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-autocorrect": "^0.4.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "reading-time": "^1.5.0",
     "tailwindcss": "^4.3.0",

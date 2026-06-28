@@ -17,14 +17,19 @@
 
 ### 系统要求
 
-- [Node.js](https://nodejs.org/) ≥ 20.19（推荐 Node 22 LTS，见 `.nvmrc`）
-- [pnpm](https://pnpm.io/) ≥ 10（通过 [Corepack](https://nodejs.org/api/corepack.html) 自动启用）
+- [mise](https://mise.jdx.dev/)（统一管理工具链：Node、pnpm、AutoCorrect CLI，见 `mise.toml`）
+- [Node.js](https://nodejs.org/) ≥ 22.12（`mise.toml` / `.nvmrc` 锁定 Node 24）
+- [pnpm](https://pnpm.io/) 11.7.0（`packageManager` 与 `mise.toml` 锁定同一版本：Corepack 与 mise shim 不冲突）
 
 ### 安装依赖
 
 ```bash
+mise trust     # 首次 clone 后信任仓库的 mise.toml（CI / 非交互环境必需）
+mise install   # 安装锁定的工具链（Node、pnpm、AutoCorrect CLI），或 mise run setup
 pnpm install
 ```
+
+> `pnpm lint`/`fix` 会调用 `mise run autocorrect:*`，因此需要 `mise` 在 `PATH` 上（先跑一次 `mise install`）。
 
 ### 开发命令
 
@@ -88,11 +93,12 @@ pnpm install
 
 ### 工具链
 
-- **包管理器**：pnpm (`packageManager` 字段已锁定版本)
+- **工具链管理**：[mise](https://mise.jdx.dev/)（`mise.toml`，锁定 Node / pnpm / AutoCorrect CLI）
+- **包管理器**：pnpm（`packageManager` 字段与 `mise.toml` 同步锁定 11.7.0）
 - **TypeScript/JS 格式化**：[Oxfmt](https://oxc.rs/docs/guide/usage/formatter)（`.oxfmtrc.jsonc`，Prettier 兼容输出）
-- **其余格式化**：Prettier (含 `prettier-plugin-astro` / `prettier-plugin-tailwindcss` / `prettier-plugin-autocorrect`)，负责 `.astro` / Markdown / JSON / YAML / CSS 等
+- **其余格式化**：Prettier (含 `prettier-plugin-astro` / `prettier-plugin-tailwindcss`)，负责 `.astro` / JSON / YAML / CSS 等（**不含 Markdown**）
 - **TypeScript/JS lint**：[Oxlint](https://oxc.rs/docs/guide/usage/linter)（type-aware，经 `oxlint-tsgolint`，`.oxlintrc.json`）
-- **中文文本规范**：[AutoCorrect](https://github.com/huacnlee/autocorrect)
+- **中文文本规范 + Markdown 格式化**：[AutoCorrect](https://github.com/huacnlee/autocorrect)（经 mise 安装；`.md`/`.mdx` 的唯一格式化工具）
 - **类型检查**：`astro check`
 
 ### 重要文件
