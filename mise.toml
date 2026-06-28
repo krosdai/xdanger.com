@@ -1,0 +1,18 @@
+# mise — unified dev tool manager (https://mise.jdx.dev)
+# Install: curl https://mise.run | sh   then:  mise run setup
+
+[tools]
+node = "24"            # matches .nvmrc + .github/workflows/deploy.yml; satisfies engines >=22.12.0
+pnpm = "11"            # matches packageManager pnpm@11.7.0 / engines pnpm >=11
+
+# AutoCorrect for CJK copywriting, installed from GitHub releases.
+# The npm autocorrect-node package lacks linux-arm64 binaries; the standalone CLI ships them,
+# so it is managed here instead of via npm + a postinstall native build.
+"ubi:huacnlee/autocorrect" = "2.16"
+
+[tasks]
+setup = ["mise install", "pnpm install"]
+lint = ["pnpm run lint"]
+fix = ["pnpm run fix"]
+"autocorrect:lint" = ["autocorrect --lint --strict ."]   # keep this repo's --strict flag
+"autocorrect:fix" = ["autocorrect --fix ."]
