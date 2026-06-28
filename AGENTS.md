@@ -9,24 +9,26 @@ etc.) working in this repository.
 - **Styling**: Tailwind CSS v4 (`@tailwindcss/vite`), `@tailwindcss/typography`
 - **Content**: MDX in `_posts/` and `_notes/`
 - **Search**: Pagefind (built post-build)
-- **Runtime**: Node.js ≥ 22.12 (matches `package.json` `engines`; `.nvmrc` pins Node 24)
+- **Runtime**: Node.js ≥ 22.12 (matches `package.json` `engines`; `mise.toml` / `.nvmrc` pin Node 24)
 - **Hosting**: Vercel (static) + GitHub Pages workflow as backup
 
 ## Toolchain
 
-| Concern         | Tool                                                                     |
-| --------------- | ------------------------------------------------------------------------ |
-| Package mgr     | **pnpm** (≥ 10). Do NOT use `npm`, `yarn`, or `bun`                      |
-| TS/JS linter    | **Oxlint** (type-aware via `oxlint-tsgolint`, `.oxlintrc.json`)          |
-| TS/JS formatter | **Oxfmt** (`.oxfmtrc.jsonc`)                                             |
-| Other formats   | **Prettier** (`.prettierrc.json`) — `.astro`, Markdown, JSON, YAML, CSS… |
-| CJK text lint   | **AutoCorrect** (`.autocorrectrc`)                                       |
-| Markdown lint   | `markdownlint-cli2` (run on demand for `.mdx`)                           |
-| Type checker    | `astro check` (uses `tsconfig.json`)                                     |
+| Concern         | Tool                                                                       |
+| --------------- | -------------------------------------------------------------------------- |
+| Toolchain mgr   | **mise** (`mise.toml`) — pins Node, pnpm, and the AutoCorrect CLI          |
+| Package mgr     | **pnpm** (≥ 11, pinned via `packageManager`). Do NOT use `npm`/`yarn`/`bun` |
+| TS/JS linter    | **Oxlint** (type-aware via `oxlint-tsgolint`, `.oxlintrc.json`)            |
+| TS/JS formatter | **Oxfmt** (`.oxfmtrc.jsonc`)                                               |
+| Other formats   | **Prettier** (`.prettierrc.json`) — `.astro`, JSON, YAML, CSS… (NOT Markdown) |
+| CJK text + Markdown | **AutoCorrect** (`.autocorrectrc`), installed via mise (`ubi:huacnlee/autocorrect`); sole formatter for `.md`/`.mdx` |
+| Markdown lint   | `markdownlint-cli2` (run on demand for `.mdx`)                             |
+| Type checker    | `astro check` (uses `tsconfig.json`)                                       |
 
 ### Commands
 
 ```bash
+mise install        # install pinned toolchain: Node, pnpm, AutoCorrect CLI (or: mise run setup)
 pnpm install        # install deps
 pnpm dev            # dev server; auto-provisions anyip cert → HTTPS on all interfaces (:4321)
 pnpm cert:anyip     # force-refresh the anyip TLS cert (pnpm dev already auto-fetches it)
@@ -36,20 +38,21 @@ pnpm build:debug    # Astro build with NODE_OPTIONS=--trace-warnings
 pnpm run rebuild        # Astro-only rebuild; reuse cached OG image PNG and fill missing ones
 pnpm run rebuild:og     # force-refresh all OG image PNG in the local cache
 pnpm preview        # serve dist/ via scripts/preview-server.mjs — faithful prod static mirror (try_files $uri $uri/index.html =404); do NOT use `astro preview` for URL checks
-pnpm lint           # autocorrect + oxfmt --check + prettier --check + oxlint + astro check
-pnpm fix            # autocorrect + oxfmt + prettier --write + oxlint --fix
+pnpm lint           # mise autocorrect:lint + oxfmt --check + prettier --check + oxlint + astro check
+pnpm fix            # mise autocorrect:fix + oxfmt + prettier --write + oxlint --fix
 ```
 
-### Native binding prestep (linux-arm64)
+> `pnpm lint`/`fix` shell out to `mise run autocorrect:*`, so **`mise` must be on `PATH`** (run
+> `mise install` once first). Markdown (`.md`/`.mdx`) is **excluded from Prettier** — AutoCorrect is
+> its sole formatter, which keeps CJK tables compact and emphasis markers (`*…*`) as authored.
 
-`autocorrect-node` ships no prebuilt binary for linux-arm64, which would break the
-`autocorrect` CLI and prettier-plugin-autocorrect — and with them `pnpm lint`/`fix`. A
-`postinstall` prestep (`scripts/ensure-autocorrect-native.mjs`) repairs this: it builds the
-binding once from the pinned upstream tag with the local Rust toolchain and caches it in
-`~/.cache/autocorrect-node/<version>/<platform>-<arch>/`, so later reinstalls are an instant copy. On every
-platform with upstream binaries it is a silent no-op, and it fails open (warns, never blocks
-install) when cargo/git/network are missing. Drop the hook once upstream ships linux-arm64
-binaries (<https://github.com/huacnlee/autocorrect>).
+### AutoCorrect via mise
+
+AutoCorrect (CJK copywriting + the `.md`/`.mdx` formatter) is installed by **mise** from GitHub
+releases (`"ubi:huacnlee/autocorrect"` in `mise.toml`). Unlike the old npm `autocorrect-node`
+napi binding — which had no linux-arm64 prebuilt and needed a Rust build-from-source postinstall
+hook — the standalone CLI ships native arm64 binaries, so there is **no binding, no Rust build,
+and no `postinstall` step**. Bump the pin in `mise.toml` to upgrade.
 
 ### Remote debugging over Tailscale
 
@@ -83,16 +86,16 @@ When you edit a file by hand, run the appropriate checks before committing:
 
 - `.tsx`, `.ts`, `.mjs`, `.jsx`, `.js`:
   ```bash
-  pnpm exec oxfmt <file> && pnpm exec oxlint --fix <file> && pnpm exec autocorrect --fix <file>
+  pnpm exec oxfmt <file> && pnpm exec oxlint --fix <file> && mise exec -- autocorrect --fix <file>
   ```
-- `.astro`, `.json`, `.mdx`:
+- `.astro`, `.json`:
   ```bash
-  pnpm exec prettier --write <file> && pnpm exec autocorrect --fix <file>
+  pnpm exec prettier --write <file> && mise exec -- autocorrect --fix <file>
   ```
   （`.astro` frontmatter 同时受 oxlint 检查：`pnpm exec oxlint <file>`）
-- `.mdx`:
+- `.md`, `.mdx` (Prettier does NOT touch Markdown — AutoCorrect is the formatter):
   ```bash
-  pnpm exec markdownlint-cli2 --fix <file>
+  mise exec -- autocorrect --fix <file> && pnpm exec markdownlint-cli2 --fix <file>
   ```
 
 ## Repository layout
