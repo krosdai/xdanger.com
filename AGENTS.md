@@ -5,7 +5,7 @@ etc.) working in this repository.
 
 ## Tech stack
 
-- **Framework**: [Astro](https://astro.build/) v6 (static output)
+- **Framework**: [Astro](https://astro.build/) v7 (static output)
 - **Styling**: Tailwind CSS v4 (`@tailwindcss/vite`), `@tailwindcss/typography`
 - **Content**: MDX in `_posts/` and `_notes/`
 - **Search**: Pagefind (built post-build)
@@ -281,6 +281,6 @@ the single source of truth and links back to the specs here and in `.agents/skil
 
 ## Notes on Chinese typography
 
-- Insert a space between CJK and ASCII / numbers (e.g., `使用 Astro 6`), except for `°` and `%`.
+- Insert a space between CJK and ASCII / numbers (e.g., `使用 Astro 7`), except for `°` and `%`.
 - CJK paragraphs use full-width punctuation; English paragraphs use half-width.
 - AutoCorrect enforces most of this automatically; respect its fixes.

@@ -35,11 +35,7 @@ export const rehypePullQuotes: Plugin<[], Root> = () => (tree) => {
     if (textLength > MAX_PULL_LENGTH) return;
 
     const props = node.properties;
-    const existing = Array.isArray(props.className)
-      ? props.className.map(String)
-      : props.className
-        ? [String(props.className)]
-        : [];
+    const existing = props.className?.map(String) ?? [];
     if (!existing.includes("pull")) existing.push("pull");
     props.className = existing;
   });
