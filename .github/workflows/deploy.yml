@@ -23,7 +23,7 @@ jobs:
       - name: Install, build, and upload your site
         uses: withastro/action@b7d53628f8b666036b0238aadb0b984a2a489f26 # v6.1.1
         with:
-          node-version: 24 # Match .nvmrc; Node 24 LTS, satisfies Astro 6's >=22.12.0.
+          node-version: 24 # Match .nvmrc; Node 24 LTS, satisfies Astro 7's >=22.12.0.
           # path: . # The root location of your Astro project inside the repository. (optional)
           # package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
 
