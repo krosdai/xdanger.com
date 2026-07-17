@@ -19,7 +19,7 @@
 
 - [mise](https://mise.jdx.dev/)（统一管理工具链：Node、pnpm、AutoCorrect CLI，见 `mise.toml`）
 - [Node.js](https://nodejs.org/) ≥ 22.12（`mise.toml` / `.nvmrc` 锁定 Node 24）
-- [pnpm](https://pnpm.io/) 11.12.0（`packageManager` 与 `mise.toml` 锁定同一版本：Corepack 与 mise shim 不冲突）
+- [pnpm](https://pnpm.io/) 11.13.1（`packageManager` 与 `mise.toml` 锁定同一版本：Corepack 与 mise shim 不冲突）
 
 ### 安装依赖
 
@@ -94,7 +94,7 @@ pnpm install
 ### 工具链
 
 - **工具链管理**：[mise](https://mise.jdx.dev/)（`mise.toml`，锁定 Node / pnpm / AutoCorrect CLI）
-- **包管理器**：pnpm（`packageManager` 字段与 `mise.toml` 同步锁定 11.12.0）
+- **包管理器**：pnpm（`packageManager` 字段与 `mise.toml` 同步锁定 11.13.1）
 - **TypeScript/JS 格式化**：[Oxfmt](https://oxc.rs/docs/guide/usage/formatter)（`.oxfmtrc.jsonc`，Prettier 兼容输出）
 - **其余格式化**：Prettier (含 `prettier-plugin-astro` / `prettier-plugin-tailwindcss`)，负责 `.astro` / JSON / YAML / CSS 等（**不含 Markdown**）
 - **TypeScript/JS lint**：[Oxlint](https://oxc.rs/docs/guide/usage/linter)（type-aware，经 `oxlint-tsgolint`，`.oxlintrc.json`）

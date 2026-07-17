@@ -17,7 +17,7 @@ etc.) working in this repository.
 | Concern         | Tool                                                                       |
 | --------------- | -------------------------------------------------------------------------- |
 | Toolchain mgr   | **mise** (`mise.toml`) — pins Node, pnpm, and the AutoCorrect CLI          |
-| Package mgr     | **pnpm** 11.12.0 (`packageManager` + `mise.toml` pin the same version). Do NOT use `npm`/`yarn`/`bun` |
+| Package mgr     | **pnpm** 11.13.1 (`packageManager` + `mise.toml` pin the same version). Do NOT use `npm`/`yarn`/`bun` |
 | TS/JS linter    | **Oxlint** (type-aware via `oxlint-tsgolint`, `.oxlintrc.json`)            |
 | TS/JS formatter | **Oxfmt** (`.oxfmtrc.jsonc`)                                               |
 | Other formats   | **Prettier** (`.prettierrc.json`) — `.astro`, JSON, YAML, CSS… (NOT Markdown) |
