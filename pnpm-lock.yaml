@@ -8,7 +8,7 @@ overrides:
   path-to-regexp: 6.3.0
   esbuild: ^0.28.1
   undici: 7.28.0
-  tar: 7.5.20
+  tar: 7.5.21
   yaml: 2.9.0
 
 importers:
@@ -3942,8 +3942,8 @@ packages:
   tar-stream@3.2.0:
     resolution: {integrity: sha512-ojzvCvVaNp6aOTFmG7jaRD0meowIAuPc3cMMhSgKiVWws1GyHbGd/xvnyuRKcKlMpt3qvxx6r0hreCNITP9hIg==}
 
-  tar@7.5.20:
-    resolution: {integrity: sha512-9FcyK4PA6+WbzlTM9WhQm6vB5W7cP7dUiPsv1g7YDwEQnQ1CGpK3MGlKk/ITVWMk05kHZuBhmVhiv8LZoy/PFQ==}
+  tar@7.5.21:
+    resolution: {integrity: sha512-XdhtCvlMywwxpCW8YEq3lOXBJpUPTR2OHHcwLPO3HwsJqOHa2Ok/oJ7ruGzp+JrKoRPVCzJwAdEjqLW/vNRPHA==}
     engines: {node: '>=18'}
 
   teex@1.0.1:
@@ -5025,7 +5025,7 @@ snapshots:
       local-pkg: 1.2.1
       pathe: 2.0.3
       svgo: 3.3.4
-      tar: 7.5.20
+      tar: 7.5.21
     transitivePeerDependencies:
       - supports-color
 
@@ -5181,7 +5181,7 @@ snapshots:
       node-fetch: 2.7.0
       nopt: 8.1.0
       semver: 7.8.5
-      tar: 7.5.20
+      tar: 7.5.21
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -8617,7 +8617,7 @@ snapshots:
       - bare-buffer
       - react-native-b4a
 
-  tar@7.5.20:
+  tar@7.5.21:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
