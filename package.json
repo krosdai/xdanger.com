@@ -3,7 +3,7 @@
   "version": "6.2.0",
   "license": "CC-BY-SA-4.0",
   "type": "module",
-  "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c",
+  "packageManager": "pnpm@11.20.0+sha512.mm8zCpW2ZEbqCI+vFSFAWooB8H/ecSTMmVjf7VLUu0NnN+ZbCPhfN7Rvy6N1CSVYrFEmK4FoRLIvY0Bu0Wa/7g==",
   "engines": {
     "node": ">=22.12.0",
     "pnpm": ">=11"
