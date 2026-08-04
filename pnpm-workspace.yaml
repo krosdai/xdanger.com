@@ -7,6 +7,6 @@ minimumReleaseAgeExclude:
 overrides:
   path-to-regexp: 6.3.0
   esbuild: ^0.28.1
-  undici: 7.28.0
+  undici: 7.29.0
   tar: 7.5.21
   yaml: 2.9.0
