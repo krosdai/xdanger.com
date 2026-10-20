@@ -4,12 +4,15 @@
 **in addition to** your normal review. This file is the single source of truth; it links to the full
 specs rather than restating them.
 
-**Severities.** **Blocking** = must fix before merge (Claude/Copilot: P1; Codex: P0/P1). **P2** =
-meaningful, worth raising. Skip pure nits. Lead with the blocking red lines below — if your output is
-capped, spend it there.
+**Severities.** Prefix every finding with its label (for example, `P1:`). **Blocking** = must fix
+before merge: **P0** (critical: exploitable vulnerability, irreversible data loss, or similar) or **P1**
+(serious incorrect behavior, security exposure, or operational failure). **P2** = meaningful, worth
+raising. **P3** = nits; skip them, and never inflate a minor issue to P2. Lead with the blocking red
+lines below — if your output is capped, spend it there.
 
 **Scope.** The **Code** rules (§A) apply to every PR. The **Article / note** rules (§B) apply only when
-the PR touches `_notes/**` or `_posts/**`.
+the PR touches `_notes/**` or `_posts/**`. The **General** rules (§C) apply to every PR wherever §0–§B
+don't say otherwise.
 
 ---
 
@@ -131,6 +134,32 @@ A note should teach a first-time, curious-but-unfamiliar reader who is also a de
 - **Delivery.** Mobile-first, responsive visuals that follow §A's design-system / a11y / motion contract;
   no horizontal overflow, touch targets large enough, no hover-only interactions; frontmatter & URL valid
   per §A; `pnpm build:site` passes.
+
+---
+
+## C. General review policy (all PRs)
+
+The baseline that `.github/workflows/code-review.yml` previously loaded from the shared organization
+policy; the repo-specific rules above win wherever they conflict.
+
+- **Scope.** Review the diff for correctness, security, and code quality, in the context of the full
+  codebase. Report only specific, actionable findings, at most 10.
+- **Code.** Report P0–P2 (see **Severities** above).
+- **Other documentation** (README, `AGENTS.md`, specs, skills — not `_notes/**` or `_posts/**`, which §B
+  governs): report only verifiable factual errors, at P0 or P1, so wording, detail, or style never
+  blocks CI.
+- **Always check:**
+  - Logic errors, off-by-one bugs, and boundary conditions
+  - Security: injection, XSS, SSRF, secrets in code, etc.
+  - Race conditions and concurrency
+  - Error handling: unhandled exceptions, swallowed errors, missing edge cases
+  - API contracts: mismatched types, missing required fields
+- **Skip:**
+  - Formatting (handled by Oxfmt, Prettier, AutoCorrect, and Oxlint)
+  - Generated files, lock files (`pnpm-lock.yaml`, etc.), and vendored code
+  - Naming preferences that don't affect readability
+  - Authoring preferences: early returns, structured logging, focused functions. They guide new code
+    but are not findings; if a violation causes a reportable problem, report that problem instead.
 
 ---
 
