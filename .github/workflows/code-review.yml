@@ -70,7 +70,7 @@ jobs:
           fi
 
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # github.ref is refs/pull/<n>/merge for pull_request runs.
           # Keep enough history for `git log` and `git blame` without cloning everything.
