@@ -297,7 +297,7 @@ jobs:
             exit 1
           fi
 
-      - uses: anthropics/claude-code-action@2dca132ff0e0c4094ce6048b422c6915a071210b # v1.0.247
+      - uses: anthropics/claude-code-action@db77d4d3c98f3f6380e7cd45ffba2342a3dbde3c # v1.0.254
         with:
           # Workload Identity Federation: the action exchanges this job's GitHub OIDC token for a
           # short-lived Claude API access token, so no API key secret is involved. These values are
